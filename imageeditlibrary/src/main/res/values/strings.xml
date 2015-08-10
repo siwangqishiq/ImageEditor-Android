@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ImageEditLibrary</string>
+    <string name="no_images">未找到图片</string>
+    <string name="images">%d images</string>
+</resources>
