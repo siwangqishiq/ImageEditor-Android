@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.picchooser.SelectPictureActivity;
@@ -94,9 +95,18 @@ public class MainActivity extends AppCompatActivity {
                     handleSelectFromAblum(data);
                     break;
                 case ACTION_REQUEST_EDITIMAGE://
+                    handleEditorImage(data);
                     break;
             }// end switch
         }
+    }
+
+    private void handleEditorImage(Intent data) {
+        String newFilePath = data.getStringExtra("save_file_path");
+        Toast.makeText(this, "新图片路径: " + newFilePath, Toast.LENGTH_LONG).show();
+        //System.out.println("newFilePath---->" + newFilePath);
+        LoadImageTask loadTask = new LoadImageTask();
+        loadTask.execute(newFilePath);
     }
 
     private void handleSelectFromAblum(Intent data) {

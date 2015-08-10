@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -218,6 +220,7 @@ public class StirckerFragment extends Fragment {
 			dialog.dismiss();
 		}
 
+		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 		@Override
 		protected void onCancelled(Bitmap result) {
 			super.onCancelled(result);

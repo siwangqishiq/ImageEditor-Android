@@ -71,7 +71,7 @@ public class StickerAdapter extends RecyclerView.Adapter<ViewHolder> {
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		ImageHolder imageHoler = (ImageHolder) holder;
 		String path = pathList.get(position);
-		// System.out.println(path);
+		 System.out.println(path);
 		ImageLoader.getInstance().displayImage("assets://" + path,
 				imageHoler.image, imageOption);
 		imageHoler.image.setTag(path);
@@ -85,7 +85,6 @@ public class StickerAdapter extends RecyclerView.Adapter<ViewHolder> {
 					.list(folderPath);
 			for (String name : files) {
 				pathList.add(folderPath + File.separator + name);
-				// System.out.println(name);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
