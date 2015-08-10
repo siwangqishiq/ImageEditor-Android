@@ -62,7 +62,7 @@ public class BaseActivity extends AppCompatActivity {
                                           boolean canCancel) {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setCancelable(canCancel);
-        dialog.setTitle(title);
+        dialog.setMessage(title);
         return dialog;
     }
 }//end class
