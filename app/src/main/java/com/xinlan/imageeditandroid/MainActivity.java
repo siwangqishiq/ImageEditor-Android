@@ -13,7 +13,11 @@ import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.picchooser.SelectPictureActivity;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     public static final int SELECT_GALLERY_IMAGE_CODE = 7;
@@ -49,8 +53,27 @@ public class MainActivity extends AppCompatActivity {
         editImage = findViewById(R.id.edit_image);
 
         openAblum.setOnClickListener(new SelectClick());
-        //editImage.setOnClickListener(new EditImageClick());
+        editImage.setOnClickListener(new EditImageClick());
     }
+
+    /**
+     * 编辑选择的图片
+     *
+     * @author panyi
+     */
+    private final class EditImageClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent it = new Intent(MainActivity.this, EditImageActivity.class);
+            it.putExtra(EditImageActivity.FILE_PATH, path);
+            File outputFile = FileUtils.getEmptyFile("tietu"
+                    + System.currentTimeMillis() + ".jpg");
+            it.putExtra(EditImageActivity.EXTRA_OUTPUT,
+                    outputFile.getAbsolutePath());
+            MainActivity.this.startActivityForResult(it,
+                    ACTION_REQUEST_EDITIMAGE);
+        }
+    }// end inner class
 
     private final class SelectClick implements View.OnClickListener {
         @Override

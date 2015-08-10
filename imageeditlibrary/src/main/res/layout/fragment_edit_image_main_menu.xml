@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/btn_stickers"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:drawablePadding="@dimen/image_edit_text_padding"
+        android:drawableTop="@drawable/image_edit_icon_sticker"
+        android:gravity="center"
+        android:text="贴图"
+         android:textColor="#ffffff"
+        android:textSize="@dimen/image_edit_text_size" />
+
+    <TextView
+        android:id="@+id/btn_fliter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:drawablePadding="@dimen/image_edit_text_padding"
+        android:drawableTop="@drawable/image_edit_icon_filter"
+        android:gravity="center"
+        android:text="滤镜"
+         android:textColor="#ffffff"
+        android:textSize="@dimen/image_edit_text_size" />
+
+    <TextView
+        android:id="@+id/btn_crop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:drawablePadding="@dimen/image_edit_text_padding"
+        android:drawableTop="@drawable/image_edit_icon_crop"
+        android:gravity="center"
+        android:text="剪裁"
+         android:textColor="#ffffff"
+        android:textSize="@dimen/image_edit_text_size" />
+
+    <TextView
+        android:id="@+id/btn_rotate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:drawablePadding="@dimen/image_edit_text_padding"
+        android:drawableTop="@drawable/image_edit_icon_text"
+        android:gravity="center"
+        android:text="旋转"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/image_edit_text_size" />
+
+</LinearLayout>
