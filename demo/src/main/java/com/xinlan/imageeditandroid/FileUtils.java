@@ -18,7 +18,7 @@ import android.os.Environment;
  * 
  */
 public class FileUtils {
-	public static final String FOLDER_NAME = "babyshow";
+	public static final String FOLDER_NAME = "xinlanedit";
 
 	/**
 	 * 获取存贮文件的文件夹路径
