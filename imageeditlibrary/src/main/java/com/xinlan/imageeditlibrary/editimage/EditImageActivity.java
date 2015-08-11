@@ -118,6 +118,7 @@ public class EditImageActivity extends BaseActivity {
 
 		// 底部gallery
 		bottomGallery = (CustomViewPager) findViewById(R.id.bottom_gallery);
+		bottomGallery.setOffscreenPageLimit(5);
 		mMainMenuFragment = MainMenuFragment.newInstance(this);
 		mBottomGalleryAdapter = new BottomGalleryAdapter(
 				this.getSupportFragmentManager());
