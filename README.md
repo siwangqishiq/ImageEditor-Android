@@ -1,9 +1,9 @@
 AndroidImageEdit 安卓设备上图形编辑开源控件，支持自定义贴图 图片滤镜 图片旋转 以及图片剪裁操作<br/>
 
 <br/>
-
-
-
+<img src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/demo1.gif" width=300 />
+<br/>
+<img src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/demo2.gif" width=300 />
 
 
 <br/>
