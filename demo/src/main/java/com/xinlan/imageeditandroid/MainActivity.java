@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.view.View;
@@ -65,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
     private final class EditImageClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            if (TextUtils.isEmpty(path)) {
+                Toast.makeText(MainActivity.this, R.string.no_choose, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent it = new Intent(MainActivity.this, EditImageActivity.class);
             it.putExtra(EditImageActivity.FILE_PATH, path);
             File outputFile = FileUtils.getEmptyFile("tietu"
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleEditorImage(Intent data) {
         String newFilePath = data.getStringExtra("save_file_path");
-        Toast.makeText(this, "新图片路径: " + newFilePath, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "new image path: " + newFilePath, Toast.LENGTH_LONG).show();
         //System.out.println("newFilePath---->" + newFilePath);
         LoadImageTask loadTask = new LoadImageTask();
         loadTask.execute(newFilePath);

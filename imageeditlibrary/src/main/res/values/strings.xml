@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">ImageEditLibrary</string>
-    <string name="no_images">未找到图片</string>
+    <string name="no_images">no found the image</string>
     <string name="images">%d images</string>
+    <string name="save">save</string>
+    <string name="apply">apply</string>
+
+    <string name="stickers">stickers</string>
+    <string name="fliter">fliter</string>
+    <string name="crop">crop</string>
+    <string name="rotate">rotate</string>
 </resources>
