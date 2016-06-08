@@ -2,6 +2,13 @@
 
 #### For edit image,supply stickers filter rotate crop
 
+> ##Version History
+>###v_1.0:
+>    base function,edit image,supply stickers filter rotate crop
+>###v_2.0:
+>    add the textimage
+
+
 ### 动态效果图
 ![图1](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/demo1.gif)
 ![图2](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/demo2.gif)
@@ -15,7 +22,3 @@
 
 ####使用方法:见DEMO示例
 ####usage:see the demo project
-
-> ##Version History
->###v_1.0:
->    base function,edit image,supply stickers filter rotate crop

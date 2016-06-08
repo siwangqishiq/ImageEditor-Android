@@ -173,12 +173,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (height > reqHeight || width > reqWidth) {
             if (width > height) {
-                inSampleSize = (int) FloatMath
+                inSampleSize = (int) Math
                         .floor(((float) height / reqHeight) + 0.5f); // Math.round((float)height
                 // /
                 // (float)reqHeight);
             } else {
-                inSampleSize = (int) FloatMath
+                inSampleSize = (int) Math
                         .floor(((float) width / reqWidth) + 0.5f); // Math.round((float)width
                 // /
                 // (float)reqWidth);

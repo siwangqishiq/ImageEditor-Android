@@ -159,7 +159,7 @@ public class RotateFragment extends Fragment {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			dialog = BaseActivity.getLoadingDialog(getActivity(), "图片保存中...",
+			dialog = BaseActivity.getLoadingDialog(getActivity(), "image processing...",
 					false);
 			dialog.show();
 		}
@@ -231,10 +231,8 @@ public class RotateFragment extends Fragment {
 			out.flush();
 			out.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// System.out.println("保存文件--->" + f.getAbsolutePath());

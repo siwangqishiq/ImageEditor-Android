@@ -19,7 +19,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * @author panyi
  * 
  */
-public class MainMenuFragment extends Fragment {
+public class MainMenuFragment extends Fragment implements View.OnClickListener{
 	public static final String TAG = MainMenuFragment.class.getName();
 	private View mainView;
 	private EditImageActivity activity;
@@ -28,6 +28,8 @@ public class MainMenuFragment extends Fragment {
 	private View fliterBtn;// 滤镜按钮
 	private View cropBtn;// 剪裁按钮
 	private View rotateBtn;// 旋转按钮
+
+    private View mTextBtn;//文字型贴图添加
 
 	public static MainMenuFragment newInstance(EditImageActivity activity) {
 		MainMenuFragment fragment = new MainMenuFragment();
@@ -49,6 +51,7 @@ public class MainMenuFragment extends Fragment {
 		fliterBtn = mainView.findViewById(R.id.btn_fliter);
 		cropBtn = mainView.findViewById(R.id.btn_crop);
 		rotateBtn = mainView.findViewById(R.id.btn_rotate);
+        mTextBtn = mainView.findViewById(R.id.btn_text);
 		return mainView;
 	}
 
@@ -62,7 +65,12 @@ public class MainMenuFragment extends Fragment {
 		rotateBtn.setOnClickListener(new RotateClick());
 	}
 
-	/**
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    /**
 	 * 贴图模式
 	 * 
 	 * @author panyi
@@ -144,5 +152,7 @@ public class MainMenuFragment extends Fragment {
 			activity.bannerFlipper.showNext();
 		}
 	}// end inner class
+
+
 
 }// end class

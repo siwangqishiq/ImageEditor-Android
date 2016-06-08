@@ -9,4 +9,5 @@
     <string name="fliter">fliter</string>
     <string name="crop">crop</string>
     <string name="rotate">rotate</string>
+    <string name="text">text</string>
 </resources>
