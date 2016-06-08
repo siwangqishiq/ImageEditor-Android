@@ -29,3 +29,10 @@ For edit image,supply stickers filter rotate crop
 
 <br/>
 <span>usage:see the demo project</span>
+
+
+<br />
+Version History
+v_1.0:
+    base function,edit image,supply stickers filter rotate crop
+
