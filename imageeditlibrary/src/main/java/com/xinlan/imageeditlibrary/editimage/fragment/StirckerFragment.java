@@ -44,6 +44,8 @@ import com.xinlan.imageeditlibrary.editimage.view.StickerView;
  * @author panyi
  */
 public class StirckerFragment extends Fragment {
+    public static final int INDEX = 1;
+
     public static final String TAG = StirckerFragment.class.getName();
     public static final String STICKER_FOLDER = "stickers";
 
@@ -151,8 +153,8 @@ public class StirckerFragment extends Fragment {
             stickerBeanList.clear();
             AssetManager assetManager = getActivity().getAssets();
             try {
-                String[] lists =   assetManager.list(STICKER_FOLDER);
-                for(String parentPath:lists){
+                String[] lists = assetManager.list(STICKER_FOLDER);
+                for (String parentPath : lists) {
 
                 }//end for each
             } catch (IOException e) {
@@ -341,13 +343,10 @@ public class StirckerFragment extends Fragment {
             out.flush();
             out.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         // System.out.println("保存文件--->" + f.getAbsolutePath());
     }
-
 }// end class

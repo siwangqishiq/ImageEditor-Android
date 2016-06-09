@@ -99,6 +99,13 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:visibility="gone"/>
+
+        <com.xinlan.imageeditlibrary.editimage.view.TextStickerView
+            android:id="@+id/text_sticker_panel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
     </FrameLayout>
 
 </RelativeLayout>

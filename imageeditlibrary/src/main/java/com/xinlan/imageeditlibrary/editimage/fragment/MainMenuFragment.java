@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Filter;
 
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
@@ -19,7 +20,9 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * @author panyi
  * 
  */
-public class MainMenuFragment extends Fragment implements View.OnClickListener{
+public class MainMenuFragment extends Fragment{
+    public static final int INDEX = 0;
+
 	public static final String TAG = MainMenuFragment.class.getName();
 	private View mainView;
 	private EditImageActivity activity;
@@ -28,7 +31,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 	private View fliterBtn;// 滤镜按钮
 	private View cropBtn;// 剪裁按钮
 	private View rotateBtn;// 旋转按钮
-
     private View mTextBtn;//文字型贴图添加
 
 	public static MainMenuFragment newInstance(EditImageActivity activity) {
@@ -63,12 +65,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 		fliterBtn.setOnClickListener(new FliterClick());
 		cropBtn.setOnClickListener(new CropClick());
 		rotateBtn.setOnClickListener(new RotateClick());
+        mTextBtn.setOnClickListener(new AddTextClick());
 	}
-
-    @Override
-    public void onClick(View v) {
-
-    }
 
     /**
 	 * 贴图模式
@@ -82,7 +80,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 			activity.mode = EditImageActivity.MODE_STICKERS;
 			activity.mStirckerFragment.getmStickerView().setVisibility(
 					View.VISIBLE);
-			activity.bottomGallery.setCurrentItem(1);
+			activity.bottomGallery.setCurrentItem(StirckerFragment.INDEX);
 			activity.bannerFlipper.showNext();
 		}
 	}// end inner class
@@ -101,7 +99,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 			activity.mainImage.setImageBitmap(activity.mainBitmap);
 			activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
 			activity.mainImage.setScaleEnabled(false);
-			activity.bottomGallery.setCurrentItem(2);
+			activity.bottomGallery.setCurrentItem(FliterListFragment.INDEX);
 			activity.bannerFlipper.showNext();
 		}
 	}// end inner class
@@ -119,7 +117,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 			activity.mCropPanel.setVisibility(View.VISIBLE);
 			activity.mainImage.setImageBitmap(activity.mainBitmap);
 			activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-			activity.bottomGallery.setCurrentItem(3);
+			activity.bottomGallery.setCurrentItem(CropFragment.INDEX);
 			activity.mainImage.setScaleEnabled(false);// 禁用缩放
 			//
 			RectF r = activity.mainImage.getBitmapRect();
@@ -139,7 +137,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 		@Override
 		public void onClick(View v) {
 			activity.mode = EditImageActivity.MODE_ROTATE;
-			activity.bottomGallery.setCurrentItem(4);
+			activity.bottomGallery.setCurrentItem(RotateFragment.INDEX);
 			activity.mainImage.setImageBitmap(activity.mainBitmap);
 			activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
 			activity.mainImage.setVisibility(View.GONE);
@@ -154,5 +152,20 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 	}// end inner class
 
 
-
+    /**
+     * 插入文字模式
+     *
+     * @author panyi
+     *
+     */
+    private final class AddTextClick implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+            activity.mode = EditImageActivity.MODE_TEXT;
+            activity.bottomGallery.setCurrentItem(AddTextFragment.INDEX);
+            activity.mainImage.setImageBitmap(activity.mainBitmap);
+            activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+            activity.bannerFlipper.showNext();
+        }
+    }// end inner class
 }// end class

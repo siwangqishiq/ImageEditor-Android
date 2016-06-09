@@ -15,6 +15,7 @@ import android.widget.ViewFlipper;
 
 import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
+import com.xinlan.imageeditlibrary.editimage.fragment.AddTextFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.CropFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.FliterListFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.MainMenuFragment;
@@ -44,8 +45,8 @@ public class EditImageActivity extends BaseActivity {
 	public static final int MODE_STICKERS = 1;// 贴图模式
 	public static final int MODE_FILTER = 2;// 滤镜模式
 	public static final int MODE_CROP = 3;// 剪裁模式
-	public static final int MODE_TEXT = 4;// 文字模式
-	public static final int MODE_ROTATE = 5;// 旋转模式
+	public static final int MODE_ROTATE = 4;// 旋转模式
+    public static final int MODE_TEXT = 5;// 文字模式
 
 	public String filePath;// 需要编辑图片路径
 	public String saveFilePath;// 生成的新图片路径
@@ -73,6 +74,7 @@ public class EditImageActivity extends BaseActivity {
 	public FliterListFragment mFliterListFragment;// 滤镜FliterListFragment
 	private CropFragment mCropFragment;// 图片剪裁Fragment
 	public RotateFragment mRotateFragment;// 图片旋转Fragment
+    public AddTextFragment mAddTextFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -118,7 +120,7 @@ public class EditImageActivity extends BaseActivity {
 
 		// 底部gallery
 		bottomGallery = (CustomViewPager) findViewById(R.id.bottom_gallery);
-		bottomGallery.setOffscreenPageLimit(5);
+		//bottomGallery.setOffscreenPageLimit(5);
 		mMainMenuFragment = MainMenuFragment.newInstance(this);
 		mBottomGalleryAdapter = new BottomGalleryAdapter(
 				this.getSupportFragmentManager());
@@ -126,7 +128,7 @@ public class EditImageActivity extends BaseActivity {
 		mFliterListFragment = FliterListFragment.newInstance(this);
 		mCropFragment = CropFragment.newInstance(this);
 		mRotateFragment = RotateFragment.newInstance(this);
-
+        mAddTextFragment = AddTextFragment.newInstance(this);
 		bottomGallery.setAdapter(mBottomGalleryAdapter);
 	}
 
@@ -143,22 +145,26 @@ public class EditImageActivity extends BaseActivity {
 		@Override
 		public Fragment getItem(int index) {
 			// System.out.println("createFragment-->"+index);
-			if (index == 0)
-				return mMainMenuFragment;// 主菜单
-			if (index == 1)
-				return mStirckerFragment;// 贴图
-			if (index == 2)
-				return mFliterListFragment;// 滤镜
-			if (index == 3)
-				return mCropFragment;// 剪裁
-			if (index == 4)
-				return mRotateFragment;// 旋转
-			return MainMenuFragment.newInstance(mContext);
+            switch (index){
+                case MainMenuFragment.INDEX:// 主菜单
+                    return mMainMenuFragment;
+                case StirckerFragment.INDEX:// 贴图
+                    return mStirckerFragment;
+                case FliterListFragment.INDEX:// 滤镜
+                    return mFliterListFragment;
+                case CropFragment.INDEX://剪裁
+                    return mCropFragment;
+                case RotateFragment.INDEX://旋转
+                    return mRotateFragment;
+                case AddTextFragment.INDEX://添加文字
+                    return mAddTextFragment;
+            }//end switch
+            return MainMenuFragment.newInstance(mContext);
 		}
 
 		@Override
 		public int getCount() {
-			return 5;
+			return 6;
 		}
 	}// end inner class
 

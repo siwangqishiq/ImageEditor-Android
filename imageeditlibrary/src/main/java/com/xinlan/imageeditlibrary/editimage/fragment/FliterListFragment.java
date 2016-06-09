@@ -34,6 +34,7 @@ import com.xinlan.imageeditlibrary.editimage.fliter.PhotoProcessing;
  * 
  */
 public class FliterListFragment extends Fragment {
+    public static final int INDEX = 2;
 	public static final String TAG = FliterListFragment.class.getName();
 	private View mainView;
 	private View backBtn;// 返回主菜单按钮

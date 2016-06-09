@@ -1,6 +1,7 @@
 <HorizontalScrollView
     android:id="@+id/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:scrollbars="none"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent">
 

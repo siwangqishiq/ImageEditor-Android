@@ -41,6 +41,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * 
  */
 public class CropFragment extends Fragment {
+    public static final int INDEX = 3;
 	public static final String TAG = CropFragment.class.getName();
 	private View mainView;
 	private EditImageActivity activity;
