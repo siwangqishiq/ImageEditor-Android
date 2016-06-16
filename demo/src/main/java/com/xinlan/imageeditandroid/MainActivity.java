@@ -1,17 +1,19 @@
 package com.xinlan.imageeditandroid;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.FloatMath;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,6 +24,8 @@ import com.xinlan.imageeditlibrary.picchooser.SelectPictureActivity;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_PERMISSON_SORAGE = 1;
+
     public static final int SELECT_GALLERY_IMAGE_CODE = 7;
     public static final int TAKE_PHOTO_CODE = 8;
     public static final int ACTION_REQUEST_EDITIMAGE = 9;
@@ -85,11 +89,39 @@ public class MainActivity extends AppCompatActivity {
     private final class SelectClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            MainActivity.this.startActivityForResult(new Intent(
-                            MainActivity.this, SelectPictureActivity.class),
-                    SELECT_GALLERY_IMAGE_CODE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                openAblumWithPermissionsCheck();
+            } else {
+                openAblum();
+            }//end if
         }
     }// end inner class
+
+    private void openAblum() {
+        MainActivity.this.startActivityForResult(new Intent(
+                        MainActivity.this, SelectPictureActivity.class),
+                SELECT_GALLERY_IMAGE_CODE);
+    }
+
+    private void openAblumWithPermissionsCheck() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSON_SORAGE);
+            return;
+        }
+        openAblum();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSON_SORAGE
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openAblum();
+        }//end if
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
