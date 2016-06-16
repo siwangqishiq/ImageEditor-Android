@@ -276,8 +276,7 @@ public class StirckerFragment extends Fragment {
             Matrix m = new Matrix();
             m.setValues(inverseMatrix.getValues());
 
-            LinkedHashMap<Integer, StickerItem> addItems = mStickerView
-                    .getBank();
+            LinkedHashMap<Integer, StickerItem> addItems = mStickerView.getBank();
             for (Integer id : addItems.keySet()) {
                 StickerItem item = addItems.get(id);
                 item.matrix.postConcat(m);// 乘以底部图片变化矩阵

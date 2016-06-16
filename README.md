@@ -6,7 +6,7 @@
 >###v_1.0:
 >    base function,edit image,supply stickers filter rotate crop
 >###v_2.0:
->    add the textimage
+>    add the textimage(in developing...)
 
 
 ### 动态效果图

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +29,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  *
  * @author 潘易
  */
-public class AddTextFragment extends Fragment {
+public class AddTextFragment extends Fragment implements TextWatcher{
     public static final int INDEX = 5;
     public static final String TAG = AddTextFragment.class.getName();
 
@@ -41,6 +44,7 @@ public class AddTextFragment extends Fragment {
     private ColorPicker mColorPicker;
 
     private int mTextColor = Color.WHITE;
+    private InputMethodManager imm;
 
     public static AddTextFragment newInstance(EditImageActivity activity) {
         AddTextFragment fragment = new AddTextFragment();
@@ -57,6 +61,7 @@ public class AddTextFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mainView = inflater.inflate(R.layout.fragment_edit_image_add_text, null);
         backToMenu = mainView.findViewById(R.id.back_to_main);
         mInputText = (EditText) mainView.findViewById(R.id.text_input);
@@ -68,26 +73,33 @@ public class AddTextFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
-
-        mTextStickerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    hideInput();
-                    return true;
-                }
-                return false;
-            }
-        });
-
         mColorPicker = new ColorPicker(getActivity(), 255, 255, 255);
         mTextColorSelector.setOnClickListener(new SelectColorBtnClick());
+
+        mInputText.addTextChangedListener(this);
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        //mTextStickerView change
+        String text = s.toString().trim();
+        mTextStickerView.setText(text);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
     }
 
     /**
      * 颜色选择 按钮点击
      */
-    private final class SelectColorBtnClick implements View.OnClickListener{
+    private final class SelectColorBtnClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             mColorPicker.show();
@@ -113,9 +125,14 @@ public class AddTextFragment extends Fragment {
     }
 
     public void hideInput() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+        if (getActivity().getCurrentFocus() != null && isInputMethodShow()) {
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    public boolean isInputMethodShow() {
+        return imm.isActive();
     }
 
     /**
@@ -134,6 +151,7 @@ public class AddTextFragment extends Fragment {
      * 返回主菜单
      */
     public void backToMain() {
+        hideInput();
         activity.mode = EditImageActivity.MODE_NONE;
         activity.bottomGallery.setCurrentItem(MainMenuFragment.INDEX);
         activity.mainImage.setVisibility(View.VISIBLE);
@@ -145,7 +163,6 @@ public class AddTextFragment extends Fragment {
         activity.mode = EditImageActivity.MODE_TEXT;
         activity.bottomGallery.setCurrentItem(AddTextFragment.INDEX);
         activity.mainImage.setImageBitmap(activity.mainBitmap);
-        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.bannerFlipper.showNext();
 
         mTextStickerView.setVisibility(View.VISIBLE);
