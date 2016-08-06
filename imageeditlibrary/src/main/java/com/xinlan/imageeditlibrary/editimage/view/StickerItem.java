@@ -15,6 +15,7 @@ import android.graphics.RectF;
 import android.view.View;
 
 import com.xinlan.imageeditlibrary.R;
+import com.xinlan.imageeditlibrary.editimage.utils.RectUtil;
 
 
 /**
@@ -24,7 +25,7 @@ public class StickerItem {
     private static final float MIN_SCALE = 0.15f;
     private static final int HELP_BOX_PAD = 25;
 
-    private static final int BUTTON_WIDTH = 25;
+    private static final int BUTTON_WIDTH = Constants.STICKER_BTN_HALF_SIZE;
 
     public Bitmap bitmap;
     public Rect srcRect;// 原始图片坐标
@@ -181,7 +182,7 @@ public class StickerItem {
                 this.dstRect.centerY());// 存入scale矩阵
         // this.matrix.postRotate(5, this.dstRect.centerX(),
         // this.dstRect.centerY());
-        scaleRect(this.dstRect, scale);// 缩放目标矩形
+        RectUtil.scaleRect(this.dstRect, scale);// 缩放目标矩形
 
         // 重新计算工具箱坐标
         helpBox.set(dstRect);
@@ -202,7 +203,7 @@ public class StickerItem {
         float angle = (float) Math.toDegrees(Math.acos(cos));
         // System.out.println("angle--->" + angle);
 
-        // 拉普拉斯定理
+        // 定理
         float calMatrix = xa * yb - xb * ya;// 行列式计算 确定转动方向
 
         int flag = calMatrix > 0 ? 1 : -1;
@@ -213,9 +214,9 @@ public class StickerItem {
         this.matrix.postRotate(angle, this.dstRect.centerX(),
                 this.dstRect.centerY());
 
-        rotateRect(this.detectRotateRect, this.dstRect.centerX(),
+        RectUtil.rotateRect(this.detectRotateRect, this.dstRect.centerX(),
                 this.dstRect.centerY(), roatetAngle);
-        rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
+        RectUtil.rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
                 this.dstRect.centerY(), roatetAngle);
         // System.out.println("angle----->" + angle + "   " + flag);
 
@@ -236,7 +237,6 @@ public class StickerItem {
             canvas.drawBitmap(deleteBit, helpToolsRect, deleteRect, null);
             canvas.drawBitmap(rotateBit, helpToolsRect, rotateRect, null);
             canvas.restore();
-
             // canvas.drawRect(deleteRect, dstPaint);
             // canvas.drawRect(rotateRect, dstPaint);
             // canvas.drawRect(detectRotateRect, this.greenPaint);
@@ -244,57 +244,5 @@ public class StickerItem {
         }// end if
 
         // detectRotateRect
-    }
-
-    Path path = new Path();
-
-    /**
-     * 缩放指定矩形
-     *
-     * @param rect
-     * @param scale
-     */
-    private static void scaleRect(RectF rect, float scale) {
-        float w = rect.width();
-        float h = rect.height();
-
-        float newW = scale * w;
-        float newH = scale * h;
-
-        float dx = (newW - w) / 2;
-        float dy = (newH - h) / 2;
-
-        rect.left -= dx;
-        rect.top -= dy;
-        rect.right += dx;
-        rect.bottom += dy;
-    }
-
-    /**
-     * 矩形绕指定点旋转
-     *
-     * @param rect
-     * @param roatetAngle
-     */
-    private static void rotateRect(RectF rect, float center_x, float center_y,
-                                   float roatetAngle) {
-        float x = rect.centerX();
-        float y = rect.centerY();
-        float sinA = (float) Math.sin(Math.toRadians(roatetAngle));
-        float cosA = (float) Math.cos(Math.toRadians(roatetAngle));
-        float newX = center_x + (x - center_x) * cosA - (y - center_y) * sinA;
-        float newY = center_y + (y - center_y) * cosA + (x - center_x) * sinA;
-
-        float dx = newX - x;
-        float dy = newY - y;
-
-        rect.offset(dx, dy);
-
-        // float w = rect.width();
-        // float h = rect.height();
-        // rect.left = newX;
-        // rect.top = newY;
-        // rect.right = newX + w;
-        // rect.bottom = newY + h;
     }
 }// end class

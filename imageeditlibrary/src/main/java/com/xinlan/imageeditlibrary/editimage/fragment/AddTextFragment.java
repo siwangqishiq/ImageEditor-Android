@@ -29,7 +29,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  *
  * @author 潘易
  */
-public class AddTextFragment extends Fragment implements TextWatcher{
+public class AddTextFragment extends Fragment implements TextWatcher {
     public static final int INDEX = 5;
     public static final String TAG = AddTextFragment.class.getName();
 
@@ -122,6 +122,7 @@ public class AddTextFragment extends Fragment implements TextWatcher{
     private void changeTextColor(int newColor) {
         this.mTextColor = newColor;
         mTextColorSelector.setBackgroundColor(mTextColor);
+        mTextStickerView.setTextColor(mTextColor);
     }
 
     public void hideInput() {
