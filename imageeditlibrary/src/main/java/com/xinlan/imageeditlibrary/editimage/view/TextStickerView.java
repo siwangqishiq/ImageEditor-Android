@@ -14,7 +14,9 @@ import android.text.Layout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
 import com.xinlan.imageeditlibrary.R;
 
@@ -26,6 +28,8 @@ import com.xinlan.imageeditlibrary.R;
 public class TextStickerView extends View {
     public static final float TEXT_SIZE_DEFAULT = 80;
     public static final int PADDING = 32;
+
+
     private String mText;
     private TextPaint mPaint = new TextPaint();
     private Matrix mMatrix = new Matrix();
@@ -44,6 +48,21 @@ public class TextStickerView extends View {
     private Bitmap mDeleteBitmap;
     private Bitmap mRotateBitmap;
 
+    private int mCurrentMode = IDLE_MODE;
+    //控件的几种模式
+    private static final int IDLE_MODE = 2;//正常
+    private static final int MOVE_MODE = 3;//移动模式
+    private static final int ROTATE_MODE = 4;//旋转模式
+    private static final int DELETE_MODE = 5;//删除模式
+
+    private EditText mEditText;//输入控件
+
+    private int layout_x = 0;
+    private int layout_y = 0;
+
+    private float last_x = 0;
+    private float last_y = 0;
+
     public TextStickerView(Context context) {
         super(context);
         initView(context);
@@ -57,6 +76,10 @@ public class TextStickerView extends View {
     public TextStickerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
+    }
+
+    public void setEditText(EditText textView) {
+        this.mEditText = textView;
     }
 
     private void initView(Context context) {
@@ -94,13 +117,23 @@ public class TextStickerView extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        layout_x = getMeasuredWidth() / 2;
+        layout_y = getMeasuredHeight() / 2;
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         if (TextUtils.isEmpty(mText))
             return;
 
+        drawContent(canvas);
+    }
 
+    private void drawContent(Canvas canvas) {
         drawText(canvas);
 
         mHelpBoxRect.set(mTextRect.left - PADDING, mTextRect.top - PADDING
@@ -117,8 +150,8 @@ public class TextStickerView extends View {
     }
 
     private void drawText(Canvas canvas) {
-        int x = getWidth() >> 1;
-        int y = getHeight() >> 1;
+        int x = layout_x;
+        int y = layout_y;
 
         mPaint.getTextBounds(mText, 0, mText.length(), mTextRect);
         mTextRect.offset(x - (mTextRect.width() >> 1), y);
@@ -131,5 +164,64 @@ public class TextStickerView extends View {
         canvas.restore();
 
         canvas.drawRect(mTextRect, debugPaint);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean ret = super.onTouchEvent(event);// 是否向下传递事件标志 true为消耗
+
+        int action = event.getAction();
+        float x = event.getX();
+        float y = event.getY();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                if (mDeleteDstRect.contains(x, y)) {// 删除模式
+                    mCurrentMode = DELETE_MODE;
+                } else if (mRotateDstRect.contains(x, y)) {// 旋转按钮
+                    mCurrentMode = ROTATE_MODE;
+                } else if (mHelpBoxRect.contains(x, y)) {// 移动模式
+                    mCurrentMode = MOVE_MODE;
+                    last_x = x;
+                    last_y = y;
+                    ret = true;
+                }// end if
+
+                if (mCurrentMode == DELETE_MODE) {// 删除选定贴图
+                    mCurrentMode = IDLE_MODE;// 返回空闲状态
+                    clearTextContent();
+                    invalidate();
+                }// end if
+                break;
+            case MotionEvent.ACTION_MOVE:
+                ret = true;
+                if (mCurrentMode == MOVE_MODE) {// 移动贴图
+                    float dx = x - last_x ;
+                    float dy = y - last_y;
+
+                    layout_x += dx;
+                    layout_y += dy;
+
+                    invalidate();
+
+                    last_x = x;
+                    last_y = y;
+                } else if (mCurrentMode == ROTATE_MODE) {// 旋转 缩放文字操作
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                ret = false;
+                mCurrentMode = IDLE_MODE;
+                break;
+        }// end switch
+
+        return ret;
+    }
+
+    public void clearTextContent() {
+        if (mEditText != null) {
+            mEditText.setText(null);
+        }
+        //setText(null);
     }
 }//end class

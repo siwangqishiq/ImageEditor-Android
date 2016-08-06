@@ -5,10 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.ui.ColorPicker;
 import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
-import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
 
 
 /**
@@ -77,6 +74,8 @@ public class AddTextFragment extends Fragment implements TextWatcher {
         mTextColorSelector.setOnClickListener(new SelectColorBtnClick());
 
         mInputText.addTextChangedListener(this);
+
+        mTextStickerView.setEditText(mInputText);
     }
 
     @Override
