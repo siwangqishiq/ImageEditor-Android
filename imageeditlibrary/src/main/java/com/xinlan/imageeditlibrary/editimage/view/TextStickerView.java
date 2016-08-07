@@ -140,19 +140,26 @@ public class TextStickerView extends View {
     private void drawContent(Canvas canvas) {
         drawText(canvas);
 
-        canvas.drawRoundRect(mHelpBoxRect, 10, 10, mHelpPaint);
-
         //draw x and rotate button
         int offsetValue = ((int) mDeleteDstRect.width()) >> 1;
         mDeleteDstRect.offsetTo(mHelpBoxRect.left - offsetValue, mHelpBoxRect.top - offsetValue);
         mRotateDstRect.offsetTo(mHelpBoxRect.right - offsetValue, mHelpBoxRect.bottom - offsetValue);
 
+        RectUtil.rotateRect(mDeleteDstRect, mHelpBoxRect.centerX(),
+                mHelpBoxRect.centerY(), mRotateAngle);
+        RectUtil.rotateRect(mRotateDstRect, mHelpBoxRect.centerX(),
+                mHelpBoxRect.centerY(), mRotateAngle);
+
+        canvas.save();
+        canvas.rotate(mRotateAngle, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
+        canvas.drawRoundRect(mHelpBoxRect, 10, 10, mHelpPaint);
+        canvas.restore();
+
+
         canvas.drawBitmap(mDeleteBitmap, mDeleteRect, mDeleteDstRect, null);
         canvas.drawBitmap(mRotateBitmap, mRotateRect, mRotateDstRect, null);
-
-
-        canvas.drawRect(mRotateDstRect, debugPaint);
-        canvas.drawRect(mDeleteDstRect, debugPaint);
+        //canvas.drawRect(mRotateDstRect, debugPaint);
+        //canvas.drawRect(mDeleteDstRect, debugPaint);
     }
 
     private void drawText(Canvas canvas) {
@@ -167,13 +174,10 @@ public class TextStickerView extends View {
         RectUtil.scaleRect(mHelpBoxRect, mScale);
 
         canvas.save();
-        //canvas.rotate(60, x, y);
-        //canvas.scale(2f,2f,x,y);
         canvas.scale(mScale, mScale, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
+        canvas.rotate(mRotateAngle, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
         canvas.drawText(mText, x, y, mPaint);
         canvas.restore();
-
-        //canvas.drawRect(mTextRect, debugPaint);
     }
 
     @Override
@@ -277,52 +281,23 @@ public class TextStickerView extends View {
         float scale = curLen / srcLen;// 计算缩放比
 
         mScale *= scale;
-
-        //System.out.println("mScale = " + mScale);
-
         float newWidth = mHelpBoxRect.width() * mScale;
-//        if (newWidth / initWidth < MIN_SCALE) {// 最小缩放值检测
-//            return;
-//        }
 
+        if (newWidth < 70) {
+            mScale /= scale;
+            return;
+        }
 
-//        this.matrix.postScale(scale, scale, this.dstRect.centerX(),
-//                this.dstRect.centerY());// 存入scale矩阵
-//        RectUtil.scaleRect(this.dstRect, scale);// 缩放目标矩形
-//
-//        // 重新计算工具箱坐标
-//        helpBox.set(dstRect);
-//        updateHelpBoxRect();// 重新计算
-//        rotateRect.offsetTo(helpBox.right - BUTTON_WIDTH, helpBox.bottom
-//                - BUTTON_WIDTH);
-//        deleteRect.offsetTo(helpBox.left - BUTTON_WIDTH, helpBox.top
-//                - BUTTON_WIDTH);
-//
-//        detectRotateRect.offsetTo(helpBox.right - BUTTON_WIDTH, helpBox.bottom
-//                - BUTTON_WIDTH);
-//        detectDeleteRect.offsetTo(helpBox.left - BUTTON_WIDTH, helpBox.top
-//                - BUTTON_WIDTH);
-//
-//        double cos = (xa * xb + ya * yb) / (srcLen * curLen);
-//        if (cos > 1 || cos < -1)
-//            return;
-//        float angle = (float) Math.toDegrees(Math.acos(cos));
-//        // System.out.println("angle--->" + angle);
-//
-        // 定理
-//        float calMatrix = xa * yb - xb * ya;// 行列式计算 确定转动方向
-//
-//        int flag = calMatrix > 0 ? 1 : -1;
-//        angle = flag * angle;
-//
-//        roatetAngle += angle;
-//        this.matrix.postRotate(angle, this.dstRect.centerX(),
-//                this.dstRect.centerY());
-//
-//        RectUtil.rotateRect(this.detectRotateRect, this.dstRect.centerX(),
-//                this.dstRect.centerY(), roatetAngle);
-//        RectUtil.rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
-//                this.dstRect.centerY(), roatetAngle);
+        double cos = (xa * xb + ya * yb) / (srcLen * curLen);
+        if (cos > 1 || cos < -1)
+            return;
+        float angle = (float) Math.toDegrees(Math.acos(cos));
+        float calMatrix = xa * yb - xb * ya;// 行列式计算 确定转动方向
+
+        int flag = calMatrix > 0 ? 1 : -1;
+        angle = flag * angle;
+
+        mRotateAngle += angle;
     }
 
 }//end class
