@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.xinlan.imageeditlibrary.R;
+import com.xinlan.imageeditlibrary.editimage.utils.RectUtil;
 
 /**
  * 文本贴图处理控件
@@ -32,8 +33,6 @@ public class TextStickerView extends View {
 
     private String mText;
     private TextPaint mPaint = new TextPaint();
-    private Matrix mMatrix = new Matrix();
-
     private Paint debugPaint = new Paint();
     private Paint mHelpPaint = new Paint();
 
@@ -62,6 +61,11 @@ public class TextStickerView extends View {
 
     private float last_x = 0;
     private float last_y = 0;
+
+    private float mRotateAngle = 0;
+    private float mScale = 1;
+
+    private Matrix mMatrix = new Matrix();
 
     public TextStickerView(Context context) {
         super(context);
@@ -136,8 +140,6 @@ public class TextStickerView extends View {
     private void drawContent(Canvas canvas) {
         drawText(canvas);
 
-        mHelpBoxRect.set(mTextRect.left - PADDING, mTextRect.top - PADDING
-                , mTextRect.right + PADDING, mTextRect.bottom + PADDING);
         canvas.drawRoundRect(mHelpBoxRect, 10, 10, mHelpPaint);
 
         //draw x and rotate button
@@ -147,6 +149,10 @@ public class TextStickerView extends View {
 
         canvas.drawBitmap(mDeleteBitmap, mDeleteRect, mDeleteDstRect, null);
         canvas.drawBitmap(mRotateBitmap, mRotateRect, mRotateDstRect, null);
+
+
+        canvas.drawRect(mRotateDstRect, debugPaint);
+        canvas.drawRect(mDeleteDstRect, debugPaint);
     }
 
     private void drawText(Canvas canvas) {
@@ -156,14 +162,18 @@ public class TextStickerView extends View {
         mPaint.getTextBounds(mText, 0, mText.length(), mTextRect);
         mTextRect.offset(x - (mTextRect.width() >> 1), y);
 
+        mHelpBoxRect.set(mTextRect.left - PADDING, mTextRect.top - PADDING
+                , mTextRect.right + PADDING, mTextRect.bottom + PADDING);
+        RectUtil.scaleRect(mHelpBoxRect, mScale);
+
         canvas.save();
         //canvas.rotate(60, x, y);
         //canvas.scale(2f,2f,x,y);
-        //canvas.scale(2.0f,2.0f);
+        canvas.scale(mScale, mScale, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
         canvas.drawText(mText, x, y, mPaint);
         canvas.restore();
 
-        canvas.drawRect(mTextRect, debugPaint);
+        //canvas.drawRect(mTextRect, debugPaint);
     }
 
     @Override
@@ -179,6 +189,9 @@ public class TextStickerView extends View {
                     mCurrentMode = DELETE_MODE;
                 } else if (mRotateDstRect.contains(x, y)) {// 旋转按钮
                     mCurrentMode = ROTATE_MODE;
+                    last_x = mRotateDstRect.centerX();
+                    last_y = mRotateDstRect.centerY();
+                    ret = true;
                 } else if (mHelpBoxRect.contains(x, y)) {// 移动模式
                     mCurrentMode = MOVE_MODE;
                     last_x = x;
@@ -195,7 +208,8 @@ public class TextStickerView extends View {
             case MotionEvent.ACTION_MOVE:
                 ret = true;
                 if (mCurrentMode == MOVE_MODE) {// 移动贴图
-                    float dx = x - last_x ;
+                    mCurrentMode = MOVE_MODE;
+                    float dx = x - last_x;
                     float dy = y - last_y;
 
                     layout_x += dx;
@@ -206,6 +220,15 @@ public class TextStickerView extends View {
                     last_x = x;
                     last_y = y;
                 } else if (mCurrentMode == ROTATE_MODE) {// 旋转 缩放文字操作
+                    mCurrentMode = ROTATE_MODE;
+                    float dx = x - last_x;
+                    float dy = y - last_y;
+
+                    updateRotateAndScale(dx, dy);
+
+                    invalidate();
+                    last_x = x;
+                    last_y = y;
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -224,4 +247,82 @@ public class TextStickerView extends View {
         }
         //setText(null);
     }
+
+
+    /**
+     * 旋转 缩放 更新
+     *
+     * @param dx
+     * @param dy
+     */
+    public void updateRotateAndScale(final float dx, final float dy) {
+        float c_x = mHelpBoxRect.centerX();
+        float c_y = mHelpBoxRect.centerY();
+
+        float x = mRotateDstRect.centerX();
+        float y = mRotateDstRect.centerY();
+
+        float n_x = x + dx;
+        float n_y = y + dy;
+
+        float xa = x - c_x;
+        float ya = y - c_y;
+
+        float xb = n_x - c_x;
+        float yb = n_y - c_y;
+
+        float srcLen = (float) Math.sqrt(xa * xa + ya * ya);
+        float curLen = (float) Math.sqrt(xb * xb + yb * yb);
+
+        float scale = curLen / srcLen;// 计算缩放比
+
+        mScale *= scale;
+
+        //System.out.println("mScale = " + mScale);
+
+        float newWidth = mHelpBoxRect.width() * mScale;
+//        if (newWidth / initWidth < MIN_SCALE) {// 最小缩放值检测
+//            return;
+//        }
+
+
+//        this.matrix.postScale(scale, scale, this.dstRect.centerX(),
+//                this.dstRect.centerY());// 存入scale矩阵
+//        RectUtil.scaleRect(this.dstRect, scale);// 缩放目标矩形
+//
+//        // 重新计算工具箱坐标
+//        helpBox.set(dstRect);
+//        updateHelpBoxRect();// 重新计算
+//        rotateRect.offsetTo(helpBox.right - BUTTON_WIDTH, helpBox.bottom
+//                - BUTTON_WIDTH);
+//        deleteRect.offsetTo(helpBox.left - BUTTON_WIDTH, helpBox.top
+//                - BUTTON_WIDTH);
+//
+//        detectRotateRect.offsetTo(helpBox.right - BUTTON_WIDTH, helpBox.bottom
+//                - BUTTON_WIDTH);
+//        detectDeleteRect.offsetTo(helpBox.left - BUTTON_WIDTH, helpBox.top
+//                - BUTTON_WIDTH);
+//
+//        double cos = (xa * xb + ya * yb) / (srcLen * curLen);
+//        if (cos > 1 || cos < -1)
+//            return;
+//        float angle = (float) Math.toDegrees(Math.acos(cos));
+//        // System.out.println("angle--->" + angle);
+//
+        // 定理
+//        float calMatrix = xa * yb - xb * ya;// 行列式计算 确定转动方向
+//
+//        int flag = calMatrix > 0 ? 1 : -1;
+//        angle = flag * angle;
+//
+//        roatetAngle += angle;
+//        this.matrix.postRotate(angle, this.dstRect.centerX(),
+//                this.dstRect.centerY());
+//
+//        RectUtil.rotateRect(this.detectRotateRect, this.dstRect.centerX(),
+//                this.dstRect.centerY(), roatetAngle);
+//        RectUtil.rotateRect(this.detectDeleteRect, this.dstRect.centerX(),
+//                this.dstRect.centerY(), roatetAngle);
+    }
+
 }//end class
