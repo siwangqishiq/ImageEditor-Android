@@ -1,7 +1,9 @@
 package com.xinlan.imageeditlibrary.editimage.fragment;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -125,7 +127,7 @@ public class AddTextFragment extends Fragment implements TextWatcher {
     }
 
     public void hideInput() {
-        if (getActivity().getCurrentFocus() != null && isInputMethodShow()) {
+        if (getActivity() != null && getActivity().getCurrentFocus() != null && isInputMethodShow()) {
             imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
@@ -166,5 +168,20 @@ public class AddTextFragment extends Fragment implements TextWatcher {
         activity.bannerFlipper.showNext();
 
         mTextStickerView.setVisibility(View.VISIBLE);
+        mInputText.clearFocus();
+    }
+
+    /**
+     * 保存贴图图片
+     */
+    public void saveTextImage() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        mTextStickerView.clearTextContent();
+        mTextStickerView.resetView();
     }
 }// end class

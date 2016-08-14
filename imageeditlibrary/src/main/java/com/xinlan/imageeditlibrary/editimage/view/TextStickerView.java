@@ -66,8 +66,6 @@ public class TextStickerView extends View {
     private float mScale = 1;
     private boolean isInitLayout = true;
 
-    private Matrix mMatrix = new Matrix();
-
     private boolean isShowHelpBox = true;
 
     public TextStickerView(Context context) {
@@ -129,8 +127,7 @@ public class TextStickerView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (isInitLayout) {
             isInitLayout = false;
-            layout_x = getMeasuredWidth() / 2;
-            layout_y = getMeasuredHeight() / 2;
+         resetView();
         }
     }
 
@@ -317,4 +314,10 @@ public class TextStickerView extends View {
         mRotateAngle += angle;
     }
 
+    public void resetView(){
+        layout_x = getMeasuredWidth() / 2;
+        layout_y = getMeasuredHeight() / 2;
+        mRotateAngle = 0;
+        mScale = 1;
+    }
 }//end class

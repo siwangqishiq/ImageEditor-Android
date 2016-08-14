@@ -34,6 +34,8 @@ import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.adapter.StickerAdapter;
 import com.xinlan.imageeditlibrary.editimage.adapter.StickerTypeAdapter;
 import com.xinlan.imageeditlibrary.editimage.model.StickerBean;
+import com.xinlan.imageeditlibrary.editimage.task.StickerTask;
+import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.editimage.utils.Matrix3;
 import com.xinlan.imageeditlibrary.editimage.view.StickerItem;
 import com.xinlan.imageeditlibrary.editimage.view.StickerView;
@@ -61,6 +63,8 @@ public class StirckerFragment extends Fragment {
 
     private LoadStickersTask mLoadStickersTask;
     private List<StickerBean> stickerBeanList = new ArrayList<StickerBean>();
+
+    private SaveStickersTask mSaveTask;
 
     public static StirckerFragment newInstance(EditImageActivity activity) {
         StirckerFragment fragment = new StirckerFragment();
@@ -256,63 +260,25 @@ public class StirckerFragment extends Fragment {
      *
      * @author panyi
      */
-    private final class SaveStickersTask extends
-            AsyncTask<Bitmap, Void, Bitmap> {
-        private Dialog dialog;
+    private final class SaveStickersTask extends StickerTask {
+        public SaveStickersTask(EditImageActivity activity) {
+            super(activity);
+        }
 
         @Override
-        protected Bitmap doInBackground(Bitmap... params) {
-            // System.out.println("保存贴图!");
-            Matrix touchMatrix = activity.mainImage.getImageViewMatrix();
-
-            Bitmap resultBit = Bitmap.createBitmap(params[0]).copy(
-                    Bitmap.Config.RGB_565, true);
-            Canvas canvas = new Canvas(resultBit);
-
-            float[] data = new float[9];
-            touchMatrix.getValues(data);// 底部图片变化记录矩阵原始数据
-            Matrix3 cal = new Matrix3(data);// 辅助矩阵计算类
-            Matrix3 inverseMatrix = cal.inverseMatrix();// 计算逆矩阵
-            Matrix m = new Matrix();
-            m.setValues(inverseMatrix.getValues());
-
+        public void handleImage(Canvas canvas, Matrix m) {
             LinkedHashMap<Integer, StickerItem> addItems = mStickerView.getBank();
             for (Integer id : addItems.keySet()) {
                 StickerItem item = addItems.get(id);
                 item.matrix.postConcat(m);// 乘以底部图片变化矩阵
                 canvas.drawBitmap(item.bitmap, item.matrix, null);
             }// end for
-            saveBitmap(resultBit, activity.saveFilePath);
-            return resultBit;
         }
 
         @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            dialog.dismiss();
-        }
-
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-        @Override
-        protected void onCancelled(Bitmap result) {
-            super.onCancelled(result);
-            dialog.dismiss();
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
+        public void onPostResult(Bitmap result) {
             mStickerView.clear();
             activity.changeMainBitmap(result);
-            dialog.dismiss();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = BaseActivity.getLoadingDialog(getActivity(), "图片合成保存中...",
-                    false);
-            dialog.show();
         }
     }// end inner class
 
@@ -321,31 +287,10 @@ public class StirckerFragment extends Fragment {
      */
     public void saveStickers() {
         // System.out.println("保存 合成图片");
-        SaveStickersTask task = new SaveStickersTask();
-        task.execute(activity.mainBitmap);
-    }
-
-    /**
-     * 保存Bitmap图片到指定文件
-     *
-     * @param bm
-     * @param name
-     */
-    public static void saveBitmap(Bitmap bm, String filePath) {
-        File f = new File(filePath);
-        if (f.exists()) {
-            f.delete();
+        if (mSaveTask != null) {
+            mSaveTask.cancel(true);
         }
-        try {
-            FileOutputStream out = new FileOutputStream(f);
-            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // System.out.println("保存文件--->" + f.getAbsolutePath());
+        mSaveTask = new SaveStickersTask((EditImageActivity) getActivity());
+        mSaveTask.execute(activity.mainBitmap);
     }
 }// end class

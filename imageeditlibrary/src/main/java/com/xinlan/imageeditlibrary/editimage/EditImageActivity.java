@@ -35,7 +35,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * 图片编辑 主页面
  *
  * @author panyi
- *         <p/>
+ *         <p>
  *         包含 1.贴图 2.滤镜 3.剪裁 4.底图旋转 功能
  */
 public class EditImageActivity extends BaseActivity {
@@ -150,7 +150,9 @@ public class EditImageActivity extends BaseActivity {
      * 关闭输入法
      */
     private void closeInputMethod() {
-        mAddTextFragment.hideInput();
+        if (mAddTextFragment.isAdded()) {
+            mAddTextFragment.hideInput();
+        }
     }
 
     /**
@@ -276,6 +278,9 @@ public class EditImageActivity extends BaseActivity {
                     break;
                 case MODE_ROTATE:// 旋转图片保存
                     mRotateFragment.saveRotateImage();
+                    break;
+                case MODE_TEXT://文字贴图 图片保存
+                    mAddTextFragment.saveTextImage();
                     break;
                 default:
                     break;

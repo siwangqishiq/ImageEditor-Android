@@ -13,6 +13,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
+
 public class DecodeUtils {
 
 	/**
