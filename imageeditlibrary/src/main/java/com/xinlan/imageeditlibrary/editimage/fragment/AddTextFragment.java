@@ -2,7 +2,10 @@ package com.xinlan.imageeditlibrary.editimage.fragment;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +22,7 @@ import android.widget.ImageView;
 
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.task.StickerTask;
 import com.xinlan.imageeditlibrary.editimage.ui.ColorPicker;
 import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
 
@@ -44,6 +48,8 @@ public class AddTextFragment extends Fragment implements TextWatcher {
 
     private int mTextColor = Color.WHITE;
     private InputMethodManager imm;
+
+    private SaveTextStickerTask mSaveTask;
 
     public static AddTextFragment newInstance(EditImageActivity activity) {
         AddTextFragment fragment = new AddTextFragment();
@@ -175,13 +181,48 @@ public class AddTextFragment extends Fragment implements TextWatcher {
      * 保存贴图图片
      */
     public void saveTextImage() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (mSaveTask != null) {
+            mSaveTask.cancel(true);
         }
 
-        mTextStickerView.clearTextContent();
-        mTextStickerView.resetView();
+        //启动任务
+        mSaveTask = new SaveTextStickerTask(activity);
+        mSaveTask.execute(activity.mainBitmap);
     }
+
+    /**
+     * 文字合成任务
+     * 合成最终图片
+     */
+    private final class SaveTextStickerTask extends StickerTask {
+
+        public SaveTextStickerTask(EditImageActivity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void handleImage(Canvas canvas, Matrix m) {
+            float[] f = new float[9];
+            m.getValues(f);
+            int dx = (int) f[Matrix.MTRANS_X];
+            int dy = (int) f[Matrix.MTRANS_Y];
+            float scale_x = f[Matrix.MSCALE_X];
+            float scale_y = f[Matrix.MSCALE_Y];
+            canvas.save();
+            canvas.translate(dx, dy);
+            canvas.scale(scale_x, scale_y);
+            //System.out.println("scale = " + scale_x + "       " + scale_y + "     " + dx + "    " + dy);
+            mTextStickerView.drawText(canvas, mTextStickerView.layout_x,
+                    mTextStickerView.layout_y, mTextStickerView.mScale, mTextStickerView.mRotateAngle);
+            canvas.restore();
+        }
+
+        @Override
+        public void onPostResult(Bitmap result) {
+            mTextStickerView.clearTextContent();
+            mTextStickerView.resetView();
+
+            activity.changeMainBitmap(result);
+        }
+    }//end inner class
 }// end class

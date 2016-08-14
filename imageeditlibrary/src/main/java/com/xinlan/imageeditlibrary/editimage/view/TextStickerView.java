@@ -23,7 +23,7 @@ import com.xinlan.imageeditlibrary.editimage.utils.RectUtil;
 
 /**
  * 文本贴图处理控件
- * <p/>
+ * <p>
  * Created by panyi on 2016/6/9.
  */
 public class TextStickerView extends View {
@@ -56,14 +56,14 @@ public class TextStickerView extends View {
 
     private EditText mEditText;//输入控件
 
-    private int layout_x = 0;
-    private int layout_y = 0;
+    public int layout_x = 0;
+    public int layout_y = 0;
 
     private float last_x = 0;
     private float last_y = 0;
 
-    private float mRotateAngle = 0;
-    private float mScale = 1;
+    public float mRotateAngle = 0;
+    public float mScale = 1;
     private boolean isInitLayout = true;
 
     private boolean isShowHelpBox = true;
@@ -127,7 +127,7 @@ public class TextStickerView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (isInitLayout) {
             isInitLayout = false;
-         resetView();
+            resetView();
         }
     }
 
@@ -171,19 +171,23 @@ public class TextStickerView extends View {
     }
 
     private void drawText(Canvas canvas) {
-        int x = layout_x;
-        int y = layout_y;
+        drawText(canvas,layout_x,layout_y,mScale,mRotateAngle);
+    }
+
+    public  void drawText(Canvas canvas,int _x,int _y,float scale,float rotate){
+        int x = _x;
+        int y = _y;
 
         mPaint.getTextBounds(mText, 0, mText.length(), mTextRect);
         mTextRect.offset(x - (mTextRect.width() >> 1), y);
 
         mHelpBoxRect.set(mTextRect.left - PADDING, mTextRect.top - PADDING
                 , mTextRect.right + PADDING, mTextRect.bottom + PADDING);
-        RectUtil.scaleRect(mHelpBoxRect, mScale);
+        RectUtil.scaleRect(mHelpBoxRect, scale);
 
         canvas.save();
-        canvas.scale(mScale, mScale, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
-        canvas.rotate(mRotateAngle, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
+        canvas.scale(scale, scale, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
+        canvas.rotate(rotate, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
         canvas.drawText(mText, x, y, mPaint);
         canvas.restore();
     }
@@ -314,10 +318,18 @@ public class TextStickerView extends View {
         mRotateAngle += angle;
     }
 
-    public void resetView(){
+    public void resetView() {
         layout_x = getMeasuredWidth() / 2;
         layout_y = getMeasuredHeight() / 2;
         mRotateAngle = 0;
         mScale = 1;
+    }
+
+    public float getScale(){
+        return mScale;
+    }
+
+    public float getRotateAngle(){
+        return mRotateAngle;
     }
 }//end class
