@@ -14,332 +14,339 @@ import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.ViewConfiguration;
 
-public class ImageViewTouch extends ImageViewTouchBase{
-	static final float SCROLL_DELTA_THRESHOLD = 1.0f;
-	protected ScaleGestureDetector mScaleDetector;
-	protected GestureDetector mGestureDetector;
-	protected int mTouchSlop;
-	protected float mScaleFactor;
-	protected int mDoubleTapDirection;
-	protected OnGestureListener mGestureListener;
-	protected OnScaleGestureListener mScaleListener;
-	protected boolean mDoubleTapEnabled = true;
-	protected boolean mScaleEnabled = true;
-	protected boolean mScrollEnabled = true;
-	private OnImageViewTouchDoubleTapListener mDoubleTapListener;
-	private OnImageViewTouchSingleTapListener mSingleTapListener;
+public class ImageViewTouch extends ImageViewTouchBase {
+    static final float SCROLL_DELTA_THRESHOLD = 1.0f;
+    protected ScaleGestureDetector mScaleDetector;
+    protected GestureDetector mGestureDetector;
+    protected int mTouchSlop;
+    protected float mScaleFactor;
+    protected int mDoubleTapDirection;
+    protected OnGestureListener mGestureListener;
+    protected OnScaleGestureListener mScaleListener;
+    protected boolean mDoubleTapEnabled = true;
+    protected boolean mScaleEnabled = true;
+    protected boolean mScrollEnabled = true;
+    private OnImageViewTouchDoubleTapListener mDoubleTapListener;
+    private OnImageViewTouchSingleTapListener mSingleTapListener;
+    private OnImageFlingListener mFlingListener;
 
-	public ImageViewTouch(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public ImageViewTouch(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	@Override
-	protected void init() {
-		super.init();
-		mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-		mGestureListener = getGestureListener();
-		mScaleListener = getScaleListener();
-		mScaleDetector = new ScaleGestureDetector(getContext(), mScaleListener);
-		mGestureDetector = new GestureDetector(getContext(), mGestureListener,
-				null, true);
+    @Override
+    protected void init() {
+        super.init();
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        mGestureListener = getGestureListener();
+        mScaleListener = getScaleListener();
+        mScaleDetector = new ScaleGestureDetector(getContext(), mScaleListener);
+        mGestureDetector = new GestureDetector(getContext(), mGestureListener,
+                null, true);
 
-		mDoubleTapDirection = 1;
-	}
+        mDoubleTapDirection = 1;
+    }
 
-	public void setDoubleTapListener(OnImageViewTouchDoubleTapListener listener) {
-		mDoubleTapListener = listener;
-	}
+    public void setDoubleTapListener(OnImageViewTouchDoubleTapListener listener) {
+        mDoubleTapListener = listener;
+    }
 
-	public void setSingleTapListener(OnImageViewTouchSingleTapListener listener) {
-		mSingleTapListener = listener;
-	}
+    public void setSingleTapListener(OnImageViewTouchSingleTapListener listener) {
+        mSingleTapListener = listener;
+    }
 
-	public void setDoubleTapEnabled(boolean value) {
-		mDoubleTapEnabled = value;
-	}
+    public void setFlingListener(OnImageFlingListener listener) {
+        mFlingListener = listener;
+    }
 
-	public void setScaleEnabled(boolean value) {
-		mScaleEnabled = value;
-		setDoubleTapEnabled(value);
-	}
+    public void setDoubleTapEnabled(boolean value) {
+        mDoubleTapEnabled = value;
+    }
 
-	public void setScrollEnabled(boolean value) {
-		mScrollEnabled = value;
-	}
+    public void setScaleEnabled(boolean value) {
+        mScaleEnabled = value;
+        setDoubleTapEnabled(value);
+    }
 
-	public boolean getDoubleTapEnabled() {
-		return mDoubleTapEnabled;
-	}
+    public void setScrollEnabled(boolean value) {
+        mScrollEnabled = value;
+    }
 
-	protected OnGestureListener getGestureListener() {
-		return new GestureListener();
-	}
+    public boolean getDoubleTapEnabled() {
+        return mDoubleTapEnabled;
+    }
 
-	protected OnScaleGestureListener getScaleListener() {
-		return new ScaleListener();
-	}
+    protected OnGestureListener getGestureListener() {
+        return new GestureListener();
+    }
 
-	@Override
-	protected void _setImageDrawable(final Drawable drawable,
-			final Matrix initial_matrix, float min_zoom, float max_zoom) {
-		super._setImageDrawable(drawable, initial_matrix, min_zoom, max_zoom);
-		mScaleFactor = getMaxScale() / 3;
-	}
+    protected OnScaleGestureListener getScaleListener() {
+        return new ScaleListener();
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		mScaleDetector.onTouchEvent(event);
+    @Override
+    protected void _setImageDrawable(final Drawable drawable,
+                                     final Matrix initial_matrix, float min_zoom, float max_zoom) {
+        super._setImageDrawable(drawable, initial_matrix, min_zoom, max_zoom);
+        mScaleFactor = getMaxScale() / 3;
+    }
 
-		if (!mScaleDetector.isInProgress()) {
-			mGestureDetector.onTouchEvent(event);
-		}
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mScaleDetector.onTouchEvent(event);
 
-		int action = event.getAction();
-		switch (action & MotionEvent.ACTION_MASK) {
-		case MotionEvent.ACTION_UP:
-			if (getScale() < getMinScale()) {
-				zoomTo(getMinScale(), 500);
-			}
-			break;
-		}
-		return true;
-	}
+        if (!mScaleDetector.isInProgress()) {
+            mGestureDetector.onTouchEvent(event);
+        }
 
-	@Override
-	protected void onZoomAnimationCompleted(float scale) {
+        int action = event.getAction();
+        switch (action & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_UP:
+                if (getScale() < getMinScale()) {
+                    zoomTo(getMinScale(), 500);
+                }
+                break;
+        }
+        return true;
+    }
 
-		if (LOG_ENABLED) {
-			Log.d(LOG_TAG, "onZoomAnimationCompleted. scale: " + scale
-					+ ", minZoom: " + getMinScale());
-		}
+    @Override
+    protected void onZoomAnimationCompleted(float scale) {
 
-		if (scale < getMinScale()) {
-			zoomTo(getMinScale(), 50);
-		}
-	}
+        if (LOG_ENABLED) {
+            Log.d(LOG_TAG, "onZoomAnimationCompleted. scale: " + scale
+                    + ", minZoom: " + getMinScale());
+        }
 
-	// protected float onDoubleTapPost(float scale, float maxZoom) {
-	// if (mDoubleTapDirection == 1) {
-	// mDoubleTapDirection = -1;
-	// return maxZoom;
-	// } else {
-	// mDoubleTapDirection = 1;
-	// return 1f;
-	// }
-	// }
+        if (scale < getMinScale()) {
+            zoomTo(getMinScale(), 50);
+        }
+    }
 
-	protected float onDoubleTapPost(float scale, float maxZoom) {
-		if (mDoubleTapDirection == 1) {
-			if ((scale + (mScaleFactor * 2)) <= maxZoom) {
-				return scale + mScaleFactor;
-			} else {
-				mDoubleTapDirection = -1;
-				return maxZoom;
-			}
-		} else {
-			mDoubleTapDirection = 1;
-			return 1f;
-		}
-	}
+    // protected float onDoubleTapPost(float scale, float maxZoom) {
+    // if (mDoubleTapDirection == 1) {
+    // mDoubleTapDirection = -1;
+    // return maxZoom;
+    // } else {
+    // mDoubleTapDirection = 1;
+    // return 1f;
+    // }
+    // }
 
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		if (!mScrollEnabled)
-			return false;
+    protected float onDoubleTapPost(float scale, float maxZoom) {
+        if (mDoubleTapDirection == 1) {
+            if ((scale + (mScaleFactor * 2)) <= maxZoom) {
+                return scale + mScaleFactor;
+            } else {
+                mDoubleTapDirection = -1;
+                return maxZoom;
+            }
+        } else {
+            mDoubleTapDirection = 1;
+            return 1f;
+        }
+    }
 
-		if (e1 == null || e2 == null)
-			return false;
-		if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1)
-			return false;
-		if (mScaleDetector.isInProgress())
-			return false;
-		if (getScale() == 1f)
-			return false;
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+                            float distanceY) {
+        if (!mScrollEnabled)
+            return false;
 
-		mUserScaled = true;
-		// scrollBy(distanceX, distanceY);
-		scrollBy(-distanceX, -distanceY);
-		// RectF r = getBitmapRect();
-		// System.out.println(r.left + "   " + r.top + "   " + r.right + "   "
-		// + r.bottom);
-		invalidate();
-		return true;
-	}
+        if (e1 == null || e2 == null)
+            return false;
+        if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1)
+            return false;
+        if (mScaleDetector.isInProgress())
+            return false;
+        if (getScale() == 1f)
+            return false;
 
-	/**
-	 * ���ٻ���
-	 * 
-	 * @param e1
-	 * @param e2
-	 * @param velocityX
-	 * @param velocityY
-	 * @return
-	 */
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-		if (!mScrollEnabled)
-			return false;
+        mUserScaled = true;
+        // scrollBy(distanceX, distanceY);
+        scrollBy(-distanceX, -distanceY);
+        // RectF r = getBitmapRect();
+        // System.out.println(r.left + "   " + r.top + "   " + r.right + "   "
+        // + r.bottom);
+        invalidate();
+        return true;
+    }
 
-		if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1)
-			return false;
-		if (mScaleDetector.isInProgress())
-			return false;
-		if (getScale() == 1f)
-			return false;
+    /**
+     * @param e1
+     * @param e2
+     * @param velocityX
+     * @param velocityY
+     * @return
+     */
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                           float velocityY) {
+        if (!mScrollEnabled)
+            return false;
 
-		float diffX = e2.getX() - e1.getX();
-		float diffY = e2.getY() - e1.getY();
-		if (Math.abs(velocityX) > 800 || Math.abs(velocityY) > 800) {
-			mUserScaled = true;
-			// System.out.println("on fling scroll");
-			scrollBy(diffX / 2, diffY / 2, 300);
-			invalidate();
-			return true;
-		}
-		return false;
-	}
+        if (mFlingListener != null) {
+            mFlingListener.onFling(e1, e2, velocityX, velocityY);
+        }
+        
+        if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1)
+            return false;
+        if (mScaleDetector.isInProgress())
+            return false;
+        if (getScale() == 1f)
+            return false;
 
-	/**
-	 * Determines whether this ImageViewTouch can be scrolled.
-	 * 
-	 * @param direction
-	 *            - positive direction value means scroll from right to left,
-	 *            negative value means scroll from left to right
-	 * 
-	 * @return true if there is some more place to scroll, false - otherwise.
-	 */
-	public boolean canScroll(int direction) {
-		RectF bitmapRect = getBitmapRect();
-		updateRect(bitmapRect, mScrollRect);
-		Rect imageViewRect = new Rect();
-		getGlobalVisibleRect(imageViewRect);
+        float diffX = e2.getX() - e1.getX();
+        float diffY = e2.getY() - e1.getY();
+        if (Math.abs(velocityX) > 800 || Math.abs(velocityY) > 800) {
+            mUserScaled = true;
+            // System.out.println("on fling scroll");
+            scrollBy(diffX / 2, diffY / 2, 300);
+            invalidate();
+            return true;
+        }
 
-		if (null == bitmapRect) {
-			return false;
-		}
+        return false;
+    }
 
-		if (bitmapRect.right >= imageViewRect.right) {
-			if (direction < 0) {
-				return Math.abs(bitmapRect.right - imageViewRect.right) > SCROLL_DELTA_THRESHOLD;
-			}
-		}
+    /**
+     * Determines whether this ImageViewTouch can be scrolled.
+     *
+     * @param direction - positive direction value means scroll from right to left,
+     *                  negative value means scroll from left to right
+     * @return true if there is some more place to scroll, false - otherwise.
+     */
+    public boolean canScroll(int direction) {
+        RectF bitmapRect = getBitmapRect();
+        updateRect(bitmapRect, mScrollRect);
+        Rect imageViewRect = new Rect();
+        getGlobalVisibleRect(imageViewRect);
 
-		double bitmapScrollRectDelta = Math.abs(bitmapRect.left
-				- mScrollRect.left);
-		return bitmapScrollRectDelta > SCROLL_DELTA_THRESHOLD;
-	}
+        if (null == bitmapRect) {
+            return false;
+        }
 
-	/**
-	 * 
-	 * @author
-	 * 
-	 */
-	public class GestureListener extends
-			GestureDetector.SimpleOnGestureListener {
+        if (bitmapRect.right >= imageViewRect.right) {
+            if (direction < 0) {
+                return Math.abs(bitmapRect.right - imageViewRect.right) > SCROLL_DELTA_THRESHOLD;
+            }
+        }
 
-		@Override
-		public boolean onSingleTapConfirmed(MotionEvent e) {
+        double bitmapScrollRectDelta = Math.abs(bitmapRect.left
+                - mScrollRect.left);
+        return bitmapScrollRectDelta > SCROLL_DELTA_THRESHOLD;
+    }
 
-			if (null != mSingleTapListener) {
-				mSingleTapListener.onSingleTapConfirmed();
-			}
+    /**
+     * @author
+     */
+    public class GestureListener extends
+            GestureDetector.SimpleOnGestureListener {
 
-			return super.onSingleTapConfirmed(e);
-		}
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
 
-		@Override
-		public boolean onDoubleTap(MotionEvent e) {
-			Log.i(LOG_TAG, "onDoubleTap. double tap enabled? "
-					+ mDoubleTapEnabled);
-			if (mDoubleTapEnabled) {
-				mUserScaled = true;
-				float scale = getScale();
-				float targetScale = scale;
-				targetScale = onDoubleTapPost(scale, getMaxScale());
-				targetScale = Math.min(getMaxScale(),
-						Math.max(targetScale, getMinScale()));
-				zoomTo(targetScale, e.getX(), e.getY(),
-						DEFAULT_ANIMATION_DURATION);
-				invalidate();
-			}
+            if (null != mSingleTapListener) {
+                mSingleTapListener.onSingleTapConfirmed();
+            }
 
-			if (null != mDoubleTapListener) {
-				mDoubleTapListener.onDoubleTap();
-			}
+            return super.onSingleTapConfirmed(e);
+        }
 
-			return super.onDoubleTap(e);
-		}
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            Log.i(LOG_TAG, "onDoubleTap. double tap enabled? "
+                    + mDoubleTapEnabled);
+            if (mDoubleTapEnabled) {
+                mUserScaled = true;
+                float scale = getScale();
+                float targetScale = scale;
+                targetScale = onDoubleTapPost(scale, getMaxScale());
+                targetScale = Math.min(getMaxScale(),
+                        Math.max(targetScale, getMinScale()));
+                zoomTo(targetScale, e.getX(), e.getY(),
+                        DEFAULT_ANIMATION_DURATION);
+                invalidate();
+            }
 
-		@Override
-		public void onLongPress(MotionEvent e) {
-			if (isLongClickable()) {
-				if (!mScaleDetector.isInProgress()) {
-					setPressed(true);
-					performLongClick();
-				}
-			}
-		}
+            if (null != mDoubleTapListener) {
+                mDoubleTapListener.onDoubleTap();
+            }
 
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2,
-				float distanceX, float distanceY) {
-			return ImageViewTouch.this.onScroll(e1, e2, distanceX, distanceY);
-		}
+            return super.onDoubleTap(e);
+        }
 
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			return ImageViewTouch.this.onFling(e1, e2, velocityX, velocityY);
-		}
-	}// end inner class
+        @Override
+        public void onLongPress(MotionEvent e) {
+            if (isLongClickable()) {
+                if (!mScaleDetector.isInProgress()) {
+                    setPressed(true);
+                    performLongClick();
+                }
+            }
+        }
 
-	public class ScaleListener extends
-			ScaleGestureDetector.SimpleOnScaleGestureListener {
-		protected boolean mScaled = false;
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY) {
+            return ImageViewTouch.this.onScroll(e1, e2, distanceX, distanceY);
+        }
 
-		@Override
-		public boolean onScale(ScaleGestureDetector detector) {
-			float span = detector.getCurrentSpan() - detector.getPreviousSpan();
-			float targetScale = getScale() * detector.getScaleFactor();
-			// System.out.println("span--->" + span);
-			if (mScaleEnabled) {
-				if (mScaled && span != 0) {
-					mUserScaled = true;
-					targetScale = Math.min(getMaxScale(),
-							Math.max(targetScale, getMinScale() - 0.1f));
-					zoomTo(targetScale, detector.getFocusX(),
-							detector.getFocusY());
-					mDoubleTapDirection = 1;
-					invalidate();
-					return true;
-				}
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            return ImageViewTouch.this.onFling(e1, e2, velocityX, velocityY);
+        }
+    }// end inner class
 
-				// This is to prevent a glitch the first time
-				// image is scaled.
-				if (!mScaled)
-					mScaled = true;
-			}
-			return true;
-		}
-	}// end inner class
+    public class ScaleListener extends
+            ScaleGestureDetector.SimpleOnScaleGestureListener {
+        protected boolean mScaled = false;
 
-	public void resetImage() {
-		float scale = getScale();
-		float targetScale = scale;
-		targetScale = Math.min(getMaxScale(),
-				Math.max(targetScale, getMinScale()));
-		zoomTo(targetScale, 0, 0, DEFAULT_ANIMATION_DURATION);
-		invalidate();
-	}
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float span = detector.getCurrentSpan() - detector.getPreviousSpan();
+            float targetScale = getScale() * detector.getScaleFactor();
+            // System.out.println("span--->" + span);
+            if (mScaleEnabled) {
+                if (mScaled && span != 0) {
+                    mUserScaled = true;
+                    targetScale = Math.min(getMaxScale(),
+                            Math.max(targetScale, getMinScale() - 0.1f));
+                    zoomTo(targetScale, detector.getFocusX(),
+                            detector.getFocusY());
+                    mDoubleTapDirection = 1;
+                    invalidate();
+                    return true;
+                }
 
-	public interface OnImageViewTouchDoubleTapListener {
+                // This is to prevent a glitch the first time
+                // image is scaled.
+                if (!mScaled)
+                    mScaled = true;
+            }
+            return true;
+        }
+    }// end inner class
 
-		void onDoubleTap();
-	}
+    public void resetImage() {
+        float scale = getScale();
+        float targetScale = scale;
+        targetScale = Math.min(getMaxScale(),
+                Math.max(targetScale, getMinScale()));
+        zoomTo(targetScale, 0, 0, DEFAULT_ANIMATION_DURATION);
+        invalidate();
+    }
 
-	public interface OnImageViewTouchSingleTapListener {
+    public interface OnImageViewTouchDoubleTapListener {
 
-		void onSingleTapConfirmed();
-	}
+        void onDoubleTap();
+    }
 
+    public interface OnImageViewTouchSingleTapListener {
+
+        void onSingleTapConfirmed();
+    }
+
+    public interface OnImageFlingListener {
+        void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
+    }
 }

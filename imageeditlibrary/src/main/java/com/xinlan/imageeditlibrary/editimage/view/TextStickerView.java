@@ -64,8 +64,11 @@ public class TextStickerView extends View {
 
     private float mRotateAngle = 0;
     private float mScale = 1;
+    private boolean isInitLayout = true;
 
     private Matrix mMatrix = new Matrix();
+
+    private boolean isShowHelpBox = true;
 
     public TextStickerView(Context context) {
         super(context);
@@ -103,6 +106,7 @@ public class TextStickerView extends View {
         mPaint.setColor(Color.WHITE);
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(TEXT_SIZE_DEFAULT);
+        mPaint.setAntiAlias(true);
 
         mHelpPaint.setColor(Color.BLACK);
         mHelpPaint.setStyle(Paint.Style.STROKE);
@@ -123,8 +127,11 @@ public class TextStickerView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        layout_x = getMeasuredWidth() / 2;
-        layout_y = getMeasuredHeight() / 2;
+        if (isInitLayout) {
+            isInitLayout = false;
+            layout_x = getMeasuredWidth() / 2;
+            layout_y = getMeasuredHeight() / 2;
+        }
     }
 
     @Override
@@ -149,6 +156,10 @@ public class TextStickerView extends View {
                 mHelpBoxRect.centerY(), mRotateAngle);
         RectUtil.rotateRect(mRotateDstRect, mHelpBoxRect.centerX(),
                 mHelpBoxRect.centerY(), mRotateAngle);
+
+        if (!isShowHelpBox) {
+            return;
+        }
 
         canvas.save();
         canvas.rotate(mRotateAngle, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
@@ -190,17 +201,23 @@ public class TextStickerView extends View {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (mDeleteDstRect.contains(x, y)) {// 删除模式
+                    isShowHelpBox = true;
                     mCurrentMode = DELETE_MODE;
                 } else if (mRotateDstRect.contains(x, y)) {// 旋转按钮
+                    isShowHelpBox = true;
                     mCurrentMode = ROTATE_MODE;
                     last_x = mRotateDstRect.centerX();
                     last_y = mRotateDstRect.centerY();
                     ret = true;
                 } else if (mHelpBoxRect.contains(x, y)) {// 移动模式
+                    isShowHelpBox = true;
                     mCurrentMode = MOVE_MODE;
                     last_x = x;
                     last_y = y;
                     ret = true;
+                } else {
+                    isShowHelpBox = false;
+                    invalidate();
                 }// end if
 
                 if (mCurrentMode == DELETE_MODE) {// 删除选定贴图
