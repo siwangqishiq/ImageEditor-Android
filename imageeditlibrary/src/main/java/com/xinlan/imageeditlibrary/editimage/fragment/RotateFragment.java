@@ -156,7 +156,7 @@ public class RotateFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = BaseActivity.getLoadingDialog(getActivity(), "image processing...",
+            dialog = BaseActivity.getLoadingDialog(getActivity(), R.string.saving_image,
                     false);
             dialog.show();
         }

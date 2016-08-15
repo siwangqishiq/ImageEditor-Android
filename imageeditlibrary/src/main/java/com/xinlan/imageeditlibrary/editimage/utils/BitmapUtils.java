@@ -54,15 +54,15 @@ public class BitmapUtils {
 
     public static final long MAX_SZIE = 1024 * 512;// 500KB
 
-    public static Bitmap loadImageByPath(final String imagePath, int reqWidth,
-                                         int reqHeight) {
-        File file = new File(imagePath);
-        if (file.length() < MAX_SZIE) {
-            return getSampledBitmap(imagePath, reqWidth, reqHeight);
-        } else {// 压缩图片
-            return getImageCompress(imagePath);
-        }
-    }
+//    public static Bitmap loadImageByPath(final String imagePath, int reqWidth,
+//                                         int reqHeight) {
+//        File file = new File(imagePath);
+//        if (file.length() < MAX_SZIE) {
+//            return getSampledBitmap(imagePath, reqWidth, reqHeight);
+//        } else {// 压缩图片
+//            return getImageCompress(imagePath);
+//        }
+//    }
 
     public static int getOrientation(final String imagePath) {
         int rotate = 0;
@@ -87,33 +87,6 @@ public class BitmapUtils {
             e.printStackTrace();
         }
         return rotate;
-    }
-
-    public static Bitmap getSampledBitmap(String filePath, int reqWidth,
-                                          int reqHeight) {
-        Options options = new Options();
-        options.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeFile(filePath, options);
-
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            if (width > height) {
-                inSampleSize = (int) Math.floor(((float) height / reqHeight) + 0.5f); // Math.round((float)height
-            } else {
-                inSampleSize = (int) Math.floor(((float) width / reqWidth) + 0.5f); // Math.round((float)width
-            }//end if
-        }
-        // System.out.println("inSampleSize--->"+inSampleSize);
-
-        options.inSampleSize = inSampleSize;
-        options.inJustDecodeBounds = false;
-
-        return BitmapFactory.decodeFile(filePath, options);
     }
 
     public static BitmapSize getBitmapSize(String filePath) {
@@ -436,5 +409,39 @@ public class BitmapUtils {
      */
     public static Bitmap resizeBitmap( final Bitmap input, int destWidth, int destHeight ) throws OutOfMemoryError {
         return resizeBitmap( input, destWidth, destHeight, 0 );
+    }
+
+    public static Bitmap getSampledBitmap(String filePath, int reqWidth, int reqHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        int inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inSampleSize = inSampleSize;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }

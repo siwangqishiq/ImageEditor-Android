@@ -96,8 +96,8 @@ public class EditImageActivity extends BaseActivity {
     private void initView() {
         mContext = this;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        imageWidth = (int) ((float) metrics.widthPixels / 1.5);
-        imageHeight = (int) ((float) metrics.heightPixels / 1.5);
+        imageWidth = metrics.widthPixels / 2;
+        imageHeight = metrics.heightPixels / 2;
 
         bannerFlipper = (ViewFlipper) findViewById(R.id.banner_flipper);
         bannerFlipper.setInAnimation(this, R.anim.in_bottom_to_top);
@@ -205,7 +205,7 @@ public class EditImageActivity extends BaseActivity {
     private final class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
-            return BitmapUtils.loadImageByPath(params[0], imageWidth,
+            return BitmapUtils.getSampledBitmap(params[0], imageWidth,
                     imageHeight);
         }
 

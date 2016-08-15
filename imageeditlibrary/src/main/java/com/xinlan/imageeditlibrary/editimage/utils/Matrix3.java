@@ -35,7 +35,7 @@ public class Matrix3 {
 	}
 
 	/**
-	 * 两矩阵相�?
+	 * 两矩阵相乘
 	 * 
 	 * @param m
 	 */
@@ -57,9 +57,8 @@ public class Matrix3 {
 	}
 
 	/**
-	 * 当前矩阵求�?矩阵 快�?求�?矩阵的方�?
-	 * 
-	 * 
+	 * 求当前矩阵的逆矩阵
+	 *
 	 * @return
 	 */
 	public Matrix3 inverseMatrix() {

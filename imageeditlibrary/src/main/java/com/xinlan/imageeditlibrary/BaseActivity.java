@@ -57,6 +57,11 @@ public class BaseActivity extends AppCompatActivity {
         ImageLoader.getInstance().init(config);
     }
 
+    public static Dialog getLoadingDialog(Context context, int titleId,
+                                          boolean canCancel) {
+        return getLoadingDialog(context,context.getString(titleId),canCancel);
+    }
+
 
     public static Dialog getLoadingDialog(Context context, String title,
                                           boolean canCancel) {

@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.editimage.utils.Matrix3;
@@ -29,7 +30,11 @@ public abstract class StickerTask extends AsyncTask<Bitmap, Void, Bitmap> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = mContext.getLoadingDialog(mContext, "图片合成保存中...",
+
+        if (mContext.isFinishing())
+            return;
+
+        dialog = mContext.getLoadingDialog(mContext, R.string.saving_image,
                 false);
         dialog.show();
     }

@@ -143,7 +143,7 @@ public class StirckerFragment extends Fragment {
 
         public LoadStickersTask() {
             super();
-            loadDialog = BaseActivity.getLoadingDialog(getActivity(), "正在载入贴图数据...", false);
+            loadDialog = BaseActivity.getLoadingDialog(getActivity(), R.string.saving_image, false);
         }
 
         @Override

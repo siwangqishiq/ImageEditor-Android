@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">编辑图片</string>
+    <string name="no_images">没有发现图片</string>
+    <string name="images">%d 张图片</string>
+    <string name="save">保存</string>
+    <string name="apply">应用</string>
+    <string name="stickers">贴图</string>
+    <string name="fliter">滤镜</string>
+    <string name="crop">裁剪</string>
+    <string name="rotate">旋转</string>
+    <string name="text">文字</string>
+    <string name="materialcolorpicker__app_name">颜色选择</string>
+    <string name="materialcolorpicker__descLib">颜色选择</string>
+    <string name="materialcolorpicker__errHex">颜色值不正确</string>
+    <string name="materialcolorpicker__inputColor">颜色:</string>
+    <string name="materialcolorpicker__btnSelectColor">选择</string>
+    <string name="saving_image">图片合成保存中...</string>
+    <string name="input_hint">输入文本 ...</string>
+</resources>

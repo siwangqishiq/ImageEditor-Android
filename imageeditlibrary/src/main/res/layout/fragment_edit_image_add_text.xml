@@ -15,7 +15,7 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="18dp"
         android:layout_weight="1"
-        android:hint="input text ..."
+        android:hint="@string/input_hint"
         android:paddingLeft="8dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"/>

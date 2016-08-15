@@ -23,7 +23,7 @@ import com.xinlan.imageeditlibrary.editimage.utils.RectUtil;
 
 /**
  * 文本贴图处理控件
- * <p>
+ * <p/>
  * Created by panyi on 2016/6/9.
  */
 public class TextStickerView extends View {
@@ -171,10 +171,14 @@ public class TextStickerView extends View {
     }
 
     private void drawText(Canvas canvas) {
-        drawText(canvas,layout_x,layout_y,mScale,mRotateAngle);
+        drawText(canvas, layout_x, layout_y, mScale, mRotateAngle);
     }
 
-    public  void drawText(Canvas canvas,int _x,int _y,float scale,float rotate){
+    public void drawText(Canvas canvas, int _x, int _y, float scale, float rotate) {
+        if (TextUtils.isEmpty(mText)) {
+            return;
+        }
+
         int x = _x;
         int y = _y;
 
@@ -325,11 +329,11 @@ public class TextStickerView extends View {
         mScale = 1;
     }
 
-    public float getScale(){
+    public float getScale() {
         return mScale;
     }
 
-    public float getRotateAngle(){
+    public float getRotateAngle() {
         return mRotateAngle;
     }
 }//end class

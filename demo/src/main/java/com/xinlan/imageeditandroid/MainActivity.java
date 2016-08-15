@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.picchooser.SelectPictureActivity;
 
 import java.io.File;
@@ -34,10 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgView;
     private View openAblum;
     private View editImage;//
-    private View stickersImage;//
     private Bitmap mainBitmap;
-    public Uri mImageUri;//
-    public String mOutputFilePath;//
     private int imageWidth, imageHeight;//
     private String path;
 
@@ -51,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         context = this;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        imageWidth = (int) ((float) metrics.widthPixels / 1.5);
-        imageHeight = (int) ((float) metrics.heightPixels / 1.5);
+        imageWidth = metrics.widthPixels;
+        imageHeight = metrics.heightPixels;
 
         imgView = (ImageView) findViewById(R.id.img);
         openAblum = findViewById(R.id.select_ablum);
@@ -159,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     private final class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
-            return getSampledBitmap(params[0], imageWidth, imageHeight);
+            return BitmapUtils.getSampledBitmap(params[0], imageWidth / 4, imageHeight / 4);
         }
 
         @Override
@@ -191,36 +189,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }// end inner class
 
-    public static Bitmap getSampledBitmap(String filePath, int reqWidth,
-                                          int reqHeight) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeFile(filePath, options);
-
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            if (width > height) {
-                inSampleSize = (int) Math
-                        .floor(((float) height / reqHeight) + 0.5f); // Math.round((float)height
-                // /
-                // (float)reqHeight);
-            } else {
-                inSampleSize = (int) Math
-                        .floor(((float) width / reqWidth) + 0.5f); // Math.round((float)width
-                // /
-                // (float)reqWidth);
-            }
-        }
-        // System.out.println("inSampleSize--->"+inSampleSize);
-
-        options.inSampleSize = inSampleSize;
-        options.inJustDecodeBounds = false;
-
-        return BitmapFactory.decodeFile(filePath, options);
-    }
 }//end class
