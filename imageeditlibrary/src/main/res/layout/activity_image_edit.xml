@@ -62,7 +62,7 @@
     <com.xinlan.imageeditlibrary.editimage.view.CustomViewPager
         android:id="@+id/bottom_gallery"
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="@dimen/bottom_banner_height"
         android:layout_alignParentBottom="true"
         android:background="#333333"/>
 

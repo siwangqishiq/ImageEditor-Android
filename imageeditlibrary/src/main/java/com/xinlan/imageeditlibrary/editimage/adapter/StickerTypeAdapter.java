@@ -21,16 +21,9 @@ import com.xinlan.imageeditlibrary.editimage.fragment.StirckerFragment;
 public class StickerTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     public static final int[] typeIcon = {R.drawable.stickers_type_animal,
             R.drawable.stickers_type_motion, R.drawable.stickers_type_cos,
-            R.drawable.stickers_type_mark, R.drawable.stickers_type_decoration,
-            R.drawable.stickers_type_spring, R.drawable.stickers_type_text,
-            R.drawable.stickers_type_number, R.drawable.stickers_type_frame,
-            R.drawable.stickers_type_profession};
-    public static final String[] stickerPath = {"stickers/dongwu",
-            "stickers/xinqing", "stickers/cos", "stickers/fuhao",
-            "stickers/shipin", "stickers/chunjie", "stickers/wenzi",
-            "stickers/shuzi", "stickers/biankuang", "stickers/zhiye"};
-    public static final String[] stickerPathName = {"动物", "心情", "cos", "符号",
-            "饰品", "春节", "文字", "数字", "边框", "职业"};
+            R.drawable.stickers_type_mark, R.drawable.stickers_type_decoration};
+    public static final String[] stickerPath = {"stickers/type1", "stickers/type2", "stickers/type3", "stickers/type4", "stickers/type5", "stickers/type6"};
+    public static final String[] stickerPathName = {"表情1", "表情2", "表情3", "表情4", "表情5", "表情6"};
     private StirckerFragment mStirckerFragment;
     private ImageClick mImageClick = new ImageClick();
 
@@ -78,9 +71,9 @@ public class StickerTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
         String name = stickerPathName[position];
         imageHoler.text.setText(name);
         // TODO
-        imageHoler.icon.setImageResource(typeIcon[position]);
-        imageHoler.icon.setTag(stickerPath[position]);
-        imageHoler.icon.setOnClickListener(mImageClick);
+        //imageHoler.icon.setImageResource(typeIcon[position]);
+        imageHoler.text.setTag(stickerPath[position]);
+        imageHoler.text.setOnClickListener(mImageClick);
     }
 
     /**
