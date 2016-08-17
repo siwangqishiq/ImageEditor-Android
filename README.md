@@ -1,12 +1,12 @@
 # AndroidImageEditor
 
-#### For edit image,supply stickers filter rotate crop
+#### For edit image,supply stickers filter rotate crop textstciker
 
 > ##Version History
 >###v_1.0:
 >    base function,edit image,supply stickers filter rotate crop
 >###v_2.0:
->    add the textimage(in developing...)
+>    add the textimage
 
 
 ### 动态效果图
