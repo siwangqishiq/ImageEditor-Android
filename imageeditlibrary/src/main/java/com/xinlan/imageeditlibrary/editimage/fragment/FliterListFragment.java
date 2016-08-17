@@ -151,7 +151,7 @@ public class FliterListFragment extends Fragment {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			dialog = EditImageActivity.getLoadingDialog(getActivity(),
-					"image processing...", false);
+					R.string.saving_image, false);
 			dialog.show();
 		}
 	}// end inner class
