@@ -47,7 +47,7 @@ public class ImagesFragment extends Fragment {
 						MediaStore.Images.Media.BUCKET_ID + " = ?",
 						new String[] { String.valueOf(getArguments().getInt(
 								"bucket")) },
-						MediaStore.Images.Media.DATE_MODIFIED + " ASC");
+						MediaStore.Images.Media.DATE_MODIFIED + " DESC");
 
 		final List<GridItem> images = new ArrayList<GridItem>(cur.getCount());
 

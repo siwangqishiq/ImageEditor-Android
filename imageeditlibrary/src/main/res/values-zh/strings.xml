@@ -16,4 +16,19 @@
     <string name="materialcolorpicker__btnSelectColor">选择</string>
     <string name="saving_image">图片合成保存中...</string>
     <string name="input_hint">输入文本 ...</string>
+
+    <string-array name="fliters">
+        <item>原始</item>
+        <item>软化</item>
+        <item>黑白</item>
+        <item>经典</item>
+        <item>华丽</item>
+        <item>复古</item>
+        <item>优雅</item>
+        <item>电影</item>
+        <item>回忆</item>
+        <item>优格</item>
+        <item>流年</item>
+        <item>发光</item>
+    </string-array>
 </resources>

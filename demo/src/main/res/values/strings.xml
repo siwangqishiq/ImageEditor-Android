@@ -5,4 +5,5 @@
     <string name="no_choose">please choose a image for edit</string>
     <string name="choose_image">choose a image for edit</string>
     <string name="edit_image">edit image</string>
+    <string name="save_path">save path : %s</string>
 </resources>

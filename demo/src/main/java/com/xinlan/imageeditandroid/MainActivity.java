@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleEditorImage(Intent data) {
         String newFilePath = data.getStringExtra("save_file_path");
-        Toast.makeText(this, "new image path: " + newFilePath, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
         //System.out.println("newFilePath---->" + newFilePath);
         LoadImageTask loadTask = new LoadImageTask();
         loadTask.execute(newFilePath);

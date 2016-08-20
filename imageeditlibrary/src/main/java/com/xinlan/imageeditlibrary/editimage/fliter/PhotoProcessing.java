@@ -3,6 +3,8 @@ package com.xinlan.imageeditlibrary.editimage.fliter;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 
+import com.xinlan.imageeditlibrary.R;
+
 /**
  * 图片处理类
  *
@@ -11,8 +13,6 @@ import android.graphics.Bitmap.Config;
 public class PhotoProcessing {
     private static final String TAG = "PhotoProcessing";
 
-    public static final String[] FILTERS = {"origin", "soft", "black", "classic", "gorgeous",
-            "retro", "grace", "film", "memory", "yogurt", "fleeting", "shine"};
 
     public static Bitmap filterPhoto(Bitmap bitmap, int position) {
         if (bitmap != null) {
