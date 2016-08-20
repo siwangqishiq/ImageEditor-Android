@@ -10,15 +10,15 @@
 
 
 ### 动态效果图
-![图1](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/demo1.gif)
-![图2](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/demo2.gif)
-
-####效果图
-![图3](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/1.png)
-![图4](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/2.png)
-![图5](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/3.png)
-![图6](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/4.png)
-![图7](https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/5.png)
-
+<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif1.gif"/>
+<br />
+<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif2.gif"/>
+<br />
+<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif3.gif"/>
+<br />
+<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif4.gif"/>
+<br />
+<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif5.gif"/>
+<br />
 ####使用方法:见DEMO示例
 ####usage:see the demo project
