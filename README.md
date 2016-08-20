@@ -10,15 +10,15 @@
 
 
 ### 动态效果图
-<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif1.gif"/>
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif1.gif"/>
 <br />
-<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif2.gif"/>
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif2.gif"/>
 <br />
-<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif3.gif"/>
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif3.gif"/>
 <br />
-<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif4.gif"/>
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif4.gif"/>
 <br />
-<img width=300 height=800 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif5.gif"/>
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif5.gif"/>
 <br />
 ####使用方法:见DEMO示例
 ####usage:see the demo project
