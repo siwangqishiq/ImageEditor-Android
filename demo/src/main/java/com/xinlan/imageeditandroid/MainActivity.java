@@ -182,6 +182,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openAblum();
+            return;
+        }//end if
+
+        if (requestCode == REQUEST_PERMISSON_CAMERA
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            doTakePhoto();
+            return;
         }//end if
     }
 
