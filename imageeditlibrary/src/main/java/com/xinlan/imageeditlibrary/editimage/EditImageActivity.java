@@ -22,6 +22,7 @@ import com.xinlan.imageeditlibrary.editimage.fragment.FliterListFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.MainMenuFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.RotateFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.StirckerFragment;
+import com.xinlan.imageeditlibrary.editimage.utils.FileUtil;
 import com.xinlan.imageeditlibrary.editimage.view.CropImageView;
 import com.xinlan.imageeditlibrary.editimage.view.CustomViewPager;
 import com.xinlan.imageeditlibrary.editimage.view.RotateImageView;
@@ -41,6 +42,9 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
 public class EditImageActivity extends BaseActivity {
     public static final String FILE_PATH = "file_path";
     public static final String EXTRA_OUTPUT = "extra_output";
+    public static final String SAVE_FILE_PATH = "save_file_path";
+
+    public static final String IMAGE_IS_EDIT = "image_is_edit";
 
     public static final int MODE_NONE = 0;
     public static final int MODE_STICKERS = 1;// 贴图模式
@@ -205,6 +209,7 @@ public class EditImageActivity extends BaseActivity {
     private final class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
+
             return BitmapUtils.getSampledBitmap(params[0], imageWidth,
                     imageHeight);
         }
@@ -297,8 +302,15 @@ public class EditImageActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("save_file_path", saveFilePath);
-            mContext.setResult(RESULT_OK, returnIntent);
+            if(FileUtil.checkFileExist(saveFilePath)){//图片被编辑过
+                returnIntent.putExtra(SAVE_FILE_PATH, saveFilePath);
+                returnIntent.putExtra(IMAGE_IS_EDIT, true);
+                mContext.setResult(RESULT_OK, returnIntent);
+            }else{
+                returnIntent.putExtra(SAVE_FILE_PATH, filePath);
+                returnIntent.putExtra(IMAGE_IS_EDIT, false);
+                mContext.setResult(RESULT_OK, returnIntent);
+            }//end if
             mContext.finish();
         }
     }// end inner class

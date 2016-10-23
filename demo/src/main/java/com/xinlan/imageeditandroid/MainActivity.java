@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -138,9 +139,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleEditorImage(Intent data) {
-        String newFilePath = data.getStringExtra("save_file_path");
+        String newFilePath = data.getStringExtra(EditImageActivity.SAVE_FILE_PATH);
+        boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
         Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
         //System.out.println("newFilePath---->" + newFilePath);
+        Log.d("image is edit", isImageEdit + "");
         LoadImageTask loadTask = new LoadImageTask();
         loadTask.execute(newFilePath);
     }
