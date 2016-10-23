@@ -5,12 +5,13 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -24,9 +25,11 @@ import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.picchooser.SelectPictureActivity;
 
 import java.io.File;
+import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int REQUEST_PERMISSON_SORAGE = 1;
+    public static final int REQUEST_PERMISSON_CAMERA = 2;
 
     public static final int SELECT_GALLERY_IMAGE_CODE = 7;
     public static final int TAKE_PHOTO_CODE = 8;
@@ -39,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap mainBitmap;
     private int imageWidth, imageHeight;//
     private String path;
+
+
+    private View mTakenPhoto;//拍摄照片用于编辑
+    private Uri photoURI = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,9 +63,69 @@ public class MainActivity extends AppCompatActivity {
         imgView = (ImageView) findViewById(R.id.img);
         openAblum = findViewById(R.id.select_ablum);
         editImage = findViewById(R.id.edit_image);
+        openAblum.setOnClickListener(this);
+        editImage.setOnClickListener(this);
 
-        openAblum.setOnClickListener(new SelectClick());
-        editImage.setOnClickListener(new EditImageClick());
+        mTakenPhoto = findViewById(R.id.take_photo);
+        mTakenPhoto.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.take_photo:
+                takePhotoClick();
+                break;
+            case R.id.edit_image:
+                editImageClick();
+                break;
+            case R.id.select_ablum:
+                selectFromAblum();
+                break;
+        }//end switch
+    }
+
+    /**
+     * 拍摄照片
+     */
+    protected void takePhotoClick() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestTakePhotoPermissions();
+        } else {
+            doTakePhoto();
+        }//end if
+    }
+
+    /**
+     * 请求拍照权限
+     */
+    private void requestTakePhotoPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_PERMISSON_CAMERA);
+            return;
+        }
+        doTakePhoto();
+    }
+
+    /**
+     * 拍摄照片
+     */
+    private void doTakePhoto() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = FileUtils.genEditFile();
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                photoURI = Uri.fromFile(photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, TAKE_PHOTO_CODE);
+            }
+
+            //startActivityForResult(takePictureIntent, TAKE_PHOTO_CODE);
+        }
     }
 
     /**
@@ -66,35 +133,31 @@ public class MainActivity extends AppCompatActivity {
      *
      * @author panyi
      */
-    private final class EditImageClick implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            if (TextUtils.isEmpty(path)) {
-                Toast.makeText(MainActivity.this, R.string.no_choose, Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Intent it = new Intent(MainActivity.this, EditImageActivity.class);
-            it.putExtra(EditImageActivity.FILE_PATH, path);
-            File outputFile = FileUtils.getEmptyFile("tietu"
-                    + System.currentTimeMillis() + ".jpg");
-            it.putExtra(EditImageActivity.EXTRA_OUTPUT,
-                    outputFile.getAbsolutePath());
-            MainActivity.this.startActivityForResult(it,
-                    ACTION_REQUEST_EDITIMAGE);
+    private void editImageClick() {
+        if (TextUtils.isEmpty(path)) {
+            Toast.makeText(MainActivity.this, R.string.no_choose, Toast.LENGTH_SHORT).show();
+            return;
         }
-    }// end inner class
 
-    private final class SelectClick implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                openAblumWithPermissionsCheck();
-            } else {
-                openAblum();
-            }//end if
-        }
-    }// end inner class
+        Intent it = new Intent(MainActivity.this, EditImageActivity.class);
+        it.putExtra(EditImageActivity.FILE_PATH, path);
+        File outputFile = FileUtils.genEditFile();
+        it.putExtra(EditImageActivity.EXTRA_OUTPUT,
+                outputFile.getAbsolutePath());
+        MainActivity.this.startActivityForResult(it,
+                ACTION_REQUEST_EDITIMAGE);
+    }
+
+    /**
+     * 从相册选择编辑图片
+     */
+    private void selectFromAblum() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            openAblumWithPermissionsCheck();
+        } else {
+            openAblum();
+        }//end if
+    }
 
     private void openAblum() {
         MainActivity.this.startActivityForResult(new Intent(
@@ -131,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
                 case SELECT_GALLERY_IMAGE_CODE://
                     handleSelectFromAblum(data);
                     break;
+                case TAKE_PHOTO_CODE://拍照返回
+                    handleTakePhoto(data);
+                    break;
                 case ACTION_REQUEST_EDITIMAGE://
                     handleEditorImage(data);
                     break;
@@ -138,10 +204,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 处理拍照返回
+     *
+     * @param data
+     */
+    private void handleTakePhoto(Intent data) {
+        if (photoURI != null) {//拍摄成功
+            path = photoURI.getPath();
+            startLoadTask();
+        }
+    }
+
     private void handleEditorImage(Intent data) {
         String newFilePath = data.getStringExtra(EditImageActivity.SAVE_FILE_PATH);
         boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
-        Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
+
+        if (isImageEdit)
+            Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
         //System.out.println("newFilePath---->" + newFilePath);
         Log.d("image is edit", isImageEdit + "");
         LoadImageTask loadTask = new LoadImageTask();
@@ -152,6 +232,10 @@ public class MainActivity extends AppCompatActivity {
         String filepath = data.getStringExtra("imgPath");
         path = filepath;
         // System.out.println("path---->"+path);
+        startLoadTask();
+    }
+
+    private void startLoadTask() {
         LoadImageTask task = new LoadImageTask();
         task.execute(path);
     }

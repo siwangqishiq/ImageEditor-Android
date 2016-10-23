@@ -45,6 +45,11 @@ public class FileUtils {
 		return Environment.getExternalStorageDirectory();
 	}
 
+	public static File genEditFile(){
+		return FileUtils.getEmptyFile("tietu"
+				+ System.currentTimeMillis() + ".jpg");
+	}
+
 	public static File getEmptyFile(String name) {
 		File folder = FileUtils.createFolders();
 		if (folder != null) {
