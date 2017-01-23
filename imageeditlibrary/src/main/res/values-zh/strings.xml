@@ -16,6 +16,7 @@
     <string name="materialcolorpicker__btnSelectColor">选择</string>
     <string name="saving_image">图片合成保存中...</string>
     <string name="input_hint">输入文本 ...</string>
+    <string name="no_choose">请选择一张需要编辑的图片</string>
 
     <string-array name="fliters">
         <item>原始</item>

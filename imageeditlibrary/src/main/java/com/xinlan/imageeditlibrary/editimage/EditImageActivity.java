@@ -1,17 +1,22 @@
 package com.xinlan.imageeditlibrary.editimage;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.xinlan.imageeditlibrary.BaseActivity;
@@ -31,6 +36,8 @@ import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouch;
 import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
+
+import java.io.File;
 
 /**
  * 图片编辑 主页面
@@ -81,6 +88,25 @@ public class EditImageActivity extends BaseActivity {
     private CropFragment mCropFragment;// 图片剪裁Fragment
     public RotateFragment mRotateFragment;// 图片旋转Fragment
     public AddTextFragment mAddTextFragment;
+
+    /**
+     *
+     * @param context
+     * @param editImagePath
+     * @param outputPath
+     * @param requestCode
+     */
+    public static void start(Activity context,final String editImagePath,final String outputPath,final int requestCode){
+        if (TextUtils.isEmpty(editImagePath)) {
+            Toast.makeText(context, R.string.no_choose, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent it = new Intent(context, EditImageActivity.class);
+        it.putExtra(EditImageActivity.FILE_PATH, editImagePath);
+        it.putExtra(EditImageActivity.EXTRA_OUTPUT, outputPath);
+        context.startActivityForResult(it, requestCode);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -305,6 +331,9 @@ public class EditImageActivity extends BaseActivity {
             if(FileUtil.checkFileExist(saveFilePath)){//图片被编辑过
                 returnIntent.putExtra(SAVE_FILE_PATH, saveFilePath);
                 returnIntent.putExtra(IMAGE_IS_EDIT, true);
+
+                FileUtil.ablumUpdate(mContext,saveFilePath);
+
                 mContext.setResult(RESULT_OK, returnIntent);
             }else{
                 returnIntent.putExtra(SAVE_FILE_PATH, filePath);

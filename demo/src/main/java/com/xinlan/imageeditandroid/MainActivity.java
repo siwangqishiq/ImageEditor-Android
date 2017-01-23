@@ -134,18 +134,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @author panyi
      */
     private void editImageClick() {
-        if (TextUtils.isEmpty(path)) {
-            Toast.makeText(MainActivity.this, R.string.no_choose, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent it = new Intent(MainActivity.this, EditImageActivity.class);
-        it.putExtra(EditImageActivity.FILE_PATH, path);
         File outputFile = FileUtils.genEditFile();
-        it.putExtra(EditImageActivity.EXTRA_OUTPUT,
-                outputFile.getAbsolutePath());
-        MainActivity.this.startActivityForResult(it,
-                ACTION_REQUEST_EDITIMAGE);
+        EditImageActivity.start(this,path,outputFile.getAbsolutePath(),ACTION_REQUEST_EDITIMAGE);
     }
 
     /**
