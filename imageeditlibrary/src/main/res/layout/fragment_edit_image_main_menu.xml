@@ -18,7 +18,7 @@
             android:layout_margin="@dimen/image_edit_menu_margin"
             android:gravity="center"
             android:text="@string/stickers"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="@dimen/image_edit_text_size"/>
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_margin="@dimen/image_edit_menu_margin"
             android:gravity="center"
             android:text="@string/fliter"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="@dimen/image_edit_text_size"/>
 
         <TextView
@@ -40,7 +40,7 @@
             android:layout_margin="@dimen/image_edit_menu_margin"
             android:gravity="center"
             android:text="@string/crop"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="@dimen/image_edit_text_size"/>
 
         <TextView
@@ -51,7 +51,7 @@
             android:layout_margin="@dimen/image_edit_menu_margin"
             android:gravity="center"
             android:text="@string/rotate"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="@dimen/image_edit_text_size"/>
 
         <TextView
@@ -62,7 +62,18 @@
             android:layout_margin="@dimen/image_edit_menu_margin"
             android:gravity="center"
             android:text="@string/text"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
+            android:textSize="@dimen/image_edit_text_size"/>
+
+        <TextView
+            android:id="@+id/btn_paint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/image_edit_menu_margin"
+            android:gravity="center"
+            android:text="@string/edit"
+            android:textColor="@color/white"
             android:textSize="@dimen/image_edit_text_size"/>
     </LinearLayout>
 </HorizontalScrollView>

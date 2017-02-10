@@ -10,6 +10,7 @@
     <string name="crop">crop</string>
     <string name="rotate">rotate</string>
     <string name="text">text</string>
+    <string name="edit">edit</string>
 
 
     <string name="materialcolorpicker__app_name">Android Material Color Picker Dialog</string>

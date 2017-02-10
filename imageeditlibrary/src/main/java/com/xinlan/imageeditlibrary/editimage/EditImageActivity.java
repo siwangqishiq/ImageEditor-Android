@@ -25,6 +25,7 @@ import com.xinlan.imageeditlibrary.editimage.fragment.AddTextFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.CropFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.FliterListFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.MainMenuFragment;
+import com.xinlan.imageeditlibrary.editimage.fragment.PaintFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.RotateFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.StirckerFragment;
 import com.xinlan.imageeditlibrary.editimage.utils.FileUtil;
@@ -59,6 +60,7 @@ public class EditImageActivity extends BaseActivity {
     public static final int MODE_CROP = 3;// 剪裁模式
     public static final int MODE_ROTATE = 4;// 旋转模式
     public static final int MODE_TEXT = 5;// 文字模式
+    public static final int MODE_PAINT = 6;//绘制模式
 
     public String filePath;// 需要编辑图片路径
     public String saveFilePath;// 生成的新图片路径
@@ -85,9 +87,10 @@ public class EditImageActivity extends BaseActivity {
     private MainMenuFragment mMainMenuFragment;// Menu
     public StirckerFragment mStirckerFragment;// 贴图Fragment
     public FliterListFragment mFliterListFragment;// 滤镜FliterListFragment
-    private CropFragment mCropFragment;// 图片剪裁Fragment
+    public CropFragment mCropFragment;// 图片剪裁Fragment
     public RotateFragment mRotateFragment;// 图片旋转Fragment
-    public AddTextFragment mAddTextFragment;
+    public AddTextFragment mAddTextFragment;//图片添加文字
+    public PaintFragment mPaintFragment;//绘制模式Fragment
 
     /**
      *
@@ -162,6 +165,8 @@ public class EditImageActivity extends BaseActivity {
         mCropFragment = CropFragment.newInstance(this);
         mRotateFragment = RotateFragment.newInstance(this);
         mAddTextFragment = AddTextFragment.newInstance(this);
+        mPaintFragment = PaintFragment.newInstance(this);
+
         bottomGallery.setAdapter(mBottomGalleryAdapter);
 
 
@@ -209,13 +214,15 @@ public class EditImageActivity extends BaseActivity {
                     return mRotateFragment;
                 case AddTextFragment.INDEX://添加文字
                     return mAddTextFragment;
+                case PaintFragment.INDEX:
+                    return mPaintFragment;//绘制
             }//end switch
             return MainMenuFragment.newInstance(mContext);
         }
 
         @Override
         public int getCount() {
-            return 6;
+            return 7;
         }
     }// end inner class
 

@@ -9,6 +9,7 @@
     <string name="crop">裁剪</string>
     <string name="rotate">旋转</string>
     <string name="text">文字</string>
+    <string name="edit">编辑</string>
     <string name="materialcolorpicker__app_name">颜色选择</string>
     <string name="materialcolorpicker__descLib">颜色选择</string>
     <string name="materialcolorpicker__errHex">颜色值不正确</string>
