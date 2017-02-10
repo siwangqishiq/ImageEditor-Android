@@ -7,6 +7,8 @@
 >    base function,edit image,supply stickers filter rotate crop
 >###v_2.0:
 >    add the textimage
+>###v_3.0:
+>    add Draw feature (is developing)
 
 
 ### 动态效果图
