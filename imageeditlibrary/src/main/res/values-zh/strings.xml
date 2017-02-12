@@ -33,4 +33,6 @@
         <item>流年</item>
         <item>发光</item>
     </string-array>
+
+    <string name="more">更多</string>
 </resources>

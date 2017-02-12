@@ -1,5 +1,6 @@
 <resources>
     <color name="white">#ffffff</color>
+    <color name="main_backgroud">#333333</color>
     <color name="materialcolorpicker__white">#ffffff</color>
     <color name="materialcolorpicker__red">#f44336</color>
     <color name="materialcolorpicker__green">#4caf50</color>

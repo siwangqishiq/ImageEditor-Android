@@ -5,75 +5,114 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.xinlan.imageeditlibrary.R;
-import com.xinlan.imageeditlibrary.editimage.fragment.StirckerFragment;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.xinlan.imageeditlibrary.editimage.fragment.PaintFragment;
 
 
 /**
  * 颜色列表Adapter
- * 
+ *
  * @author panyi
- * 
  */
 public class ColorListAdapter extends RecyclerView.Adapter<ViewHolder> {
-	private StirckerFragment mStirckerFragment;
-	private List<String> pathList = new ArrayList<String>();// 图片路径列表
+    public static final int TYPE_COLOR = 1;
+    public static final int TYPE_MORE = 2;
 
-	public ColorListAdapter(StirckerFragment fragment) {
-		super();
-		this.mStirckerFragment = fragment;
-	}
+    public interface IColorListAction{
+        void onColorSelected(final int position,final int color);
+        void onMoreSelected(final int position);
+    }
 
-	public class ImageHolder extends ViewHolder {
-		public ImageView image;
+    private PaintFragment mContext;
+    private int[] colorsData;
 
-		public ImageHolder(View itemView) {
-			super(itemView);
-			this.image = (ImageView) itemView.findViewById(R.id.img);
-		}
-	}// end inner class
+    private IColorListAction mCallback;
 
-	@Override
-	public int getItemCount() {
-		return pathList.size();
-	}
 
-	@Override
-	public int getItemViewType(int position) {
-		return 1;
-	}
+    public ColorListAdapter(PaintFragment frg, int[] colors,IColorListAction action) {
+        super();
+        this.mContext = frg;
+        this.colorsData = colors;
+        this.mCallback = action;
+    }
 
-	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewtype) {
-		View v = null;
-		v = LayoutInflater.from(parent.getContext()).inflate(
-				R.layout.view_sticker_item, null);
-		ImageHolder holer = new ImageHolder(v);
-		return holer;
-	}
+    public class ColorViewHolder extends ViewHolder {
+        View colorPanelView;
 
-	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
-	}
+        public ColorViewHolder(View itemView) {
+            super(itemView);
+            this.colorPanelView = itemView.findViewById(R.id.color_panel_view);
+        }
+    }// end inner class
 
-	public void addStickerImages(String folderPath) {
-		pathList.clear();
-		try {
-			String[] files = mStirckerFragment.getActivity().getAssets()
-					.list(folderPath);
-			for (String name : files) {
-				pathList.add(folderPath + File.separator + name);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.notifyDataSetChanged();
-	}
+    public class MoreViewHolder extends ViewHolder {
+        View moreBtn;
+        public MoreViewHolder(View itemView) {
+            super(itemView);
+            this.moreBtn = itemView.findViewById(R.id.color_panel_more);
+        }
+
+    }//end inner class
+
+    @Override
+    public int getItemCount() {
+        return colorsData.length + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return colorsData.length == position ? TYPE_MORE : TYPE_COLOR;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = null;
+        ViewHolder viewHolder = null;
+        if (viewType == TYPE_COLOR) {
+            v = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.view_color_panel, parent,false);
+            viewHolder = new ColorViewHolder(v);
+        } else if (viewType == TYPE_MORE) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.view_color_more_panel,parent,false);
+            viewHolder = new MoreViewHolder(v);
+        }
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        int type = getItemViewType(position);
+        if(type == TYPE_COLOR){
+            onBindColorViewHolder((ColorViewHolder)holder,position);
+        }else if(type == TYPE_MORE){
+            onBindColorMoreViewHolder((MoreViewHolder)holder,position);
+        }
+    }
+
+    private void onBindColorViewHolder(final ColorViewHolder holder,final int position){
+        holder.colorPanelView.setBackgroundColor(colorsData[position]);
+        holder.colorPanelView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCallback!=null){
+                    mCallback.onColorSelected(position,colorsData[position]);
+                }
+            }
+        });
+    }
+
+    private void onBindColorMoreViewHolder(final MoreViewHolder holder,final int position){
+        holder.moreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCallback!=null){
+                    mCallback.onMoreSelected(position);
+                }
+            }
+        });
+    }
+
 }// end class

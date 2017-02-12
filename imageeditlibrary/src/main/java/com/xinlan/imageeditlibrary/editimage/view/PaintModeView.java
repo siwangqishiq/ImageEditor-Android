@@ -1,0 +1,73 @@
+package com.xinlan.imageeditlibrary.editimage.view;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.util.AttributeSet;
+import android.view.View;
+
+/**
+ * Created by panyi on 17/2/11.
+ */
+
+public class PaintModeView extends View {
+    private Paint mPaint;
+
+    private int mStokeColor;
+    private float mStokeWidth;
+
+    private float mRadius;
+
+    public PaintModeView(Context context) {
+        super(context);
+        initView(context);
+    }
+
+    public PaintModeView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView(context);
+    }
+
+    public PaintModeView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView(context);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public PaintModeView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        initView(context);
+    }
+
+    protected void initView(Context context){
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.RED);
+
+        mStokeWidth = 10;
+        mStokeColor = Color.RED;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        mPaint.setColor(mStokeColor);
+        mRadius = mStokeWidth;
+
+        canvas.drawCircle(getWidth()>>1,getHeight()>>1,mRadius,mPaint);
+    }
+
+    public void setPaintStrokeColor(final int newColor){
+        this.mStokeColor = newColor;
+        this.invalidate();
+    }
+
+    public void setPaintStrokeWidth(final int newWidth){
+        this.mStokeWidth = newWidth;
+        this.invalidate();
+    }
+
+}//end class

@@ -64,7 +64,7 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/bottom_banner_height"
         android:layout_alignParentBottom="true"
-        android:background="#333333"/>
+        android:background="@color/main_backgroud"/>
 
     <FrameLayout
         android:id="@+id/work_space"
