@@ -30,6 +30,7 @@ import com.xinlan.imageeditlibrary.editimage.fragment.RotateFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.StirckerFragment;
 import com.xinlan.imageeditlibrary.editimage.utils.FileUtil;
 import com.xinlan.imageeditlibrary.editimage.view.CropImageView;
+import com.xinlan.imageeditlibrary.editimage.view.CustomPaintView;
 import com.xinlan.imageeditlibrary.editimage.view.CustomViewPager;
 import com.xinlan.imageeditlibrary.editimage.view.RotateImageView;
 import com.xinlan.imageeditlibrary.editimage.view.StickerView;
@@ -81,6 +82,7 @@ public class EditImageActivity extends BaseActivity {
     public CropImageView mCropPanel;// 剪切操作控件
     public RotateImageView mRotatePanel;// 旋转操作控件
     public TextStickerView mTextStickerView;//文本贴图显示View
+    public CustomPaintView mPaintView;//涂鸦模式画板
 
     public CustomViewPager bottomGallery;// 底部gallery
     private BottomGalleryAdapter mBottomGalleryAdapter;// 底部gallery
@@ -153,6 +155,7 @@ public class EditImageActivity extends BaseActivity {
         mCropPanel = (CropImageView) findViewById(R.id.crop_panel);
         mRotatePanel = (RotateImageView) findViewById(R.id.rotate_panel);
         mTextStickerView = (TextStickerView) findViewById(R.id.text_sticker_panel);
+        mPaintView = (CustomPaintView) findViewById(R.id.custom_paint_view);
 
         // 底部gallery
         bottomGallery = (CustomViewPager) findViewById(R.id.bottom_gallery);

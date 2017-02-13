@@ -10,8 +10,8 @@
         android:src="@drawable/image_edit_back"/>
     <com.xinlan.imageeditlibrary.editimage.view.PaintModeView
         android:id="@+id/paint_thumb"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp" />

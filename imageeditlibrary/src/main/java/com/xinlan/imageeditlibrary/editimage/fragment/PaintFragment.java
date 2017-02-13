@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 
@@ -19,6 +20,7 @@ import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.adapter.ColorListAdapter;
 import com.xinlan.imageeditlibrary.editimage.ui.ColorPicker;
 import com.xinlan.imageeditlibrary.editimage.utils.DensityUtil;
+import com.xinlan.imageeditlibrary.editimage.view.CustomPaintView;
 import com.xinlan.imageeditlibrary.editimage.view.PaintModeView;
 
 
@@ -41,10 +43,14 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
     private ColorListAdapter mColorAdapter;
     private View popView;
 
+    private CustomPaintView mPaintView;
+
     private ColorPicker mColorPicker;//颜色选择器
 
     private PopupWindow setStokenWidthWindow;
     private SeekBar mStokenWidthSeekBar;
+
+    private ImageView mEraserView;
 
     public boolean isEraser = false;//是否是擦除模式
 
@@ -62,6 +68,7 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPaintView = activity.mPaintView;
     }
 
     @Override
@@ -71,6 +78,7 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         backToMenu = mainView.findViewById(R.id.back_to_main);
         mPaintModeView = (PaintModeView) mainView.findViewById(R.id.paint_thumb);
         mColorListView = (RecyclerView) mainView.findViewById(R.id.paint_color_list);
+        mEraserView = (ImageView)mainView.findViewById(R.id.paint_eraser);
         return mainView;
     }
 
@@ -84,6 +92,9 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         mPaintModeView.setOnClickListener(this);
 
         initStokeWidthPopWindow();
+
+        mEraserView.setOnClickListener(this);
+        updateEraserView();
     }
 
     /**
@@ -109,6 +120,8 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
             backToMain();
         } else if (v == mPaintModeView) {//设置绘制画笔粗细
             setStokeWidth();
+        }else if(v == mEraserView){
+            toggleEraserView();
         }//end if
     }
 
@@ -120,6 +133,8 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         activity.bottomGallery.setCurrentItem(MainMenuFragment.INDEX);
         activity.mainImage.setVisibility(View.VISIBLE);
         activity.bannerFlipper.showPrevious();
+
+        this.mPaintView.setVisibility(View.GONE);
     }
 
     public void onShow() {
@@ -127,6 +142,8 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         activity.bottomGallery.setCurrentItem(PaintFragment.INDEX);
         activity.mainImage.setImageBitmap(activity.mainBitmap);
         activity.bannerFlipper.showNext();
+
+        this.mPaintView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -154,6 +171,16 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
      */
     protected void setPaintColor(final int paintColor) {
         mPaintModeView.setPaintStrokeColor(paintColor);
+
+        updatePaintView();
+    }
+
+    private void updatePaintView() {
+        isEraser = false;
+        updateEraserView();
+
+        this.mPaintView.setColor(mPaintModeView.getStokenColor());
+        this.mPaintView.setWidth(mPaintModeView.getStokenWidth());
     }
 
     /**
@@ -167,12 +194,13 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
 
         mStokenWidthSeekBar.setMax(mPaintModeView.getMeasuredHeight() / 2);
 
-        mStokenWidthSeekBar.setProgress((int)mPaintModeView.getStokenWidth());
+        mStokenWidthSeekBar.setProgress((int) mPaintModeView.getStokenWidth());
 
         mStokenWidthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mPaintModeView.setPaintStrokeWidth(progress);
+                updatePaintView();
             }
 
             @Override
@@ -208,5 +236,17 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
 
         mPaintModeView.setPaintStrokeColor(Color.RED);
         mPaintModeView.setPaintStrokeWidth(10);
+
+        updatePaintView();
+    }
+
+    private void toggleEraserView(){
+        isEraser =!isEraser;
+        updateEraserView();
+    }
+
+    private void updateEraserView(){
+        mEraserView.setImageResource(isEraser?R.drawable.eraser_seleced:R.drawable.eraser_normal);
+        mPaintView.setEraser(isEraser);
     }
 }// end class

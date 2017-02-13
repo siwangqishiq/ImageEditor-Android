@@ -107,6 +107,13 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:visibility="gone"/>
+
+        <com.xinlan.imageeditlibrary.editimage.view.CustomPaintView
+            android:id="@+id/custom_paint_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
     </FrameLayout>
 
 </RelativeLayout>
