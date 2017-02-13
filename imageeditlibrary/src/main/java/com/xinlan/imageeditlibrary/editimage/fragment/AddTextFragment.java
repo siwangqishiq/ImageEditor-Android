@@ -225,4 +225,12 @@ public class AddTextFragment extends Fragment implements TextWatcher {
             activity.changeMainBitmap(result);
         }
     }//end inner class
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mSaveTask != null && !mSaveTask.isCancelled()) {
+            mSaveTask.cancel(true);
+        }
+    }
 }// end class

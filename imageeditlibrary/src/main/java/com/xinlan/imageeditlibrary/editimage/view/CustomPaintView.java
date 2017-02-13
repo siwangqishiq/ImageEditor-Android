@@ -56,9 +56,13 @@ public class CustomPaintView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //System.out.println("width = "+getMeasuredWidth()+"     height = "+getMeasuredHeight());
         if (mDrawBit == null) {
-            mDrawBit = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-            mPaintCanvas = new Canvas(mDrawBit);
+            generatorBit();
         }
+    }
+
+    private void generatorBit() {
+        mDrawBit = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        mPaintCanvas = new Canvas(mDrawBit);
     }
 
     private void init(Context context) {
@@ -138,4 +142,15 @@ public class CustomPaintView extends View {
         mPaint.setColor(eraser ? Color.TRANSPARENT : mColor);
     }
 
+    public Bitmap getPaintBit() {
+        return mDrawBit;
+    }
+
+    public void reset() {
+        if (mDrawBit != null && !mDrawBit.isRecycled()) {
+            mDrawBit.recycle();
+        }
+
+        generatorBit();
+    }
 }//end class

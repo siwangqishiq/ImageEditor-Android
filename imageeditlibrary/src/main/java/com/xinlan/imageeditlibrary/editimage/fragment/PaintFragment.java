@@ -1,6 +1,9 @@
 package com.xinlan.imageeditlibrary.editimage.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,7 @@ import android.widget.SeekBar;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.adapter.ColorListAdapter;
+import com.xinlan.imageeditlibrary.editimage.task.StickerTask;
 import com.xinlan.imageeditlibrary.editimage.ui.ColorPicker;
 import com.xinlan.imageeditlibrary.editimage.utils.DensityUtil;
 import com.xinlan.imageeditlibrary.editimage.view.CustomPaintView;
@@ -54,6 +58,7 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
 
     public boolean isEraser = false;//是否是擦除模式
 
+    private SaveCustomPaintTask mSavePaintImageTask;
 
     public int[] mPaintColors = {Color.BLACK,
             Color.DKGRAY, Color.GRAY, Color.LTGRAY, Color.WHITE,
@@ -78,7 +83,7 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         backToMenu = mainView.findViewById(R.id.back_to_main);
         mPaintModeView = (PaintModeView) mainView.findViewById(R.id.paint_thumb);
         mColorListView = (RecyclerView) mainView.findViewById(R.id.paint_color_list);
-        mEraserView = (ImageView)mainView.findViewById(R.id.paint_eraser);
+        mEraserView = (ImageView) mainView.findViewById(R.id.paint_eraser);
         return mainView;
     }
 
@@ -120,7 +125,7 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
             backToMain();
         } else if (v == mPaintModeView) {//设置绘制画笔粗细
             setStokeWidth();
-        }else if(v == mEraserView){
+        } else if (v == mEraserView) {
             toggleEraserView();
         }//end if
     }
@@ -240,13 +245,70 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         updatePaintView();
     }
 
-    private void toggleEraserView(){
-        isEraser =!isEraser;
+    private void toggleEraserView() {
+        isEraser = !isEraser;
         updateEraserView();
     }
 
-    private void updateEraserView(){
-        mEraserView.setImageResource(isEraser?R.drawable.eraser_seleced:R.drawable.eraser_normal);
+    private void updateEraserView() {
+        mEraserView.setImageResource(isEraser ? R.drawable.eraser_seleced : R.drawable.eraser_normal);
         mPaintView.setEraser(isEraser);
     }
+
+    /**
+     * 保存涂鸦
+     */
+    public void savePaintImage() {
+        if (mSavePaintImageTask != null && !mSavePaintImageTask.isCancelled()) {
+            mSavePaintImageTask.cancel(true);
+        }
+
+        mSavePaintImageTask = new SaveCustomPaintTask(activity);
+        mSavePaintImageTask.execute(activity.mainBitmap);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mSavePaintImageTask != null && !mSavePaintImageTask.isCancelled()) {
+            mSavePaintImageTask.cancel(true);
+        }
+    }
+
+    /**
+     * 文字合成任务
+     * 合成最终图片
+     */
+    private final class SaveCustomPaintTask extends StickerTask {
+
+        public SaveCustomPaintTask(EditImageActivity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void handleImage(Canvas canvas, Matrix m) {
+            float[] f = new float[9];
+            m.getValues(f);
+            int dx = (int) f[Matrix.MTRANS_X];
+            int dy = (int) f[Matrix.MTRANS_Y];
+            float scale_x = f[Matrix.MSCALE_X];
+            float scale_y = f[Matrix.MSCALE_Y];
+            canvas.save();
+            canvas.translate(dx, dy);
+            canvas.scale(scale_x, scale_y);
+
+            if (mPaintView.getPaintBit() != null) {
+                canvas.drawBitmap(mPaintView.getPaintBit(), 0, 0, null);
+            }
+            canvas.restore();
+        }
+
+        @Override
+        public void onPostResult(Bitmap result) {
+            mPaintView.reset();
+
+            activity.changeMainBitmap(result);
+        }
+    }//end inner class
+
 }// end class

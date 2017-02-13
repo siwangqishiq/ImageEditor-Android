@@ -323,6 +323,9 @@ public class EditImageActivity extends BaseActivity {
                 case MODE_TEXT://文字贴图 图片保存
                     mAddTextFragment.saveTextImage();
                     break;
+                case MODE_PAINT://保存涂鸦
+                    mPaintFragment.savePaintImage();
+                    break;
                 default:
                     break;
             }// end switch
