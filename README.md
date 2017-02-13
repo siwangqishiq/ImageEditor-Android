@@ -1,6 +1,6 @@
 # AndroidImageEditor
 
-#### For edit image,supply stickers filter rotate crop textstciker
+#### For doodle , edit image,supply stickers filter rotate crop textstciker
 
 > ##Version History
 >###v_1.0:
@@ -8,10 +8,12 @@
 >###v_2.0:
 >    add the textimage
 >###v_3.0:
->    add Draw feature (is developing)
+>    add   doodle mode (done)
 
 
 ### 动态效果图
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif6.gif"/>
+<br />
 <img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif1.gif"/>
 <br />
 <img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif2.gif"/>
@@ -24,3 +26,8 @@
 <br />
 ####使用方法:见DEMO示例
 ####usage:see the demo project
+
+License
+-------
+
+MIT is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
