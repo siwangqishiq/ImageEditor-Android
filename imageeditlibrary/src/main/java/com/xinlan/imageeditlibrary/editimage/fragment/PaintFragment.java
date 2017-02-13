@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.SeekBar;
 
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
@@ -43,8 +44,10 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
     private ColorPicker mColorPicker;//颜色选择器
 
     private PopupWindow setStokenWidthWindow;
+    private SeekBar mStokenWidthSeekBar;
 
     public boolean isEraser = false;//是否是擦除模式
+
 
     public int[] mPaintColors = {Color.BLACK,
             Color.DKGRAY, Color.GRAY, Color.LTGRAY, Color.WHITE,
@@ -158,13 +161,35 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
      * show popwidnow to set paint width
      */
     protected void setStokeWidth() {
+        if (popView.getMeasuredHeight() == 0) {
+            popView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        }
+
+        mStokenWidthSeekBar.setMax(mPaintModeView.getMeasuredHeight() / 2);
+
+        mStokenWidthSeekBar.setProgress((int)mPaintModeView.getStokenWidth());
+
+        mStokenWidthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mPaintModeView.setPaintStrokeWidth(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         int[] locations = new int[2];
         activity.bottomGallery.getLocationOnScreen(locations);
         setStokenWidthWindow.showAtLocation(activity.bottomGallery,
                 Gravity.NO_GRAVITY, 0, locations[1] - popView.getMeasuredHeight());
-
-
-        //setStokenWidthWindow.showAsDropDown(mPaintModeView,0,20);
     }
 
     private void initStokeWidthPopWindow() {
@@ -173,9 +198,15 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         setStokenWidthWindow = new PopupWindow(popView, ViewGroup.LayoutParams.MATCH_PARENT
                 , ViewGroup.LayoutParams.WRAP_CONTENT);
 
+        mStokenWidthSeekBar = (SeekBar) popView.findViewById(R.id.stoke_width_seekbar);
+
         setStokenWidthWindow.setFocusable(true);
         setStokenWidthWindow.setOutsideTouchable(true);
         setStokenWidthWindow.setBackgroundDrawable(new BitmapDrawable());
         setStokenWidthWindow.setAnimationStyle(R.style.popwin_anim_style);
+
+
+        mPaintModeView.setPaintStrokeColor(Color.RED);
+        mPaintModeView.setPaintStrokeWidth(10);
     }
 }// end class

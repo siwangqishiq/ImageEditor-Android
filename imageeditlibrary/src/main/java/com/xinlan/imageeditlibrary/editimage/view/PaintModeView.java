@@ -17,7 +17,7 @@ public class PaintModeView extends View {
     private Paint mPaint;
 
     private int mStokeColor;
-    private float mStokeWidth;
+    private float mStokeWidth = -1;
 
     private float mRadius;
 
@@ -42,13 +42,13 @@ public class PaintModeView extends View {
         initView(context);
     }
 
-    protected void initView(Context context){
+    protected void initView(Context context) {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.RED);
 
-        mStokeWidth = 10;
-        mStokeColor = Color.RED;
+        //mStokeWidth = 10;
+        //mStokeColor = Color.RED;
     }
 
     @Override
@@ -57,17 +57,28 @@ public class PaintModeView extends View {
         mPaint.setColor(mStokeColor);
         mRadius = mStokeWidth;
 
-        canvas.drawCircle(getWidth()>>1,getHeight()>>1,mRadius,mPaint);
+        canvas.drawCircle(getWidth() >> 1, getHeight() >> 1, mRadius, mPaint);
     }
 
-    public void setPaintStrokeColor(final int newColor){
+    public void setPaintStrokeColor(final int newColor) {
         this.mStokeColor = newColor;
         this.invalidate();
     }
 
-    public void setPaintStrokeWidth(final int newWidth){
-        this.mStokeWidth = newWidth;
+    public void setPaintStrokeWidth(final float width) {
+        this.mStokeWidth = width;
         this.invalidate();
+    }
+
+    public float getStokenWidth() {
+        if (mStokeWidth < 0) {
+            mStokeWidth = getMeasuredHeight();
+        }
+        return mStokeWidth;
+    }
+
+    public int getStokenColor() {
+        return mStokeColor;
     }
 
 }//end class

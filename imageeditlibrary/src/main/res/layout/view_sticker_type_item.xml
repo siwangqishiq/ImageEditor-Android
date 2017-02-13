@@ -1,5 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="50dp"
+              android:layout_width="wrap_content"
               android:layout_height="@dimen/bottom_banner_height"
               android:orientation="vertical"
               android:paddingLeft="18dp"

@@ -57,7 +57,7 @@ public class StickerTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewtype) {
         View v = null;
         v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.view_sticker_type_item, null);
+                R.layout.view_sticker_type_item, parent, false);
         ImageHolder holer = new ImageHolder(v);
         return holer;
     }
