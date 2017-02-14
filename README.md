@@ -1,6 +1,6 @@
 # AndroidImageEditor
 
-#### For doodle , edit image,supply stickers filter rotate crop textstciker
+#### For edit image,supply stickers filter rotate crop textstciker doodle
 
 > ##Version History
 >###v_1.0:
