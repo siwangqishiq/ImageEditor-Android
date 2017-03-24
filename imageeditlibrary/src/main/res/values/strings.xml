@@ -23,6 +23,8 @@
     <string name="input_hint">input text ...</string>
 
     <string name="no_choose">please choose a image for edit</string>
+    <string name="auto_newline">AutoNewline</string>
+    <string name="save_error">Save error!</string>
 
     <string-array name="fliters">
         <item>origin</item>
@@ -40,4 +42,7 @@
     </string-array>
 
     <string name="more">more</string>
+    <string name="exit_without_save">The edited image is not saved. Do you want to exit? </string>
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
 </resources>

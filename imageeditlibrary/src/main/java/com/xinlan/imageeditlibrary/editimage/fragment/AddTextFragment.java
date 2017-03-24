@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -43,6 +44,7 @@ public class AddTextFragment extends Fragment implements TextWatcher {
     private EditText mInputText;//输入框
     private ImageView mTextColorSelector;//颜色选择器
     private TextStickerView mTextStickerView;// 文字贴图显示控件
+    private CheckBox mAutoNewLineCheck;
 
     private ColorPicker mColorPicker;
 
@@ -71,6 +73,7 @@ public class AddTextFragment extends Fragment implements TextWatcher {
         backToMenu = mainView.findViewById(R.id.back_to_main);
         mInputText = (EditText) mainView.findViewById(R.id.text_input);
         mTextColorSelector = (ImageView) mainView.findViewById(R.id.text_color);
+        mAutoNewLineCheck = (CheckBox) mainView.findViewById(R.id.check_auto_newline);
         return mainView;
     }
 
@@ -180,7 +183,7 @@ public class AddTextFragment extends Fragment implements TextWatcher {
     /**
      * 保存贴图图片
      */
-    public void saveTextImage() {
+    public void applyTextImage() {
         if (mSaveTask != null) {
             mSaveTask.cancel(true);
         }

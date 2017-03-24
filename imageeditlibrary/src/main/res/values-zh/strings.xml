@@ -15,9 +15,11 @@
     <string name="materialcolorpicker__errHex">颜色值不正确</string>
     <string name="materialcolorpicker__inputColor">颜色:</string>
     <string name="materialcolorpicker__btnSelectColor">选择</string>
-    <string name="saving_image">图片合成保存中...</string>
+    <string name="saving_image">图片保存中...</string>
     <string name="input_hint">输入文本 ...</string>
     <string name="no_choose">请选择一张需要编辑的图片</string>
+    <string name="auto_newline">自动换行</string>
+    <string name="save_error">图片保存失败</string>
 
     <string-array name="fliters">
         <item>原始</item>
@@ -35,4 +37,7 @@
     </string-array>
 
     <string name="more">更多</string>
+    <string name="exit_without_save">编辑的图片还未保存,确认退出吗？</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
 </resources>

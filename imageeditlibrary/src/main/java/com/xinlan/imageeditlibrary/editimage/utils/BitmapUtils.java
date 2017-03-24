@@ -317,30 +317,6 @@ public class BitmapUtils {
     }
 
     /**
-     * 保存Bitmap图片到指定文件
-     *
-     * @param bm
-     */
-    public static void saveBitmap(Bitmap bm, String filePath) {
-        File f = new File(filePath);
-        if (f.exists()) {
-            f.delete();
-        }
-        try {
-            FileOutputStream out = new FileOutputStream(f);
-            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // System.out.println("保存文件--->" + f.getAbsolutePath());
-    }
-
-
-    /**
      * Resize a bitmap object to fit the passed width and height
      *
      * @param input
@@ -444,4 +420,31 @@ public class BitmapUtils {
 
         return inSampleSize;
     }
+
+    /**
+     * 保存Bitmap图片到指定文件
+     *
+     * @param bm
+     */
+    public static boolean saveBitmap(Bitmap bm, String filePath) {
+        File f = new File(filePath);
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(f);
+            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        // System.out.println("保存文件--->" + f.getAbsolutePath());
+    }
+
 }

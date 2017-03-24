@@ -1,6 +1,9 @@
 package com.xinlan.imageeditlibrary.editimage.utils;
 
+import android.graphics.Rect;
 import android.graphics.RectF;
+
+import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
 
 /**
  * Created by panyi on 2016/6/16.
@@ -35,7 +38,7 @@ public class RectUtil {
      * @param roatetAngle
      */
     public static void rotateRect(RectF rect, float center_x, float center_y,
-                                   float roatetAngle) {
+                                  float roatetAngle) {
         float x = rect.centerX();
         float y = rect.centerY();
         float sinA = (float) Math.sin(Math.toRadians(roatetAngle));
@@ -47,5 +50,55 @@ public class RectUtil {
         float dy = newY - y;
 
         rect.offset(dx, dy);
+    }
+
+    /**
+     * 矩形在Y轴方向上的加法操作
+     *
+     * @param srcRect
+     * @param addRect
+     * @param padding
+     */
+    public static void rectAddV(final RectF srcRect, final RectF addRect, int padding) {
+        if (srcRect == null || addRect == null)
+            return;
+
+        float left = srcRect.left;
+        float top = srcRect.top;
+        float right = srcRect.right;
+        float bottom = srcRect.bottom;
+
+        if (srcRect.width() <= addRect.width()) {
+            right = left + addRect.width();
+        }
+
+        bottom += padding + addRect.height();
+
+        srcRect.set(left, top, right, bottom);
+    }
+
+    /**
+     * 矩形在Y轴方向上的加法操作
+     *
+     * @param srcRect
+     * @param addRect
+     * @param padding
+     */
+    public static void rectAddV(final Rect srcRect, final Rect addRect, int padding) {
+        if (srcRect == null || addRect == null)
+            return;
+
+        int left = srcRect.left;
+        int top = srcRect.top;
+        int right = srcRect.right;
+        int bottom = srcRect.bottom;
+
+        if (srcRect.width() <= addRect.width()) {
+            right = left + addRect.width();
+        }
+
+        bottom += padding + Math.max(addRect.height(), TextStickerView.CHAR_MIN_HEIGHT);
+
+        srcRect.set(left, top, right, bottom);
     }
 }//end class

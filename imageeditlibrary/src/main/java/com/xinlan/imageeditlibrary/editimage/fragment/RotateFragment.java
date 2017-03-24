@@ -121,7 +121,7 @@ public class RotateFragment extends Fragment {
     /**
      * 保存旋转图片
      */
-    public void saveRotateImage() {
+    public void applyRotateImage() {
         // System.out.println("保存旋转图片");
         if (mSeekBar.getProgress() == 0 || mSeekBar.getProgress() == 360) {// 没有做旋转
             backToMain();
@@ -139,28 +139,29 @@ public class RotateFragment extends Fragment {
      */
     private final class SaveRotateImageTask extends
             AsyncTask<Bitmap, Void, Bitmap> {
-        private Dialog dialog;
+        //private Dialog dialog;
 
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            dialog.dismiss();
+            //dialog.dismiss();
         }
 
         @Override
         protected void onCancelled(Bitmap result) {
             super.onCancelled(result);
-            dialog.dismiss();
+            //dialog.dismiss();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = BaseActivity.getLoadingDialog(getActivity(), R.string.saving_image,
-                    false);
-            dialog.show();
+            //dialog = BaseActivity.getLoadingDialog(getActivity(), R.string.saving_image,
+            //        false);
+            //dialog.show();
         }
 
+        @SuppressWarnings("WrongThread")
         @Override
         protected Bitmap doInBackground(Bitmap... params) {
             RectF imageRect = mRotatePanel.getImageNewRect();
@@ -188,25 +189,19 @@ public class RotateFragment extends Fragment {
                     originBit.getHeight()), dst, null);
             canvas.restore();
 
-            saveBitmap(result, activity.saveFilePath);// 保存图片
+            //saveBitmap(result, activity.saveFilePath);// 保存图片
             return result;
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
-            dialog.dismiss();
+            //dialog.dismiss();
             if (result == null)
                 return;
 
             // 切换新底图
-            if (activity.mainBitmap != null
-                    && !activity.mainBitmap.isRecycled()) {
-                activity.mainBitmap.recycle();
-            }
-            activity.mainBitmap = result;
-            activity.mainImage.setImageBitmap(activity.mainBitmap);
-            activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+            activity.changeMainBitmap(result);
             backToMain();
         }
     }// end inner class

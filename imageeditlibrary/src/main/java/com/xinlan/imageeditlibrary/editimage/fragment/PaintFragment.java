@@ -306,7 +306,6 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
         @Override
         public void onPostResult(Bitmap result) {
             mPaintView.reset();
-
             activity.changeMainBitmap(result);
         }
     }//end inner class

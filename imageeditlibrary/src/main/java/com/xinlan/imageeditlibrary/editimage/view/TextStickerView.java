@@ -19,7 +19,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.xinlan.imageeditlibrary.R;
+import com.xinlan.imageeditlibrary.editimage.utils.ListUtil;
 import com.xinlan.imageeditlibrary.editimage.utils.RectUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文本贴图处理控件
@@ -29,9 +33,14 @@ import com.xinlan.imageeditlibrary.editimage.utils.RectUtil;
 public class TextStickerView extends View {
     public static final float TEXT_SIZE_DEFAULT = 80;
     public static final int PADDING = 32;
+    //public static final int PADDING = 0;
+
+    public static final int TEXT_TOP_PADDING = 10;
+
+    public static final int CHAR_MIN_HEIGHT = 60;
 
 
-    private String mText;
+    //private String mText;
     private TextPaint mPaint = new TextPaint();
     private Paint debugPaint = new Paint();
     private Paint mHelpPaint = new Paint();
@@ -67,6 +76,10 @@ public class TextStickerView extends View {
     private boolean isInitLayout = true;
 
     private boolean isShowHelpBox = true;
+
+    private boolean mAutoNewLine = false;//是否需要自动换行
+    private List<String> mTextContents = new ArrayList<String>(2);//存放所写的文字内容
+    private String mText;
 
     public TextStickerView(Context context) {
         super(context);
@@ -105,6 +118,7 @@ public class TextStickerView extends View {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(TEXT_SIZE_DEFAULT);
         mPaint.setAntiAlias(true);
+        mPaint.setTextAlign(Paint.Align.LEFT);
 
         mHelpPaint.setColor(Color.BLACK);
         mHelpPaint.setStyle(Paint.Style.STROKE);
@@ -138,7 +152,20 @@ public class TextStickerView extends View {
         if (TextUtils.isEmpty(mText))
             return;
 
+        parseText();
         drawContent(canvas);
+    }
+
+    protected void parseText() {
+        if (TextUtils.isEmpty(mText))
+            return;
+
+        mTextContents.clear();
+
+        String[] splits = mText.split("\n");
+        for (String text : splits) {
+            mTextContents.add(text);
+        }//end for each
     }
 
     private void drawContent(Canvas canvas) {
@@ -175,15 +202,29 @@ public class TextStickerView extends View {
     }
 
     public void drawText(Canvas canvas, int _x, int _y, float scale, float rotate) {
-        if (TextUtils.isEmpty(mText)) {
+        if (ListUtil.isEmpty(mTextContents))
             return;
-        }
 
         int x = _x;
         int y = _y;
+        int text_height = 0;
 
-        mPaint.getTextBounds(mText, 0, mText.length(), mTextRect);
-        mTextRect.offset(x - (mTextRect.width() >> 1), y);
+        mTextRect.set(0, 0, 0, 0);//clear
+        Rect tempRect = new Rect();
+        for (int i = 0; i < mTextContents.size(); i++) {
+            String text = mTextContents.get(i);
+            mPaint.getTextBounds(text, 0, text.length(), tempRect);
+            //System.out.println(i + " ---> " + tempRect.height());
+            text_height = Math.max(CHAR_MIN_HEIGHT, tempRect.height());
+            if (tempRect.height() <= 0) {//处理此行文字为空的情况
+                tempRect.set(0, 0, 0, text_height);
+            }
+
+            RectUtil.rectAddV(mTextRect, tempRect, TEXT_TOP_PADDING);
+        }//end for i
+
+        mTextRect.offset(x, y - text_height);
+
 
         mHelpBoxRect.set(mTextRect.left - PADDING, mTextRect.top - PADDING
                 , mTextRect.right + PADDING, mTextRect.bottom + PADDING);
@@ -192,7 +233,12 @@ public class TextStickerView extends View {
         canvas.save();
         canvas.scale(scale, scale, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
         canvas.rotate(rotate, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
-        canvas.drawText(mText, x, y, mPaint);
+
+        int draw_text_y = y;
+        for (int i = 0; i < mTextContents.size(); i++) {
+            canvas.drawText(mTextContents.get(i), x, draw_text_y, mPaint);
+            draw_text_y += text_height + TEXT_TOP_PADDING;
+        }//end for i
         canvas.restore();
     }
 
@@ -336,4 +382,17 @@ public class TextStickerView extends View {
     public float getRotateAngle() {
         return mRotateAngle;
     }
+
+    public boolean isAutoNewLine() {
+        return mAutoNewLine;
+    }
+
+    public void setAutoNewline(boolean isAuto) {
+        if (mAutoNewLine != isAuto) {
+            mAutoNewLine = isAuto;
+            postInvalidate();
+        }
+    }
+
+
 }//end class

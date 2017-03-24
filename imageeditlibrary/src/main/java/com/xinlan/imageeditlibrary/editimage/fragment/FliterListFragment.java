@@ -93,7 +93,7 @@ public class FliterListFragment extends Fragment {
     /**
      * 保存滤镜处理后的图片
      */
-    public void saveFilterImage() {
+    public void applyFilterImage() {
         // System.out.println("保存滤镜处理后的图片");
         if (currentBitmap == activity.mainBitmap) {// 原始图片
             // System.out.println("原始图片");
@@ -116,7 +116,8 @@ public class FliterListFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Bitmap... params) {
-            return saveBitmap(params[0], activity.saveFilePath);
+            //return saveBitmap(params[0], activity.saveFilePath);
+            return true;
         }
 
         @Override
@@ -136,11 +137,12 @@ public class FliterListFragment extends Fragment {
             super.onPostExecute(result);
             dialog.dismiss();
             if (result) {// 保存图片成功
-                if (activity.mainBitmap != null
-                        && !activity.mainBitmap.isRecycled()) {
-                    activity.mainBitmap.recycle();
-                }
-                activity.mainBitmap = fliterBit;
+                //if (activity.mainBitmap != null
+                //        && !activity.mainBitmap.isRecycled()) {
+                //    activity.mainBitmap.recycle();
+                //}
+                //activity.mainBitmap = fliterBit;
+                activity.changeMainBitmap(fliterBit);
                 backToMain();
             }// end if
         }
@@ -153,32 +155,6 @@ public class FliterListFragment extends Fragment {
             dialog.show();
         }
     }// end inner class
-
-    /**
-     * 保存Bitmap图片到指定文件
-     *
-     * @param bm
-     */
-    public static boolean saveBitmap(Bitmap bm, String filePath) {
-        File f = new File(filePath);
-        if (f.exists()) {
-            f.delete();
-        }
-        try {
-            FileOutputStream out = new FileOutputStream(f);
-            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-            return true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        // System.out.println("保存文件--->" + f.getAbsolutePath());
-    }
 
     /**
      * 装载滤镜
@@ -237,8 +213,7 @@ public class FliterListFragment extends Fragment {
      *
      * @author panyi
      */
-    private final class ProcessingImage extends
-            AsyncTask<Integer, Void, Bitmap> {
+    private final class ProcessingImage extends AsyncTask<Integer, Void, Bitmap> {
         private Dialog dialog;
         private Bitmap srcBitmap;
 

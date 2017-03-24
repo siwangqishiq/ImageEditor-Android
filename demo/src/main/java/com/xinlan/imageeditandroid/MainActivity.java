@@ -218,8 +218,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String newFilePath = data.getStringExtra(EditImageActivity.SAVE_FILE_PATH);
         boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
 
-        if (isImageEdit)
+        if (isImageEdit){
             Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
+        }else{
+            newFilePath = path;
+        }
         //System.out.println("newFilePath---->" + newFilePath);
         Log.d("image is edit", isImageEdit + "");
         LoadImageTask loadTask = new LoadImageTask();

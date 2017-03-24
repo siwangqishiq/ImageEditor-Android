@@ -176,7 +176,7 @@ public class CropFragment extends Fragment {
 	/**
 	 * 保存剪切图片
 	 */
-	public void saveCropImage() {
+	public void applyCropImage() {
 		// System.out.println("保存剪切图片");
 		CropImageTask task = new CropImageTask();
 		task.execute(activity.mainBitmap);
@@ -235,7 +235,7 @@ public class CropFragment extends Fragment {
 					(int) cropRect.left, (int) cropRect.top,
 					(int) cropRect.width(), (int) cropRect.height());
 
-			saveBitmap(resultBit, activity.saveFilePath);
+			//saveBitmap(resultBit, activity.saveFilePath);
 			return resultBit;
 		}
 
@@ -246,13 +246,14 @@ public class CropFragment extends Fragment {
 			if (result == null)
 				return;
 
-			if (activity.mainBitmap != null
-					&& !activity.mainBitmap.isRecycled()) {
-				activity.mainBitmap.recycle();
-			}
-			activity.mainBitmap = result;
-			activity.mainImage.setImageBitmap(activity.mainBitmap);
-			activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+//			if (activity.mainBitmap != null
+//					&& !activity.mainBitmap.isRecycled()) {
+//				activity.mainBitmap.recycle();
+//			}
+//			activity.mainBitmap = result;
+//			activity.mainImage.setImageBitmap(activity.mainBitmap);
+//			activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+            activity.changeMainBitmap(result);
 			activity.mCropPanel.setCropRect(activity.mainImage.getBitmapRect());
 			backToMain();
 		}

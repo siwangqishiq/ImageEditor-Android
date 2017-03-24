@@ -19,6 +19,17 @@
         android:paddingLeft="8dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"/>
+
+    <CheckBox
+        android:id="@+id/check_auto_newline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="3dp"
+        android:text="@string/auto_newline"
+        android:textColor="@color/white"
+        android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/text_color"
         android:layout_width="25dp"
@@ -26,4 +37,5 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="10dp"
         android:background="#ffffff"/>
+
 </LinearLayout>

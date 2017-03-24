@@ -285,7 +285,7 @@ public class StirckerFragment extends Fragment {
     /**
      * 保存贴图层 合成一张图片
      */
-    public void saveStickers() {
+    public void applyStickers() {
         // System.out.println("保存 合成图片");
         if (mSaveTask != null) {
             mSaveTask.cancel(true);

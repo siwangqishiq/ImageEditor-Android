@@ -57,7 +57,7 @@ public abstract class StickerTask extends AsyncTask<Bitmap, Void, Bitmap> {
 
         handleImage(canvas, m);
 
-        BitmapUtils.saveBitmap(resultBit, mContext.saveFilePath);
+        //BitmapUtils.saveBitmap(resultBit, mContext.saveFilePath);
         return resultBit;
     }
 

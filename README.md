@@ -9,6 +9,9 @@
 >    add the textimage
 >###v_3.0:
 >    add   doodle mode (done)
+>###v_3.1:
+>    add text support multiply line(done)
+>    save image when click save button (not apply)
 
 
 ### 动态效果图

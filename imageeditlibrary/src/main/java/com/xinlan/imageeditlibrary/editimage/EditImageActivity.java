@@ -1,18 +1,18 @@
 package com.xinlan.imageeditlibrary.editimage;
 
 import android.app.Activity;
-import android.content.ContentValues;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,8 +38,6 @@ import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouch;
 import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
-
-import java.io.File;
 
 /**
  * 图片编辑 主页面
@@ -69,6 +67,10 @@ public class EditImageActivity extends BaseActivity {
     private LoadImageTask mLoadImageTask;
 
     public int mode = MODE_NONE;// 当前操作模式
+
+    protected int mOpTimes = 0;
+    protected boolean isBeenSaved = false;
+
     private EditImageActivity mContext;
     public Bitmap mainBitmap;// 底层显示Bitmap
     public ImageViewTouch mainImage;
@@ -94,14 +96,15 @@ public class EditImageActivity extends BaseActivity {
     public AddTextFragment mAddTextFragment;//图片添加文字
     public PaintFragment mPaintFragment;//绘制模式Fragment
 
+    private SaveImageTask mSaveImageTask;
+
     /**
-     *
      * @param context
      * @param editImagePath
      * @param outputPath
      * @param requestCode
      */
-    public static void start(Activity context,final String editImagePath,final String outputPath,final int requestCode){
+    public static void start(Activity context, final String editImagePath, final String outputPath, final int requestCode) {
         if (TextUtils.isEmpty(editImagePath)) {
             Toast.makeText(context, R.string.no_choose, Toast.LENGTH_SHORT).show();
             return;
@@ -147,7 +150,7 @@ public class EditImageActivity extends BaseActivity {
         backBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                forceReturnBack();
+                onBackPressed();
             }
         });
 
@@ -265,42 +268,51 @@ public class EditImageActivity extends BaseActivity {
         }
     }// end inner class
 
-    /**
-     * 按下返回键
-     */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            switch (mode) {
-                case MODE_STICKERS:
-                    mStirckerFragment.backToMain();
-                    return true;
-                case MODE_FILTER:// 滤镜编辑状态
-                    mFliterListFragment.backToMain();// 保存滤镜贴图
-                    return true;
-                case MODE_CROP:// 剪切图片保存
-                    mCropFragment.backToMain();
-                    return true;
-                case MODE_ROTATE:// 旋转图片保存
-                    mRotateFragment.backToMain();
-                    return true;
-            }// end switch
+    public void onBackPressed() {
+        switch (mode) {
+            case MODE_STICKERS:
+                mStirckerFragment.backToMain();
+                return;
+            case MODE_FILTER:// 滤镜编辑状态
+                mFliterListFragment.backToMain();// 保存滤镜贴图
+                return;
+            case MODE_CROP:// 剪切图片保存
+                mCropFragment.backToMain();
+                return;
+            case MODE_ROTATE:// 旋转图片保存
+                mRotateFragment.backToMain();
+                return;
+            case MODE_TEXT:
+                mAddTextFragment.backToMain();
+                return;
+            case MODE_PAINT:
+                mPaintFragment.backToMain();
+                return;
+        }// end switch
 
-            forceReturnBack();
+        if (canAutoExit()) {
+            onSaveTaskDone();
+        } else {//图片还未被保存    弹出提示框确认
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage(R.string.exit_without_save)
+                    .setCancelable(false).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    mContext.finish();
+                }
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
-        return super.onKeyDown(keyCode, event);
     }
 
     /**
-     * 强制推出
-     */
-    private void forceReturnBack() {
-        setResult(RESULT_CANCELED);
-        this.finish();
-    }
-
-    /**
-     * 保存按钮点击
+     * 应用按钮点击
      *
      * @author panyi
      */
@@ -309,19 +321,19 @@ public class EditImageActivity extends BaseActivity {
         public void onClick(View v) {
             switch (mode) {
                 case MODE_STICKERS:
-                    mStirckerFragment.saveStickers();// 保存贴图
+                    mStirckerFragment.applyStickers();// 保存贴图
                     break;
                 case MODE_FILTER:// 滤镜编辑状态
-                    mFliterListFragment.saveFilterImage();// 保存滤镜贴图
+                    mFliterListFragment.applyFilterImage();// 保存滤镜贴图
                     break;
                 case MODE_CROP:// 剪切图片保存
-                    mCropFragment.saveCropImage();
+                    mCropFragment.applyCropImage();
                     break;
                 case MODE_ROTATE:// 旋转图片保存
-                    mRotateFragment.saveRotateImage();
+                    mRotateFragment.applyRotateImage();
                     break;
                 case MODE_TEXT://文字贴图 图片保存
-                    mAddTextFragment.saveTextImage();
+                    mAddTextFragment.applyTextImage();
                     break;
                 case MODE_PAINT://保存涂鸦
                     mPaintFragment.savePaintImage();
@@ -340,22 +352,25 @@ public class EditImageActivity extends BaseActivity {
     private final class SaveBtnClick implements OnClickListener {
         @Override
         public void onClick(View v) {
-            Intent returnIntent = new Intent();
-            if(FileUtil.checkFileExist(saveFilePath)){//图片被编辑过
-                returnIntent.putExtra(SAVE_FILE_PATH, saveFilePath);
-                returnIntent.putExtra(IMAGE_IS_EDIT, true);
-
-                FileUtil.ablumUpdate(mContext,saveFilePath);
-
-                mContext.setResult(RESULT_OK, returnIntent);
-            }else{
-                returnIntent.putExtra(SAVE_FILE_PATH, filePath);
-                returnIntent.putExtra(IMAGE_IS_EDIT, false);
-                mContext.setResult(RESULT_OK, returnIntent);
-            }//end if
-            mContext.finish();
+            if (mOpTimes == 0) {//并未修改图片
+                onSaveTaskDone();
+            } else {
+                doSaveImage();
+            }
         }
     }// end inner class
+
+    protected void doSaveImage() {
+        if (mOpTimes <= 0)
+            return;
+
+        if (mSaveImageTask != null) {
+            mSaveImageTask.cancel(true);
+        }
+
+        mSaveImageTask = new SaveImageTask();
+        mSaveImageTask.execute(mainBitmap);
+    }
 
     /**
      * 切换底图Bitmap
@@ -367,11 +382,12 @@ public class EditImageActivity extends BaseActivity {
             if (!mainBitmap.isRecycled()) {// 回收
                 mainBitmap.recycle();
             }
-            mainBitmap = newBit;
-        } else {
-            mainBitmap = newBit;
-        }// end if
+        }
+        mainBitmap = newBit;
         mainImage.setImageBitmap(mainBitmap);
+        mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+
+        increaseOpTimes();
     }
 
     @Override
@@ -380,5 +396,81 @@ public class EditImageActivity extends BaseActivity {
         if (mLoadImageTask != null) {
             mLoadImageTask.cancel(true);
         }
+
+        if (mSaveImageTask != null) {
+            mSaveImageTask.cancel(true);
+        }
     }
+
+    public void increaseOpTimes() {
+        mOpTimes++;
+        isBeenSaved = false;
+    }
+
+    public void resetOpTimes() {
+        isBeenSaved = true;
+    }
+
+    public boolean canAutoExit() {
+        return isBeenSaved || mOpTimes == 0;
+    }
+
+    protected void onSaveTaskDone() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(SAVE_FILE_PATH, saveFilePath);
+        returnIntent.putExtra(IMAGE_IS_EDIT, mOpTimes > 0);
+
+        FileUtil.ablumUpdate(this, saveFilePath);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
+    /**
+     * 保存图像
+     * 完成后退出
+     */
+    private final class SaveImageTask extends AsyncTask<Bitmap, Void, Boolean> {
+        private Dialog dialog;
+
+        @Override
+        protected Boolean doInBackground(Bitmap... params) {
+            if (TextUtils.isEmpty(saveFilePath))
+                return false;
+
+            return BitmapUtils.saveBitmap(params[0], saveFilePath);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            dialog.dismiss();
+        }
+
+        @Override
+        protected void onCancelled(Boolean result) {
+            super.onCancelled(result);
+            dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = EditImageActivity.getLoadingDialog(mContext, R.string.saving_image, false);
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            dialog.dismiss();
+
+            if (result) {
+                resetOpTimes();
+                onSaveTaskDone();
+            } else {
+                Toast.makeText(mContext, R.string.save_error, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }//end inner class
+
 }// end class
