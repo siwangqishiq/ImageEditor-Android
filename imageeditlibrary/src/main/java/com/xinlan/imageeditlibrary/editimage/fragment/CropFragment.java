@@ -40,11 +40,10 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * @author panyi
  * 
  */
-public class CropFragment extends Fragment {
+public class CropFragment extends BaseEditFragment {
     public static final int INDEX = 3;
 	public static final String TAG = CropFragment.class.getName();
 	private View mainView;
-	private EditImageActivity activity;
 	private View backToMenu;// 返回主菜单
 	public CropImageView mCropPanel;// 剪裁操作面板
 	private LinearLayout ratioList;
@@ -69,10 +68,8 @@ public class CropFragment extends Fragment {
 	private CropRationClick mCropRationClick = new CropRationClick();
 	public TextView selctedTextView;
 
-	public static CropFragment newInstance(EditImageActivity activity) {
+	public static CropFragment newInstance() {
 		CropFragment fragment = new CropFragment();
-		fragment.activity = activity;
-		fragment.mCropPanel = activity.mCropPanel;
 		return fragment;
 	}
 
@@ -85,9 +82,6 @@ public class CropFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mainView = inflater.inflate(R.layout.fragment_edit_image_crop, null);
-		backToMenu = mainView.findViewById(R.id.back_to_main);
-		ratioList = (LinearLayout) mainView.findViewById(R.id.ratio_list_group);
-		setUpRatioList();
 		return mainView;
 	}
 
@@ -142,10 +136,30 @@ public class CropFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+
+        backToMenu = mainView.findViewById(R.id.back_to_main);
+        ratioList = (LinearLayout) mainView.findViewById(R.id.ratio_list_group);
+        setUpRatioList();
+        this.mCropPanel = ensureEditActivity().mCropPanel;
 		backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
 	}
 
-	/**
+    @Override
+    public void onShow() {
+        activity.mode = EditImageActivity.MODE_CROP;
+
+        activity.mCropPanel.setVisibility(View.VISIBLE);
+        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+        activity.mainImage.setScaleEnabled(false);// 禁用缩放
+        //
+        RectF r = activity.mainImage.getBitmapRect();
+        activity.mCropPanel.setCropRect(r);
+        // System.out.println(r.left + "    " + r.top);
+        activity.bannerFlipper.showNext();
+    }
+
+    /**
 	 * 返回按钮逻辑
 	 * 
 	 * @author panyi
@@ -212,7 +226,8 @@ public class CropFragment extends Fragment {
 			dialog.show();
 		}
 
-		@Override
+		@SuppressWarnings("WrongThread")
+        @Override
 		protected Bitmap doInBackground(Bitmap... params) {
 			RectF cropRect = mCropPanel.getCropRect();// 剪切区域矩形
 			Matrix touchMatrix = activity.mainImage.getImageViewMatrix();

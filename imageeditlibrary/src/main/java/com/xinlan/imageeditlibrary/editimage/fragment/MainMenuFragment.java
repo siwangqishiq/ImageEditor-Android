@@ -17,12 +17,11 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  *
  * @author panyi
  */
-public class MainMenuFragment extends Fragment implements View.OnClickListener {
+public class MainMenuFragment extends BaseEditFragment implements View.OnClickListener {
     public static final int INDEX = 0;
 
     public static final String TAG = MainMenuFragment.class.getName();
     private View mainView;
-    private EditImageActivity activity;
 
     private View stickerBtn;// 贴图按钮
     private View fliterBtn;// 滤镜按钮
@@ -31,9 +30,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     private View mTextBtn;//文字型贴图添加
     private View mPaintBtn;//编辑按钮
 
-    public static MainMenuFragment newInstance(EditImageActivity activity) {
+    public static MainMenuFragment newInstance() {
         MainMenuFragment fragment = new MainMenuFragment();
-        fragment.activity = activity;
         return fragment;
     }
 
@@ -47,12 +45,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_edit_image_main_menu,
                 null);
-        stickerBtn = mainView.findViewById(R.id.btn_stickers);
-        fliterBtn = mainView.findViewById(R.id.btn_fliter);
-        cropBtn = mainView.findViewById(R.id.btn_crop);
-        rotateBtn = mainView.findViewById(R.id.btn_rotate);
-        mTextBtn = mainView.findViewById(R.id.btn_text);
-        mPaintBtn = mainView.findViewById(R.id.btn_paint);
         return mainView;
     }
 
@@ -60,12 +52,24 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        stickerBtn = mainView.findViewById(R.id.btn_stickers);
+        fliterBtn = mainView.findViewById(R.id.btn_fliter);
+        cropBtn = mainView.findViewById(R.id.btn_crop);
+        rotateBtn = mainView.findViewById(R.id.btn_rotate);
+        mTextBtn = mainView.findViewById(R.id.btn_text);
+        mPaintBtn = mainView.findViewById(R.id.btn_paint);
+
         stickerBtn.setOnClickListener(this);
         fliterBtn.setOnClickListener(this);
         cropBtn.setOnClickListener(this);
         rotateBtn.setOnClickListener(this);
         mTextBtn.setOnClickListener(this);
         mPaintBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onShow() {
+        // do nothing
     }
 
     @Override
@@ -91,11 +95,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
      * @author panyi
      */
     private void onStickClick() {
-        activity.mode = EditImageActivity.MODE_STICKERS;
-        activity.mStirckerFragment.getmStickerView().setVisibility(
-                View.VISIBLE);
         activity.bottomGallery.setCurrentItem(StirckerFragment.INDEX);
-        activity.bannerFlipper.showNext();
+        activity.mStirckerFragment.onShow();
     }
 
     /**
@@ -104,13 +105,9 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
      * @author panyi
      */
     private void onFilterClick() {
-        activity.mode = EditImageActivity.MODE_FILTER;
-        activity.mFliterListFragment.setCurrentBitmap(activity.mainBitmap);
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
-        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        activity.mainImage.setScaleEnabled(false);
         activity.bottomGallery.setCurrentItem(FliterListFragment.INDEX);
-        activity.bannerFlipper.showNext();
+
+        activity.mFliterListFragment.onShow();
     }
 
     /**
@@ -119,17 +116,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
      * @author panyi
      */
     private void onCropClick() {
-        activity.mode = EditImageActivity.MODE_CROP;
-        activity.mCropPanel.setVisibility(View.VISIBLE);
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
-        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.bottomGallery.setCurrentItem(CropFragment.INDEX);
-        activity.mainImage.setScaleEnabled(false);// 禁用缩放
-        //
-        RectF r = activity.mainImage.getBitmapRect();
-        activity.mCropPanel.setCropRect(r);
-        // System.out.println(r.left + "    " + r.top);
-        activity.bannerFlipper.showNext();
+        activity.mCropFragment.onShow();
     }
 
     /**
@@ -138,18 +126,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
      * @author panyi
      */
     private void onRotateClick() {
-        activity.mode = EditImageActivity.MODE_ROTATE;
         activity.bottomGallery.setCurrentItem(RotateFragment.INDEX);
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
-        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        activity.mainImage.setVisibility(View.GONE);
-
-        activity.mRotatePanel.addBit(activity.mainBitmap,
-                activity.mainImage.getBitmapRect());
-        activity.mRotateFragment.mSeekBar.setProgress(0);
-        activity.mRotatePanel.reset();
-        activity.mRotatePanel.setVisibility(View.VISIBLE);
-        activity.bannerFlipper.showNext();
+        activity.mRotateFragment.onShow();
     }
 
     /**
@@ -158,6 +136,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
      * @author panyi
      */
     private void onAddTextClick() {
+        activity.bottomGallery.setCurrentItem(AddTextFragment.INDEX);
         activity.mAddTextFragment.onShow();
     }
 
@@ -165,6 +144,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
      * 自由绘制模式
      */
     private void onPaintClick() {
+        activity.bottomGallery.setCurrentItem(PaintFragment.INDEX);
         activity.mPaintFragment.onShow();
     }
 

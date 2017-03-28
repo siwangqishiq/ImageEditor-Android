@@ -1,15 +1,5 @@
 package com.xinlan.imageeditlibrary.editimage.fragment;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -17,9 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,24 +23,27 @@ import com.xinlan.imageeditlibrary.editimage.adapter.StickerAdapter;
 import com.xinlan.imageeditlibrary.editimage.adapter.StickerTypeAdapter;
 import com.xinlan.imageeditlibrary.editimage.model.StickerBean;
 import com.xinlan.imageeditlibrary.editimage.task.StickerTask;
-import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
-import com.xinlan.imageeditlibrary.editimage.utils.Matrix3;
 import com.xinlan.imageeditlibrary.editimage.view.StickerItem;
 import com.xinlan.imageeditlibrary.editimage.view.StickerView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * 贴图分类fragment
  *
  * @author panyi
  */
-public class StirckerFragment extends Fragment {
+public class StirckerFragment extends BaseEditFragment {
     public static final int INDEX = 1;
 
     public static final String TAG = StirckerFragment.class.getName();
     public static final String STICKER_FOLDER = "stickers";
 
     private View mainView;
-    private EditImageActivity activity;
     private ViewFlipper flipper;
     private View backToMenu;// 返回主菜单
     private RecyclerView typeList;// 贴图分类列表
@@ -66,9 +57,8 @@ public class StirckerFragment extends Fragment {
 
     private SaveStickersTask mSaveTask;
 
-    public static StirckerFragment newInstance(EditImageActivity activity) {
+    public static StirckerFragment newInstance() {
         StirckerFragment fragment = new StirckerFragment();
-        fragment.activity = activity;
         return fragment;
     }
 
@@ -80,8 +70,17 @@ public class StirckerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         mainView = inflater.inflate(R.layout.fragment_edit_image_sticker_type,
                 null);
+        //loadStickersData();
+
+        return mainView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         this.mStickerView = activity.mStickerView;
         flipper = (ViewFlipper) mainView.findViewById(R.id.flipper);
         flipper.setInAnimation(activity, R.anim.in_bottom_to_top);
@@ -107,15 +106,6 @@ public class StirckerFragment extends Fragment {
         mStickerAdapter = new StickerAdapter(this);
         stickerList.setAdapter(mStickerAdapter);
 
-        //loadStickersData();
-
-        return mainView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
         backToType.setOnClickListener(new OnClickListener() {
             @Override
@@ -123,6 +113,14 @@ public class StirckerFragment extends Fragment {
                 flipper.showPrevious();
             }
         });
+    }
+
+    @Override
+    public void onShow() {
+        activity.mode = EditImageActivity.MODE_STICKERS;
+        activity.mStirckerFragment.getmStickerView().setVisibility(
+                View.VISIBLE);
+        activity.bannerFlipper.showNext();
     }
 
     //导入贴图数据

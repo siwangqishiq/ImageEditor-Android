@@ -32,19 +32,16 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  *
  * @author 潘易
  */
-public class RotateFragment extends Fragment {
+public class RotateFragment extends BaseEditFragment {
     public static final int INDEX = 4;
     public static final String TAG = RotateFragment.class.getName();
     private View mainView;
-    private EditImageActivity activity;
     private View backToMenu;// 返回主菜单
     public SeekBar mSeekBar;// 角度设定
     private RotateImageView mRotatePanel;// 旋转效果展示控件
 
-    public static RotateFragment newInstance(EditImageActivity activity) {
+    public static RotateFragment newInstance() {
         RotateFragment fragment = new RotateFragment();
-        fragment.activity = activity;
-        fragment.mRotatePanel = activity.mRotatePanel;
         return fragment;
     }
 
@@ -57,18 +54,35 @@ public class RotateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_edit_image_rotate, null);
-        backToMenu = mainView.findViewById(R.id.back_to_main);
-        mSeekBar = (SeekBar) mainView.findViewById(R.id.rotate_bar);
-        mSeekBar.setProgress(0);
         return mainView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
 
+        backToMenu = mainView.findViewById(R.id.back_to_main);
+        mSeekBar = (SeekBar) mainView.findViewById(R.id.rotate_bar);
+        mSeekBar.setProgress(0);
+
+        this.mRotatePanel = ensureEditActivity().mRotatePanel;
+        backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
         mSeekBar.setOnSeekBarChangeListener(new RotateAngleChange());
+    }
+
+    @Override
+    public void onShow() {
+        activity.mode = EditImageActivity.MODE_ROTATE;
+        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+        activity.mainImage.setVisibility(View.GONE);
+
+        activity.mRotatePanel.addBit(activity.mainBitmap,
+                activity.mainImage.getBitmapRect());
+        activity.mRotateFragment.mSeekBar.setProgress(0);
+        activity.mRotatePanel.reset();
+        activity.mRotatePanel.setVisibility(View.VISIBLE);
+        activity.bannerFlipper.showNext();
     }
 
     /**

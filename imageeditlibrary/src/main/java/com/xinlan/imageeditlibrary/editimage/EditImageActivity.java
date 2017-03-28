@@ -162,16 +162,16 @@ public class EditImageActivity extends BaseActivity {
 
         // 底部gallery
         bottomGallery = (CustomViewPager) findViewById(R.id.bottom_gallery);
-        //bottomGallery.setOffscreenPageLimit(5);
-        mMainMenuFragment = MainMenuFragment.newInstance(this);
+        //bottomGallery.setOffscreenPageLimit(7);
+        mMainMenuFragment = MainMenuFragment.newInstance();
         mBottomGalleryAdapter = new BottomGalleryAdapter(
                 this.getSupportFragmentManager());
-        mStirckerFragment = StirckerFragment.newInstance(this);
-        mFliterListFragment = FliterListFragment.newInstance(this);
-        mCropFragment = CropFragment.newInstance(this);
-        mRotateFragment = RotateFragment.newInstance(this);
-        mAddTextFragment = AddTextFragment.newInstance(this);
-        mPaintFragment = PaintFragment.newInstance(this);
+        mStirckerFragment = StirckerFragment.newInstance();
+        mFliterListFragment = FliterListFragment.newInstance();
+        mCropFragment = CropFragment.newInstance();
+        mRotateFragment = RotateFragment.newInstance();
+        mAddTextFragment = AddTextFragment.newInstance();
+        mPaintFragment = PaintFragment.newInstance();
 
         bottomGallery.setAdapter(mBottomGalleryAdapter);
 
@@ -223,7 +223,7 @@ public class EditImageActivity extends BaseActivity {
                 case PaintFragment.INDEX:
                     return mPaintFragment;//绘制
             }//end switch
-            return MainMenuFragment.newInstance(mContext);
+            return MainMenuFragment.newInstance();
         }
 
         @Override

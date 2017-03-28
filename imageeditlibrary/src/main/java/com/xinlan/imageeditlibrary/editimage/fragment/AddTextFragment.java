@@ -33,12 +33,11 @@ import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
  *
  * @author 潘易
  */
-public class AddTextFragment extends Fragment implements TextWatcher {
+public class AddTextFragment extends BaseEditFragment implements TextWatcher {
     public static final int INDEX = 5;
     public static final String TAG = AddTextFragment.class.getName();
 
     private View mainView;
-    private EditImageActivity activity;
     private View backToMenu;// 返回主菜单
 
     private EditText mInputText;//输入框
@@ -53,10 +52,8 @@ public class AddTextFragment extends Fragment implements TextWatcher {
 
     private SaveTextStickerTask mSaveTask;
 
-    public static AddTextFragment newInstance(EditImageActivity activity) {
+    public static AddTextFragment newInstance() {
         AddTextFragment fragment = new AddTextFragment();
-        fragment.activity = activity;
-        fragment.mTextStickerView = activity.mTextStickerView;
         return fragment;
     }
 
@@ -70,22 +67,24 @@ public class AddTextFragment extends Fragment implements TextWatcher {
                              Bundle savedInstanceState) {
         imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mainView = inflater.inflate(R.layout.fragment_edit_image_add_text, null);
-        backToMenu = mainView.findViewById(R.id.back_to_main);
-        mInputText = (EditText) mainView.findViewById(R.id.text_input);
-        mTextColorSelector = (ImageView) mainView.findViewById(R.id.text_color);
-        mAutoNewLineCheck = (CheckBox) mainView.findViewById(R.id.check_auto_newline);
         return mainView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mTextStickerView = (TextStickerView)getActivity().findViewById(R.id.text_sticker_panel);
+
+        backToMenu = mainView.findViewById(R.id.back_to_main);
+        mInputText = (EditText) mainView.findViewById(R.id.text_input);
+        mTextColorSelector = (ImageView) mainView.findViewById(R.id.text_color);
+        mAutoNewLineCheck = (CheckBox) mainView.findViewById(R.id.check_auto_newline);
+
         backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
         mColorPicker = new ColorPicker(getActivity(), 255, 255, 255);
         mTextColorSelector.setOnClickListener(new SelectColorBtnClick());
-
         mInputText.addTextChangedListener(this);
-
         mTextStickerView.setEditText(mInputText);
     }
 
@@ -170,12 +169,11 @@ public class AddTextFragment extends Fragment implements TextWatcher {
         mTextStickerView.setVisibility(View.GONE);
     }
 
+    @Override
     public void onShow() {
         activity.mode = EditImageActivity.MODE_TEXT;
-        activity.bottomGallery.setCurrentItem(AddTextFragment.INDEX);
         activity.mainImage.setImageBitmap(activity.mainBitmap);
         activity.bannerFlipper.showNext();
-
         mTextStickerView.setVisibility(View.VISIBLE);
         mInputText.clearFocus();
     }

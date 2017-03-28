@@ -35,12 +35,11 @@ import com.xinlan.imageeditlibrary.editimage.view.PaintModeView;
  *
  * @author panyi
  */
-public class PaintFragment extends Fragment implements View.OnClickListener, ColorListAdapter.IColorListAction {
+public class PaintFragment extends BaseEditFragment implements View.OnClickListener, ColorListAdapter.IColorListAction {
     public static final int INDEX = 6;
     public static final String TAG = PaintFragment.class.getName();
 
     private View mainView;
-    private EditImageActivity activity;
     private View backToMenu;// 返回主菜单
     private PaintModeView mPaintModeView;
     private RecyclerView mColorListView;//颜色列表View
@@ -64,32 +63,28 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
             Color.DKGRAY, Color.GRAY, Color.LTGRAY, Color.WHITE,
             Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA};
 
-    public static PaintFragment newInstance(EditImageActivity activity) {
+    public static PaintFragment newInstance() {
         PaintFragment fragment = new PaintFragment();
-        fragment.activity = activity;
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPaintView = activity.mPaintView;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_edit_paint, null);
-        backToMenu = mainView.findViewById(R.id.back_to_main);
-        mPaintModeView = (PaintModeView) mainView.findViewById(R.id.paint_thumb);
-        mColorListView = (RecyclerView) mainView.findViewById(R.id.paint_color_list);
-        mEraserView = (ImageView) mainView.findViewById(R.id.paint_eraser);
         return mainView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mPaintView = (CustomPaintView)getActivity().findViewById(R.id.custom_paint_view);
+        backToMenu = mainView.findViewById(R.id.back_to_main);
+        mPaintModeView = (PaintModeView) mainView.findViewById(R.id.paint_thumb);
+        mColorListView = (RecyclerView) mainView.findViewById(R.id.paint_color_list);
+        mEraserView = (ImageView) mainView.findViewById(R.id.paint_eraser);
+
         backToMenu.setOnClickListener(this);// 返回主菜单
 
         mColorPicker = new ColorPicker(getActivity(), 255, 0, 0);
@@ -144,10 +139,8 @@ public class PaintFragment extends Fragment implements View.OnClickListener, Col
 
     public void onShow() {
         activity.mode = EditImageActivity.MODE_PAINT;
-        activity.bottomGallery.setCurrentItem(PaintFragment.INDEX);
         activity.mainImage.setImageBitmap(activity.mainBitmap);
         activity.bannerFlipper.showNext();
-
         this.mPaintView.setVisibility(View.VISIBLE);
     }
 

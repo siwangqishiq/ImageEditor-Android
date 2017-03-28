@@ -25,6 +25,7 @@ import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.fliter.PhotoProcessing;
+import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
 
 
 /**
@@ -32,22 +33,20 @@ import com.xinlan.imageeditlibrary.editimage.fliter.PhotoProcessing;
  *
  * @author panyi
  */
-public class FliterListFragment extends Fragment {
+    public class FliterListFragment extends BaseEditFragment {
     public static final int INDEX = 2;
     public static final String TAG = FliterListFragment.class.getName();
     private View mainView;
     private View backBtn;// 返回主菜单按钮
 
     private Bitmap fliterBit;// 滤镜处理后的bitmap
-    private EditImageActivity activity;
 
     private LinearLayout mFilterGroup;// 滤镜列表
     private String[] fliters;
     private Bitmap currentBitmap;// 标记变量
 
-    public static FliterListFragment newInstance(EditImageActivity activity) {
+    public static FliterListFragment newInstance() {
         FliterListFragment fragment = new FliterListFragment();
-        fragment.activity = activity;
         return fragment;
     }
 
@@ -60,14 +59,16 @@ public class FliterListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_edit_image_fliter, null);
-        backBtn = mainView.findViewById(R.id.back_to_main);
-        mFilterGroup = (LinearLayout) mainView.findViewById(R.id.fliter_group);
         return mainView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        backBtn = mainView.findViewById(R.id.back_to_main);
+        mFilterGroup = (LinearLayout) mainView.findViewById(R.id.fliter_group);
+
         backBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +76,16 @@ public class FliterListFragment extends Fragment {
             }
         });
         setUpFliters();
+    }
+
+    @Override
+   public  void onShow() {
+        activity.mode = EditImageActivity.MODE_FILTER;
+        activity.mFliterListFragment.setCurrentBitmap(activity.mainBitmap);
+        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+        activity.mainImage.setScaleEnabled(false);
+        activity.bannerFlipper.showNext();
     }
 
     /**
