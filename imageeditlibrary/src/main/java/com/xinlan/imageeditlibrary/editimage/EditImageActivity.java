@@ -417,7 +417,8 @@ public class EditImageActivity extends BaseActivity {
 
     protected void onSaveTaskDone() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(SAVE_FILE_PATH, saveFilePath);
+        returnIntent.putExtra(FILE_PATH, filePath);
+        returnIntent.putExtra(EXTRA_OUTPUT, saveFilePath);
         returnIntent.putExtra(IMAGE_IS_EDIT, mOpTimes > 0);
 
         FileUtil.ablumUpdate(this, saveFilePath);
