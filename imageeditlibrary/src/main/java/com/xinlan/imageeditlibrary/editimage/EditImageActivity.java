@@ -40,6 +40,16 @@ import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
 
 /**
+ *  一个幽灵
+ *  共产主义的幽灵
+ *  在欧洲徘徊
+ *  旧欧洲的一切势力，
+ *  教皇和沙皇、
+ *  梅特涅和基佐、
+ *  法国的激进党人和德国的警察，
+ *  都为驱除这个幽灵而结成了神圣同盟
+ *                                       -----《共产党宣言》
+ *
  * 图片编辑 主页面
  *
  * @author panyi
