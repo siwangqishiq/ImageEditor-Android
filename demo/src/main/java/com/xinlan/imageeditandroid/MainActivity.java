@@ -215,15 +215,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleEditorImage(Intent data) {
-        String newFilePath = data.getStringExtra(EditImageActivity.SAVE_FILE_PATH);
+        String newFilePath = data.getStringExtra(EditImageActivity.EXTRA_OUTPUT);
         boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
 
         if (isImageEdit){
             Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
-        }else{
-            newFilePath = path;
+        }else{//未编辑  还是用原来的图片
+            newFilePath = data.getStringExtra(EditImageActivity.FILE_PATH);;
         }
         //System.out.println("newFilePath---->" + newFilePath);
+        //File file = new File(newFilePath);
+        //System.out.println("newFilePath size ---->" + (file.length() / 1024)+"KB");
         Log.d("image is edit", isImageEdit + "");
         LoadImageTask loadTask = new LoadImageTask();
         loadTask.execute(newFilePath);
