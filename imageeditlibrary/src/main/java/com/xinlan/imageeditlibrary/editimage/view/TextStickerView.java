@@ -373,6 +373,7 @@ public class TextStickerView extends View {
         layout_y = getMeasuredHeight() / 2;
         mRotateAngle = 0;
         mScale = 1;
+        mTextContents.clear();
     }
 
     public float getScale() {
