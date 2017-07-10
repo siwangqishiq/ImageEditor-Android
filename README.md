@@ -32,4 +32,4 @@ MIT is open-sourced software licensed under the [MIT license](http://opensource.
 
 
 ### next version TODO
-  美颜磨皮功能...
+  美颜磨皮功能... Facial skin grinding
