@@ -3,10 +3,21 @@
 #### For edit image,supply stickers filter rotate crop textstciker doodle
 
 ## Version History
-### v_1.0: base function,edit image,supply stickers filter rotate crop 
-### v_2.0: add the textimage 
-### v_3.0: add doodle mode (done) 
+
+### v_3.2: add Smooth skin and White skin
+
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif7.gif"/>
+
 ### v_3.1: add text support multiply line(done) save image when click save button (not apply)
+
+### v_3.0: add doodle mode (done)
+
+### v_2.0: add the textimage
+
+### v_1.0: base function,edit image,supply stickers filter rotate crop 
+
+
+
 
 
 ### 动态效果图
@@ -30,7 +41,3 @@ License
 
 MIT is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
-
-### next version
-#### TODO
-  美颜磨皮功能... Facial skin grinding(v_3.2)
