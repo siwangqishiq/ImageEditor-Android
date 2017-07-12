@@ -6,7 +6,7 @@
 
 ### v_3.2: add Smooth skin and White skin
 
-<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif7.gif"/>
+<img width=300 height=500 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif7.gif"/>
 
 ### v_3.1: add text support multiply line(done) save image when click save button (not apply)
 
