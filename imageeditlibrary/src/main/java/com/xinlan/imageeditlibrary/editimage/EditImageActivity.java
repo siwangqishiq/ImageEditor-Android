@@ -22,6 +22,7 @@ import android.widget.ViewFlipper;
 import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.fragment.AddTextFragment;
+import com.xinlan.imageeditlibrary.editimage.fragment.BeautyFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.CropFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.FliterListFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.MainMenuFragment;
@@ -71,6 +72,7 @@ public class EditImageActivity extends BaseActivity {
     public static final int MODE_ROTATE = 4;// 旋转模式
     public static final int MODE_TEXT = 5;// 文字模式
     public static final int MODE_PAINT = 6;//绘制模式
+    public static final int MODE_BEAUTY = 7;//美颜模式
 
     public String filePath;// 需要编辑图片路径
     public String saveFilePath;// 生成的新图片路径
@@ -106,6 +108,7 @@ public class EditImageActivity extends BaseActivity {
     public RotateFragment mRotateFragment;// 图片旋转Fragment
     public AddTextFragment mAddTextFragment;//图片添加文字
     public PaintFragment mPaintFragment;//绘制模式Fragment
+    public BeautyFragment mBeautyFragment;//美颜模式Fragment
 
     private SaveImageTask mSaveImageTask;
 
@@ -183,6 +186,7 @@ public class EditImageActivity extends BaseActivity {
         mRotateFragment = RotateFragment.newInstance();
         mAddTextFragment = AddTextFragment.newInstance();
         mPaintFragment = PaintFragment.newInstance();
+        mBeautyFragment = BeautyFragment.newInstance();
 
         bottomGallery.setAdapter(mBottomGalleryAdapter);
 
@@ -233,13 +237,15 @@ public class EditImageActivity extends BaseActivity {
                     return mAddTextFragment;
                 case PaintFragment.INDEX:
                     return mPaintFragment;//绘制
+                case BeautyFragment.INDEX://美颜
+                    return mBeautyFragment;
             }//end switch
             return MainMenuFragment.newInstance();
         }
 
         @Override
         public int getCount() {
-            return 7;
+            return 8;
         }
     }// end inner class
 
@@ -300,6 +306,9 @@ public class EditImageActivity extends BaseActivity {
             case MODE_PAINT:
                 mPaintFragment.backToMain();
                 return;
+            case MODE_BEAUTY://从美颜模式中返回
+                mBeautyFragment.backToMain();
+                return;
         }// end switch
 
         if (canAutoExit()) {
@@ -349,6 +358,9 @@ public class EditImageActivity extends BaseActivity {
                 case MODE_PAINT://保存涂鸦
                     mPaintFragment.savePaintImage();
                     break;
+                case MODE_BEAUTY://保存美颜后的图片
+                    mBeautyFragment.applyBeauty();
+                    break;
                 default:
                     break;
             }// end switch
@@ -389,6 +401,9 @@ public class EditImageActivity extends BaseActivity {
      * @param newBit
      */
     public void changeMainBitmap(Bitmap newBit) {
+        if(newBit == null)
+            return;
+
         if (mainBitmap != null) {
             if (!mainBitmap.isRecycled()) {// 回收
                 mainBitmap.recycle();

@@ -34,7 +34,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  *
  * @author panyi
  */
-    public class FliterListFragment extends BaseEditFragment {
+public class FliterListFragment extends BaseEditFragment {
     public static final int INDEX = ModuleConfig.INDEX_FILTER;
     public static final String TAG = FliterListFragment.class.getName();
     private View mainView;
@@ -80,7 +80,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
     }
 
     @Override
-   public  void onShow() {
+    public void onShow() {
         activity.mode = EditImageActivity.MODE_FILTER;
         activity.mFliterListFragment.setCurrentBitmap(activity.mainBitmap);
         activity.mainImage.setImageBitmap(activity.mainBitmap);
@@ -113,60 +113,10 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
             return;
         } else {// 经滤镜处理后的图片
             // System.out.println("滤镜图片");
-            SaveImageTask saveTask = new SaveImageTask();
-            saveTask.execute(fliterBit);
+            activity.changeMainBitmap(fliterBit);
+            backToMain();
         }// end if
     }
-
-    /**
-     * 保存滤镜处理图片任务
-     *
-     * @author panyi
-     */
-    private final class SaveImageTask extends AsyncTask<Bitmap, Void, Boolean> {
-        private Dialog dialog;
-
-        @Override
-        protected Boolean doInBackground(Bitmap... params) {
-            //return saveBitmap(params[0], activity.saveFilePath);
-            return true;
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            dialog.dismiss();
-        }
-
-        @Override
-        protected void onCancelled(Boolean result) {
-            super.onCancelled(result);
-            dialog.dismiss();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-            dialog.dismiss();
-            if (result) {// 保存图片成功
-                //if (activity.mainBitmap != null
-                //        && !activity.mainBitmap.isRecycled()) {
-                //    activity.mainBitmap.recycle();
-                //}
-                //activity.mainBitmap = fliterBit;
-                activity.changeMainBitmap(fliterBit);
-                backToMain();
-            }// end if
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = EditImageActivity.getLoadingDialog(getActivity(),
-                    R.string.saving_image, false);
-            dialog.show();
-        }
-    }// end inner class
 
     /**
      * 装载滤镜
@@ -271,7 +221,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = BaseActivity.getLoadingDialog(getActivity(), R.string.saving_image,
+            dialog = BaseActivity.getLoadingDialog(getActivity(), R.string.handing,
                     false);
             dialog.show();
         }

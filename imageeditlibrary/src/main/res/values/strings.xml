@@ -25,6 +25,7 @@
     <string name="no_choose">please choose a image for edit</string>
     <string name="auto_newline">AutoNewline</string>
     <string name="save_error">Save error!</string>
+    <string name="handing">loading...</string>
 
     <string-array name="fliters">
         <item>origin</item>

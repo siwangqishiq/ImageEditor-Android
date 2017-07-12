@@ -86,7 +86,7 @@ public class MainMenuFragment extends BaseEditFragment implements View.OnClickLi
         } else if (v == mPaintBtn) {
             onPaintClick();
         }else if(v == mBeautyBtn){
-            onPaintClick();
+            onBeautyClick();
         }
     }
 
@@ -107,7 +107,6 @@ public class MainMenuFragment extends BaseEditFragment implements View.OnClickLi
      */
     private void onFilterClick() {
         activity.bottomGallery.setCurrentItem(FliterListFragment.INDEX);
-
         activity.mFliterListFragment.onShow();
     }
 
@@ -150,7 +149,8 @@ public class MainMenuFragment extends BaseEditFragment implements View.OnClickLi
     }
 
     private void onBeautyClick(){
-
+        activity.bottomGallery.setCurrentItem(BeautyFragment.INDEX);
+        activity.mBeautyFragment.onShow();
     }
 
 }// end class

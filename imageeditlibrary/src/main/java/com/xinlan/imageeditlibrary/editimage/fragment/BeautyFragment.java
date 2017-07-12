@@ -1,28 +1,25 @@
 package com.xinlan.imageeditlibrary.editimage.fragment;
 
-import android.content.Context;
+import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.SeekBar;
 
+import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
-import com.xinlan.imageeditlibrary.editimage.task.StickerTask;
-import com.xinlan.imageeditlibrary.editimage.ui.ColorPicker;
-import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
+import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
+import com.xinlan.imageeditlibrary.editimage.fliter.PhotoProcessing;
+import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
+
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -30,24 +27,23 @@ import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
  *
  * @author 潘易
  */
-public class BeautyFragment extends BaseEditFragment implements TextWatcher {
-    public static final int INDEX = 7;
+public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBarChangeListener {
     public static final String TAG = BeautyFragment.class.getName();
+
+    public static final int INDEX = ModuleConfig.INDEX_BEAUTY;
 
     private View mainView;
     private View backToMenu;// 返回主菜单
 
-    private EditText mInputText;//输入框
-    private ImageView mTextColorSelector;//颜色选择器
-    private TextStickerView mTextStickerView;// 文字贴图显示控件
-    private CheckBox mAutoNewLineCheck;
+    private SeekBar mSmoothValueBar;
+    private SeekBar mWhiteValueBar;
 
-    private ColorPicker mColorPicker;
+    private BeautyTask mHandleTask;
 
-    private int mTextColor = Color.WHITE;
-    private InputMethodManager imm;
+    private int mSmooth = 0;//磨皮值
+    private int mWhiteSkin = 0;//美白值
 
-    private SaveTextStickerTask mSaveTask;
+    private WeakReference<Bitmap> mResultBitmapRef;
 
     public static BeautyFragment newInstance() {
         BeautyFragment fragment = new BeautyFragment();
@@ -62,84 +58,51 @@ public class BeautyFragment extends BaseEditFragment implements TextWatcher {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        mainView = inflater.inflate(R.layout.fragment_edit_image_add_text, null);
+        mainView = inflater.inflate(R.layout.fragment_edit_image_beauty, null);
+
+        mSmoothValueBar = (SeekBar) mainView.findViewById(R.id.smooth_value_bar);
+        mWhiteValueBar = (SeekBar) mainView.findViewById(R.id.white_skin_value_bar);
         return mainView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mTextStickerView = (TextStickerView)getActivity().findViewById(R.id.text_sticker_panel);
-
         backToMenu = mainView.findViewById(R.id.back_to_main);
-        mInputText = (EditText) mainView.findViewById(R.id.text_input);
-        mTextColorSelector = (ImageView) mainView.findViewById(R.id.text_color);
-        mAutoNewLineCheck = (CheckBox) mainView.findViewById(R.id.check_auto_newline);
-
         backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
-        mColorPicker = new ColorPicker(getActivity(), 255, 255, 255);
-        mTextColorSelector.setOnClickListener(new SelectColorBtnClick());
-        mInputText.addTextChangedListener(this);
-        mTextStickerView.setEditText(mInputText);
+
+        mSmoothValueBar.setOnSeekBarChangeListener(this);
+        mWhiteValueBar.setOnSeekBarChangeListener(this);
+    }
+
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        doBeautyTask();
     }
 
     @Override
-    public void afterTextChanged(Editable s) {
-        //mTextStickerView change
-        String text = s.toString().trim();
-        mTextStickerView.setText(text);
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+    public void onStartTrackingTouch(SeekBar seekBar) {
     }
 
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    /**
-     * 颜色选择 按钮点击
-     */
-    private final class SelectColorBtnClick implements OnClickListener {
-        @Override
-        public void onClick(View v) {
-            mColorPicker.show();
-            Button okColor = (Button) mColorPicker.findViewById(R.id.okColorButton);
-            okColor.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    changeTextColor(mColorPicker.getColor());
-                    mColorPicker.dismiss();
-                }
-            });
+    protected void doBeautyTask() {
+        if (mHandleTask != null && !mHandleTask.isCancelled()) {
+            mHandleTask.cancel(true);
         }
-    }//end inner class
+        mSmooth = mSmoothValueBar.getProgress();
+        mWhiteSkin = mWhiteValueBar.getProgress();
 
-    /**
-     * 修改字体颜色
-     *
-     * @param newColor
-     */
-    private void changeTextColor(int newColor) {
-        this.mTextColor = newColor;
-        mTextColorSelector.setBackgroundColor(mTextColor);
-        mTextStickerView.setTextColor(mTextColor);
-    }
-
-    public void hideInput() {
-        if (getActivity() != null && getActivity().getCurrentFocus() != null && isInputMethodShow()) {
-            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
+        if (mSmooth == 0 && mWhiteSkin == 0) {
+            activity.mainImage.setImageBitmap(activity.mainBitmap);
+            return;
         }
-    }
 
-    public boolean isInputMethodShow() {
-        return imm.isActive();
+        mHandleTask = new BeautyTask(mSmooth, mWhiteSkin);
+        mHandleTask.execute(0);
     }
 
     /**
@@ -158,77 +121,99 @@ public class BeautyFragment extends BaseEditFragment implements TextWatcher {
      * 返回主菜单
      */
     public void backToMain() {
-        hideInput();
+        this.mSmooth = 0;
+        this.mWhiteSkin = 0;
+        mSmoothValueBar.setProgress(0);
+        mWhiteValueBar.setProgress(0);
+
         activity.mode = EditImageActivity.MODE_NONE;
         activity.bottomGallery.setCurrentItem(MainMenuFragment.INDEX);
+        activity.mainImage.setImageBitmap(activity.mainBitmap);// 返回原图
+
         activity.mainImage.setVisibility(View.VISIBLE);
+        activity.mainImage.setScaleEnabled(true);
         activity.bannerFlipper.showPrevious();
-        mTextStickerView.setVisibility(View.GONE);
     }
 
     @Override
     public void onShow() {
-        activity.mode = EditImageActivity.MODE_TEXT;
+        activity.mode = EditImageActivity.MODE_BEAUTY;
         activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+        activity.mainImage.setScaleEnabled(false);
         activity.bannerFlipper.showNext();
-        mTextStickerView.setVisibility(View.VISIBLE);
-        mInputText.clearFocus();
+    }
+
+    public void applyBeauty() {
+        if (mResultBitmapRef.get() != null && (mSmooth != 0 || mWhiteSkin != 0)) {
+            activity.changeMainBitmap(mResultBitmapRef.get());
+        }
+
+        backToMain();
     }
 
     /**
-     * 保存贴图图片
+     * 美颜操作任务
      */
-    public void applyTextImage() {
-        if (mSaveTask != null) {
-            mSaveTask.cancel(true);
-        }
+    private final class BeautyTask extends AsyncTask<Integer, Void, Bitmap> {
+        private float smoothVal;
+        private float whiteVal;
 
-        //启动任务
-        mSaveTask = new SaveTextStickerTask(activity);
-        mSaveTask.execute(activity.mainBitmap);
-    }
+        private Dialog dialog;
+        private Bitmap srcBitmap;
 
-    /**
-     * 文字合成任务
-     * 合成最终图片
-     */
-    private final class SaveTextStickerTask extends StickerTask {
-
-        public SaveTextStickerTask(EditImageActivity activity) {
-            super(activity);
+        public BeautyTask(float smooth, float white) {
+            this.smoothVal = smooth;
+            this.whiteVal = white;
         }
 
         @Override
-        public void handleImage(Canvas canvas, Matrix m) {
-            float[] f = new float[9];
-            m.getValues(f);
-            int dx = (int) f[Matrix.MTRANS_X];
-            int dy = (int) f[Matrix.MTRANS_Y];
-            float scale_x = f[Matrix.MSCALE_X];
-            float scale_y = f[Matrix.MSCALE_Y];
-            canvas.save();
-            canvas.translate(dx, dy);
-            canvas.scale(scale_x, scale_y);
-            //System.out.println("scale = " + scale_x + "       " + scale_y + "     " + dx + "    " + dy);
-            mTextStickerView.drawText(canvas, mTextStickerView.layout_x,
-                    mTextStickerView.layout_y, mTextStickerView.mScale, mTextStickerView.mRotateAngle);
-            canvas.restore();
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = BaseActivity.getLoadingDialog(getActivity(), R.string.handing,
+                    false);
+            dialog.show();
         }
 
         @Override
-        public void onPostResult(Bitmap result) {
-            mTextStickerView.clearTextContent();
-            mTextStickerView.resetView();
+        protected Bitmap doInBackground(Integer... params) {
+            srcBitmap = Bitmap.createBitmap(activity.mainBitmap.copy(
+                    Bitmap.Config.ARGB_8888, true));
+            //System.out.println("smoothVal = "+smoothVal+"     whiteVal = "+whiteVal);
+            PhotoProcessing.handleSmoothAndWhiteSkin(srcBitmap, smoothVal, whiteVal);
+            return srcBitmap;
+        }
 
-            activity.changeMainBitmap(result);
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            dialog.dismiss();
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
+        protected void onCancelled(Bitmap result) {
+            super.onCancelled(result);
+            dialog.dismiss();
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            dialog.dismiss();
+            if (result == null)
+                return;
+
+            mResultBitmapRef = new WeakReference<Bitmap>(result);
+            activity.mainImage.setImageBitmap(mResultBitmapRef.get());
         }
     }//end inner class
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSaveTask != null && !mSaveTask.isCancelled()) {
-            mSaveTask.cancel(true);
+        if (mHandleTask != null && !mHandleTask.isCancelled()) {
+            mHandleTask.cancel(true);
         }
     }
 }// end class

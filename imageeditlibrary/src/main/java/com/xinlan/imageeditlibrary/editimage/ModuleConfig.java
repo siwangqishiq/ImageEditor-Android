@@ -12,4 +12,5 @@ public final class ModuleConfig {
     public static final int INDEX_ROTATE = 4;
     public static final int INDEX_ADDTEXT = 5;
     public static final int INDEX_PAINT = 6;
+    public static final int INDEX_BEAUTY = 7;//美颜
 }
