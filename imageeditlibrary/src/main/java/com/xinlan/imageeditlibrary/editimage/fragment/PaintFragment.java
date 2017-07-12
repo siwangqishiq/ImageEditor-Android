@@ -20,6 +20,7 @@ import android.widget.SeekBar;
 
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
 import com.xinlan.imageeditlibrary.editimage.adapter.ColorListAdapter;
 import com.xinlan.imageeditlibrary.editimage.task.StickerTask;
 import com.xinlan.imageeditlibrary.editimage.ui.ColorPicker;
@@ -36,7 +37,7 @@ import com.xinlan.imageeditlibrary.editimage.view.PaintModeView;
  * @author panyi
  */
 public class PaintFragment extends BaseEditFragment implements View.OnClickListener, ColorListAdapter.IColorListAction {
-    public static final int INDEX = 6;
+    public static final int INDEX = ModuleConfig.INDEX_PAINT;
     public static final String TAG = PaintFragment.class.getName();
 
     private View mainView;

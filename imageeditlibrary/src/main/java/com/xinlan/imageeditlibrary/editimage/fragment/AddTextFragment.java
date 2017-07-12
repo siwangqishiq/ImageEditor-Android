@@ -23,6 +23,7 @@ import android.widget.ImageView;
 
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
 import com.xinlan.imageeditlibrary.editimage.task.StickerTask;
 import com.xinlan.imageeditlibrary.editimage.ui.ColorPicker;
 import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
@@ -34,7 +35,7 @@ import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
  * @author 潘易
  */
 public class AddTextFragment extends BaseEditFragment implements TextWatcher {
-    public static final int INDEX = 5;
+    public static final int INDEX = ModuleConfig.INDEX_ADDTEXT;
     public static final String TAG = AddTextFragment.class.getName();
 
     private View mainView;

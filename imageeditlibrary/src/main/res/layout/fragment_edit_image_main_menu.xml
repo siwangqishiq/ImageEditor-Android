@@ -76,6 +76,17 @@
             android:textColor="@color/white"
             android:textSize="@dimen/image_edit_text_size"/>
 
+        <TextView
+            android:id="@+id/btn_beauty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/image_edit_menu_margin"
+            android:gravity="center"
+            android:text="@string/beauty"
+            android:textColor="@color/white"
+            android:textSize="@dimen/image_edit_text_size"/>
+
     </LinearLayout>
 </HorizontalScrollView>
 

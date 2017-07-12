@@ -45,4 +45,8 @@
     <string name="exit_without_save">The edited image is not saved. Do you want to exit? </string>
     <string name="confirm">confirm</string>
     <string name="cancel">cancel</string>
+
+    <string name="beauty">beauty</string>
+    <string name="smooth">smooth</string>
+    <string name="white_skin">white skin</string>
 </resources>

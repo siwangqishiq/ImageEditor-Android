@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
 import com.xinlan.imageeditlibrary.editimage.fliter.PhotoProcessing;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
 
@@ -34,7 +35,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * @author panyi
  */
     public class FliterListFragment extends BaseEditFragment {
-    public static final int INDEX = 2;
+    public static final int INDEX = ModuleConfig.INDEX_FILTER;
     public static final String TAG = FliterListFragment.class.getName();
     private View mainView;
     private View backBtn;// 返回主菜单按钮

@@ -23,6 +23,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
 import com.xinlan.imageeditlibrary.editimage.view.RotateImageView;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
 
@@ -33,7 +34,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * @author 潘易
  */
 public class RotateFragment extends BaseEditFragment {
-    public static final int INDEX = 4;
+    public static final int INDEX = ModuleConfig.INDEX_ROTATE;
     public static final String TAG = RotateFragment.class.getName();
     private View mainView;
     private View backToMenu;// 返回主菜单

@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
 import com.xinlan.imageeditlibrary.editimage.model.RatioItem;
 import com.xinlan.imageeditlibrary.editimage.utils.Matrix3;
 import com.xinlan.imageeditlibrary.editimage.view.CropImageView;
@@ -41,7 +42,7 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  * 
  */
 public class CropFragment extends BaseEditFragment {
-    public static final int INDEX = 3;
+    public static final int INDEX = ModuleConfig.INDEX_CROP;
 	public static final String TAG = CropFragment.class.getName();
 	private View mainView;
 	private View backToMenu;// 返回主菜单
@@ -50,7 +51,7 @@ public class CropFragment extends BaseEditFragment {
 	private static List<RatioItem> dataList = new ArrayList<RatioItem>();
 	static {
 		// init data
-		dataList.add(new RatioItem("任意", -1f));
+		dataList.add(new RatioItem("none", -1f));
 		dataList.add(new RatioItem("1:1", 1f));
 		dataList.add(new RatioItem("1:2", 1 / 2f));
 		dataList.add(new RatioItem("1:3", 1 / 3f));

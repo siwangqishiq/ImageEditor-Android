@@ -19,6 +19,7 @@ import android.widget.ViewFlipper;
 import com.xinlan.imageeditlibrary.BaseActivity;
 import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
+import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
 import com.xinlan.imageeditlibrary.editimage.adapter.StickerAdapter;
 import com.xinlan.imageeditlibrary.editimage.adapter.StickerTypeAdapter;
 import com.xinlan.imageeditlibrary.editimage.model.StickerBean;
@@ -38,7 +39,7 @@ import java.util.List;
  * @author panyi
  */
 public class StirckerFragment extends BaseEditFragment {
-    public static final int INDEX = 1;
+    public static final int INDEX = ModuleConfig.INDEX_STICKER;
 
     public static final String TAG = StirckerFragment.class.getName();
     public static final String STICKER_FOLDER = "stickers";

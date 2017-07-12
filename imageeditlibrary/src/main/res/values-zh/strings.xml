@@ -40,4 +40,8 @@
     <string name="exit_without_save">编辑的图片还未保存,确认退出吗？</string>
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
+
+    <string name="beauty">美颜</string>
+    <string name="smooth">磨皮</string>
+    <string name="white_skin">美白</string>
 </resources>
