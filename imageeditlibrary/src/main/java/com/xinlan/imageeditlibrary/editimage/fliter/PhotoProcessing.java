@@ -110,6 +110,14 @@ public class PhotoProcessing {
 
     public static native void nativeResizeBitmap(int newWidth, int newHeight);
 
+    public static native void handleSmooth(Bitmap bitmap,float smoothValue);
+
+    public static native void handleWhiteSkin(Bitmap bitmap,float whiteValue);
+
+    public static native void handleSmoothAndWhiteSkin(Bitmap bitmap,float smoothValue,float whiteValue);
+
+    public static native void freeBeautifyMatrix();
+
     private static void sendBitmapToNative(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
