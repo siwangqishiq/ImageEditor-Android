@@ -32,12 +32,19 @@ public class FileUtil {
 
     /**
      * 将图片文件加入到相册
+     *
      * @param context
      * @param dstPath
      */
     public static void ablumUpdate(final Context context, final String dstPath) {
         if (TextUtils.isEmpty(dstPath) || context == null)
             return;
+
+        File file = new File(dstPath);
+        //System.out.println("panyi  file.length() = "+file.length());
+        if (!file.exists() || file.length() == 0) {//文件若不存在  则不操作
+            return;
+        }
 
         ContentValues values = new ContentValues(2);
         String extensionName = getExtensionName(dstPath);
