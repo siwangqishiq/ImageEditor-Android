@@ -33,6 +33,8 @@
 <br />
 <img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif5.gif"/>
 <br />
+
+
 #### 使用方法:见DEMO示例
 #### usage:see the demo project
 
