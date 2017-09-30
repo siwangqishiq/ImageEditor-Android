@@ -37,7 +37,7 @@ public class TextStickerView extends View {
 
     public static final int TEXT_TOP_PADDING = 10;
 
-    public static final int CHAR_MIN_HEIGHT = 60;
+    //public static final int CHAR_MIN_HEIGHT = 60;
 
 
     //private String mText;
@@ -211,20 +211,23 @@ public class TextStickerView extends View {
 
         mTextRect.set(0, 0, 0, 0);//clear
         Rect tempRect = new Rect();
+        Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
+        int charMinHeight = Math.abs(fontMetrics.top) + Math.abs(fontMetrics.bottom);//字体高度
+        text_height = charMinHeight;
+        //System.out.println("top = "+fontMetrics.top +"   bottom = "+fontMetrics.bottom);
         for (int i = 0; i < mTextContents.size(); i++) {
             String text = mTextContents.get(i);
             mPaint.getTextBounds(text, 0, text.length(), tempRect);
             //System.out.println(i + " ---> " + tempRect.height());
-            text_height = Math.max(CHAR_MIN_HEIGHT, tempRect.height());
+            //text_height = Math.max(charMinHeight, tempRect.height());
             if (tempRect.height() <= 0) {//处理此行文字为空的情况
                 tempRect.set(0, 0, 0, text_height);
             }
 
-            RectUtil.rectAddV(mTextRect, tempRect, TEXT_TOP_PADDING);
+            RectUtil.rectAddV(mTextRect, tempRect, 0, charMinHeight);
         }//end for i
 
-        mTextRect.offset(x, y - text_height);
-
+        mTextRect.offset(x, y);
 
         mHelpBoxRect.set(mTextRect.left - PADDING, mTextRect.top - PADDING
                 , mTextRect.right + PADDING, mTextRect.bottom + PADDING);
@@ -234,10 +237,15 @@ public class TextStickerView extends View {
         canvas.scale(scale, scale, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
         canvas.rotate(rotate, mHelpBoxRect.centerX(), mHelpBoxRect.centerY());
 
-        int draw_text_y = y;
+        //canvas.drawRect(mTextRect, debugPaint);
+        //float left = mHelpBoxRect.left - mTextRect.left;
+        //float right = mHelpBoxRect.right - mTextRect.right;
+
+        //System.out.println("left = "+left +"   right = "+right);
+        int draw_text_y = y + (text_height >> 1) + PADDING;
         for (int i = 0; i < mTextContents.size(); i++) {
             canvas.drawText(mTextContents.get(i), x, draw_text_y, mPaint);
-            draw_text_y += text_height + TEXT_TOP_PADDING;
+            draw_text_y += text_height;
         }//end for i
         canvas.restore();
     }

@@ -84,7 +84,7 @@ public class RectUtil {
      * @param addRect
      * @param padding
      */
-    public static void rectAddV(final Rect srcRect, final Rect addRect, int padding) {
+    public static void rectAddV(final Rect srcRect, final Rect addRect, int padding , int charMinHeight) {
         if (srcRect == null || addRect == null)
             return;
 
@@ -97,7 +97,7 @@ public class RectUtil {
             right = left + addRect.width();
         }
 
-        bottom += padding + Math.max(addRect.height(), TextStickerView.CHAR_MIN_HEIGHT);
+        bottom += padding + Math.max(addRect.height(), charMinHeight);
 
         srcRect.set(left, top, right, bottom);
     }
