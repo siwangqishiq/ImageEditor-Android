@@ -50,7 +50,7 @@ public class MainMenuFragment extends BaseEditFragment implements View.OnClickLi
         super.onActivityCreated(savedInstanceState);
 
         stickerBtn = mainView.findViewById(R.id.btn_stickers);
-        fliterBtn = mainView.findViewById(R.id.btn_fliter);
+        fliterBtn = mainView.findViewById(R.id.btn_filter);
         cropBtn = mainView.findViewById(R.id.btn_crop);
         rotateBtn = mainView.findViewById(R.id.btn_rotate);
         mTextBtn = mainView.findViewById(R.id.btn_text);
@@ -96,8 +96,8 @@ public class MainMenuFragment extends BaseEditFragment implements View.OnClickLi
      * @author panyi
      */
     private void onStickClick() {
-        activity.bottomGallery.setCurrentItem(StirckerFragment.INDEX);
-        activity.mStirckerFragment.onShow();
+        activity.bottomGallery.setCurrentItem(StickerFragment.INDEX);
+        activity.mStickerFragment.onShow();
     }
 
     /**
@@ -106,8 +106,8 @@ public class MainMenuFragment extends BaseEditFragment implements View.OnClickLi
      * @author panyi
      */
     private void onFilterClick() {
-        activity.bottomGallery.setCurrentItem(FliterListFragment.INDEX);
-        activity.mFliterListFragment.onShow();
+        activity.bottomGallery.setCurrentItem(FilterListFragment.INDEX);
+        activity.mFilterListFragment.onShow();
     }
 
     /**

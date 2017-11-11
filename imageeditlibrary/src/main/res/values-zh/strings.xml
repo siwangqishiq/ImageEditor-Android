@@ -5,7 +5,7 @@
     <string name="save">保存</string>
     <string name="apply">应用</string>
     <string name="stickers">贴图</string>
-    <string name="fliter">滤镜</string>
+    <string name="filter">滤镜</string>
     <string name="crop">裁剪</string>
     <string name="rotate">旋转</string>
     <string name="text">文字</string>
@@ -22,7 +22,7 @@
     <string name="save_error">图片保存失败</string>
     <string name="handing">处理中...</string>
 
-    <string-array name="fliters">
+    <string-array name="filter">
         <item>原始</item>
         <item>软化</item>
         <item>黑白</item>

@@ -17,7 +17,7 @@
         android:layout_weight="1" >
 
         <LinearLayout
-            android:id="@+id/fliter_group"
+            android:id="@+id/filter_group"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:orientation="horizontal" >

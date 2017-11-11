@@ -24,11 +24,11 @@ import com.xinlan.imageeditlibrary.R;
 import com.xinlan.imageeditlibrary.editimage.fragment.AddTextFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.BeautyFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.CropFragment;
-import com.xinlan.imageeditlibrary.editimage.fragment.FliterListFragment;
+import com.xinlan.imageeditlibrary.editimage.fragment.FilterListFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.MainMenuFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.PaintFragment;
 import com.xinlan.imageeditlibrary.editimage.fragment.RotateFragment;
-import com.xinlan.imageeditlibrary.editimage.fragment.StirckerFragment;
+import com.xinlan.imageeditlibrary.editimage.fragment.StickerFragment;
 import com.xinlan.imageeditlibrary.editimage.utils.FileUtil;
 import com.xinlan.imageeditlibrary.editimage.view.CropImageView;
 import com.xinlan.imageeditlibrary.editimage.view.CustomPaintView;
@@ -102,8 +102,8 @@ public class EditImageActivity extends BaseActivity {
     public CustomViewPager bottomGallery;// 底部gallery
     private BottomGalleryAdapter mBottomGalleryAdapter;// 底部gallery
     private MainMenuFragment mMainMenuFragment;// Menu
-    public StirckerFragment mStirckerFragment;// 贴图Fragment
-    public FliterListFragment mFliterListFragment;// 滤镜FliterListFragment
+    public StickerFragment mStickerFragment;// 贴图Fragment
+    public FilterListFragment mFilterListFragment;// 滤镜FliterListFragment
     public CropFragment mCropFragment;// 图片剪裁Fragment
     public RotateFragment mRotateFragment;// 图片旋转Fragment
     public AddTextFragment mAddTextFragment;//图片添加文字
@@ -180,8 +180,8 @@ public class EditImageActivity extends BaseActivity {
         mMainMenuFragment = MainMenuFragment.newInstance();
         mBottomGalleryAdapter = new BottomGalleryAdapter(
                 this.getSupportFragmentManager());
-        mStirckerFragment = StirckerFragment.newInstance();
-        mFliterListFragment = FliterListFragment.newInstance();
+        mStickerFragment = StickerFragment.newInstance();
+        mFilterListFragment = FilterListFragment.newInstance();
         mCropFragment = CropFragment.newInstance();
         mRotateFragment = RotateFragment.newInstance();
         mAddTextFragment = AddTextFragment.newInstance();
@@ -225,10 +225,10 @@ public class EditImageActivity extends BaseActivity {
             switch (index) {
                 case MainMenuFragment.INDEX:// 主菜单
                     return mMainMenuFragment;
-                case StirckerFragment.INDEX:// 贴图
-                    return mStirckerFragment;
-                case FliterListFragment.INDEX:// 滤镜
-                    return mFliterListFragment;
+                case StickerFragment.INDEX:// 贴图
+                    return mStickerFragment;
+                case FilterListFragment.INDEX:// 滤镜
+                    return mFilterListFragment;
                 case CropFragment.INDEX://剪裁
                     return mCropFragment;
                 case RotateFragment.INDEX://旋转
@@ -289,10 +289,10 @@ public class EditImageActivity extends BaseActivity {
     public void onBackPressed() {
         switch (mode) {
             case MODE_STICKERS:
-                mStirckerFragment.backToMain();
+                mStickerFragment.backToMain();
                 return;
             case MODE_FILTER:// 滤镜编辑状态
-                mFliterListFragment.backToMain();// 保存滤镜贴图
+                mFilterListFragment.backToMain();// 保存滤镜贴图
                 return;
             case MODE_CROP:// 剪切图片保存
                 mCropFragment.backToMain();
@@ -341,10 +341,10 @@ public class EditImageActivity extends BaseActivity {
         public void onClick(View v) {
             switch (mode) {
                 case MODE_STICKERS:
-                    mStirckerFragment.applyStickers();// 保存贴图
+                    mStickerFragment.applyStickers();// 保存贴图
                     break;
                 case MODE_FILTER:// 滤镜编辑状态
-                    mFliterListFragment.applyFilterImage();// 保存滤镜贴图
+                    mFilterListFragment.applyFilterImage();// 保存滤镜贴图
                     break;
                 case MODE_CROP:// 剪切图片保存
                     mCropFragment.applyCropImage();

@@ -6,7 +6,7 @@
     <string name="apply">apply</string>
 
     <string name="stickers">stickers</string>
-    <string name="fliter">fliter</string>
+    <string name="filter">filter</string>
     <string name="crop">crop</string>
     <string name="rotate">rotate</string>
     <string name="text">text</string>
@@ -27,7 +27,7 @@
     <string name="save_error">Save error!</string>
     <string name="handing">loading...</string>
 
-    <string-array name="fliters">
+    <string-array name="filters">
         <item>origin</item>
         <item>soft</item>
         <item>black</item>
