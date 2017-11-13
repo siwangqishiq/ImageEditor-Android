@@ -3,8 +3,6 @@ package com.xinlan.imageeditlibrary.editimage.fliter;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 
-import com.xinlan.imageeditlibrary.R;
-
 /**
  * 图片处理类
  *

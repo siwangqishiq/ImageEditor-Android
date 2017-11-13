@@ -191,7 +191,7 @@ public class PaintFragment extends BaseEditFragment implements View.OnClickListe
             popView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         }
 
-        mStokenWidthSeekBar.setMax(mPaintModeView.getMeasuredHeight() / 2);
+        mStokenWidthSeekBar.setMax(mPaintModeView.getMeasuredHeight());
 
         mStokenWidthSeekBar.setProgress((int) mPaintModeView.getStokenWidth());
 

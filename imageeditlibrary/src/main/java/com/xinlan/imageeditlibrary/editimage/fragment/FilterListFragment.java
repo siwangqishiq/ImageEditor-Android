@@ -1,10 +1,5 @@
 package com.xinlan.imageeditlibrary.editimage.fragment;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.graphics.Bitmap;
@@ -12,7 +7,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +28,9 @@ import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
  *
  * @author panyi
  */
-public class FliterListFragment extends BaseEditFragment {
+public class FilterListFragment extends BaseEditFragment {
     public static final int INDEX = ModuleConfig.INDEX_FILTER;
-    public static final String TAG = FliterListFragment.class.getName();
+    public static final String TAG = FilterListFragment.class.getName();
     private View mainView;
     private View backBtn;// 返回主菜单按钮
 
@@ -46,8 +40,8 @@ public class FliterListFragment extends BaseEditFragment {
     private String[] fliters;
     private Bitmap currentBitmap;// 标记变量
 
-    public static FliterListFragment newInstance() {
-        FliterListFragment fragment = new FliterListFragment();
+    public static FilterListFragment newInstance() {
+        FilterListFragment fragment = new FilterListFragment();
         return fragment;
     }
 
@@ -68,7 +62,7 @@ public class FliterListFragment extends BaseEditFragment {
         super.onActivityCreated(savedInstanceState);
 
         backBtn = mainView.findViewById(R.id.back_to_main);
-        mFilterGroup = (LinearLayout) mainView.findViewById(R.id.fliter_group);
+        mFilterGroup = (LinearLayout) mainView.findViewById(R.id.filter_group);
 
         backBtn.setOnClickListener(new OnClickListener() {
             @Override
@@ -82,7 +76,7 @@ public class FliterListFragment extends BaseEditFragment {
     @Override
     public void onShow() {
         activity.mode = EditImageActivity.MODE_FILTER;
-        activity.mFliterListFragment.setCurrentBitmap(activity.mainBitmap);
+        activity.mFilterListFragment.setCurrentBitmap(activity.mainBitmap);
         activity.mainImage.setImageBitmap(activity.mainBitmap);
         activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.mainImage.setScaleEnabled(false);
@@ -122,7 +116,7 @@ public class FliterListFragment extends BaseEditFragment {
      * 装载滤镜
      */
     private void setUpFliters() {
-        fliters = getResources().getStringArray(R.array.fliters);
+        fliters = getResources().getStringArray(R.array.filter);
         if (fliters == null)
             return;
 

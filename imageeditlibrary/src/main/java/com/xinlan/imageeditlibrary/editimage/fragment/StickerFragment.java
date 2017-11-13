@@ -38,10 +38,10 @@ import java.util.List;
  *
  * @author panyi
  */
-public class StirckerFragment extends BaseEditFragment {
+public class StickerFragment extends BaseEditFragment {
     public static final int INDEX = ModuleConfig.INDEX_STICKER;
 
-    public static final String TAG = StirckerFragment.class.getName();
+    public static final String TAG = StickerFragment.class.getName();
     public static final String STICKER_FOLDER = "stickers";
 
     private View mainView;
@@ -58,8 +58,8 @@ public class StirckerFragment extends BaseEditFragment {
 
     private SaveStickersTask mSaveTask;
 
-    public static StirckerFragment newInstance() {
-        StirckerFragment fragment = new StirckerFragment();
+    public static StickerFragment newInstance() {
+        StickerFragment fragment = new StickerFragment();
         return fragment;
     }
 
@@ -119,7 +119,7 @@ public class StirckerFragment extends BaseEditFragment {
     @Override
     public void onShow() {
         activity.mode = EditImageActivity.MODE_STICKERS;
-        activity.mStirckerFragment.getmStickerView().setVisibility(
+        activity.mStickerFragment.getmStickerView().setVisibility(
                 View.VISIBLE);
         activity.bannerFlipper.showNext();
     }

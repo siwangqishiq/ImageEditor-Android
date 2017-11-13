@@ -55,7 +55,7 @@ public class PaintModeView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mPaint.setColor(mStokeColor);
-        mRadius = mStokeWidth;
+        mRadius = mStokeWidth / 2;
 
         canvas.drawCircle(getWidth() >> 1, getHeight() >> 1, mRadius, mPaint);
     }

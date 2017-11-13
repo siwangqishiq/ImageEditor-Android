@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xinlan.imageeditlibrary.R;
-import com.xinlan.imageeditlibrary.editimage.fragment.StirckerFragment;
+import com.xinlan.imageeditlibrary.editimage.fragment.StickerFragment;
 
 
 /**
@@ -24,12 +24,12 @@ public class StickerTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
             R.drawable.stickers_type_mark, R.drawable.stickers_type_decoration};
     public static final String[] stickerPath = {"stickers/type1", "stickers/type2", "stickers/type3", "stickers/type4", "stickers/type5", "stickers/type6"};
     public static final String[] stickerPathName = {"表情1", "表情2", "表情3", "表情4", "表情5", "表情6"};
-    private StirckerFragment mStirckerFragment;
+    private StickerFragment mStickerFragment;
     private ImageClick mImageClick = new ImageClick();
 
-    public StickerTypeAdapter(StirckerFragment fragment) {
+    public StickerTypeAdapter(StickerFragment fragment) {
         super();
-        this.mStirckerFragment = fragment;
+        this.mStickerFragment = fragment;
     }
 
     public class ImageHolder extends ViewHolder {
@@ -86,7 +86,7 @@ public class StickerTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
         public void onClick(View v) {
             String data = (String) v.getTag();
             // System.out.println("data---->" + data);
-            mStirckerFragment.swipToStickerDetails(data);
+            mStickerFragment.swipToStickerDetails(data);
         }
     }// end inner class
 }// end class
