@@ -4,21 +4,19 @@
 
 ## Version History
 
-### v_3.3: []add Undo and Redo(developing...)
+### v_3.3( is developing... ):
+[ ] redo and undo
 
 ### v_3.2: add Smooth skin and White skin
-
+[x] add Smooth skin and White skin
 <img width=300 height=500 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif7.gif"/>
 
-### v_3.1: add text support multiply line(done) save image when click save button (not apply)
-
-### v_3.0: add doodle mode (done)
-
-### v_2.0: add the textimage
-
-### v_1.0: base function,edit image,supply stickers filter rotate crop 
-
-
+### v_3.1:
+[x] text support multiply line(done) save image when click save button (not apply)
+### v_3.0:
+[x] doodle mode (done)
+### v_2.0:
+[x]  add the textimage
 
 
 
