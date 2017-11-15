@@ -5,18 +5,18 @@
 ## Version History
 
 ### v_3.3( is developing... ):
-[ ] redo and undo
+- [ ] redo and undo
 
 ### v_3.2: add Smooth skin and White skin
-[x] add Smooth skin and White skin
-<img width=300 height=500 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif7.gif"/>
+- [x] add Smooth skin and White skin
+<br/> <img width=300 height=500 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif7.gif"/>
 
 ### v_3.1:
-[x] text support multiply line(done) save image when click save button (not apply)
+- [x] text support multiply line(done) save image when click save button (not apply)
 ### v_3.0:
-[x] doodle mode (done)
+- [x] doodle mode (done)
 ### v_2.0:
-[x]  add the textimage
+- [x]  add the textimage
 
 
 
