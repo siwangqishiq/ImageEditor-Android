@@ -7,7 +7,7 @@
 ### v_3.3:
 - [x] redo and undo
 <br />
-<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif7_redo_undo.gif"/>
+<img width=300 height=600 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif8_redo_undo.gif"/>
 
 ### v_3.2: 
 - [x] add Smooth skin and White skin
