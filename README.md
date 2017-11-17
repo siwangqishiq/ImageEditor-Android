@@ -1,13 +1,13 @@
 # AndroidImageEditor
 
-#### For edit image,supply stickers filter rotate crop textstciker doodle
+#### For edit image,supply stickers filter rotate crop textstciker doodle 
 
 ## Version History
 
 ### v_3.3:
 - [x] redo and undo
 <br />
-<img width=375 height=571 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif8_redo_undo.gif"/>
+<img width=250 height=380 src="https://github.com/siwangqishiq/ImageEditAndroid/blob/master/screens/gif8_redo_undo.gif"/>
 
 ### v_3.2: 
 - [x] add Smooth skin and White skin
