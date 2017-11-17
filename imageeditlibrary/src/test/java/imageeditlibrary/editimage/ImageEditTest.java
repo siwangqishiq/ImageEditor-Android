@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 public class ImageEditTest {
     @Before
     public void prepare(){
-        //System.out.println("do fuck prepare");
     }
 
     @Test

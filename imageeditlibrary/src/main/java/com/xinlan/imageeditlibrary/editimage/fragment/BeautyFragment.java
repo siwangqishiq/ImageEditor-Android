@@ -18,7 +18,6 @@ import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 import com.xinlan.imageeditlibrary.editimage.ModuleConfig;
 import com.xinlan.imageeditlibrary.editimage.fliter.PhotoProcessing;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
-
 import java.lang.ref.WeakReference;
 
 
@@ -97,7 +96,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
         mWhiteSkin = mWhiteValueBar.getProgress();
 
         if (mSmooth == 0 && mWhiteSkin == 0) {
-            activity.mainImage.setImageBitmap(activity.mainBitmap);
+            activity.mainImage.setImageBitmap(activity.getMainBit());
             return;
         }
 
@@ -120,6 +119,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
     /**
      * 返回主菜单
      */
+    @Override
     public void backToMain() {
         this.mSmooth = 0;
         this.mWhiteSkin = 0;
@@ -128,7 +128,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
 
         activity.mode = EditImageActivity.MODE_NONE;
         activity.bottomGallery.setCurrentItem(MainMenuFragment.INDEX);
-        activity.mainImage.setImageBitmap(activity.mainBitmap);// 返回原图
+        activity.mainImage.setImageBitmap(activity.getMainBit());// 返回原图
 
         activity.mainImage.setVisibility(View.VISIBLE);
         activity.mainImage.setScaleEnabled(true);
@@ -138,7 +138,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
     @Override
     public void onShow() {
         activity.mode = EditImageActivity.MODE_BEAUTY;
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setImageBitmap(activity.getMainBit());
         activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.mainImage.setScaleEnabled(false);
         activity.bannerFlipper.showNext();
@@ -146,7 +146,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
 
     public void applyBeauty() {
         if (mResultBitmapRef.get() != null && (mSmooth != 0 || mWhiteSkin != 0)) {
-            activity.changeMainBitmap(mResultBitmapRef.get());
+            activity.changeMainBitmap(mResultBitmapRef.get(),true);
         }
 
         backToMain();
@@ -177,7 +177,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
 
         @Override
         protected Bitmap doInBackground(Integer... params) {
-            srcBitmap = Bitmap.createBitmap(activity.mainBitmap.copy(
+            srcBitmap = Bitmap.createBitmap(activity.getMainBit().copy(
                     Bitmap.Config.ARGB_8888, true));
             //System.out.println("smoothVal = "+smoothVal+"     whiteVal = "+whiteVal);
             PhotoProcessing.handleSmoothAndWhiteSkin(srcBitmap, smoothVal, whiteVal);

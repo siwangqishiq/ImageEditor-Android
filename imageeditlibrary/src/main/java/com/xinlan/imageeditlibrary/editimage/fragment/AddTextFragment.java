@@ -161,6 +161,7 @@ public class AddTextFragment extends BaseEditFragment implements TextWatcher {
     /**
      * 返回主菜单
      */
+    @Override
     public void backToMain() {
         hideInput();
         activity.mode = EditImageActivity.MODE_NONE;
@@ -173,7 +174,7 @@ public class AddTextFragment extends BaseEditFragment implements TextWatcher {
     @Override
     public void onShow() {
         activity.mode = EditImageActivity.MODE_TEXT;
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setImageBitmap(activity.getMainBit());
         activity.bannerFlipper.showNext();
         mTextStickerView.setVisibility(View.VISIBLE);
         mInputText.clearFocus();
@@ -189,7 +190,7 @@ public class AddTextFragment extends BaseEditFragment implements TextWatcher {
 
         //启动任务
         mSaveTask = new SaveTextStickerTask(activity);
-        mSaveTask.execute(activity.mainBitmap);
+        mSaveTask.execute(activity.getMainBit());
     }
 
     /**
@@ -224,7 +225,8 @@ public class AddTextFragment extends BaseEditFragment implements TextWatcher {
             mTextStickerView.clearTextContent();
             mTextStickerView.resetView();
 
-            activity.changeMainBitmap(result);
+            activity.changeMainBitmap(result , true);
+            backToMain();
         }
     }//end inner class
 

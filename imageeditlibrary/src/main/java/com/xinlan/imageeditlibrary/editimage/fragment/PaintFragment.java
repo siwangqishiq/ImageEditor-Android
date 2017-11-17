@@ -140,7 +140,7 @@ public class PaintFragment extends BaseEditFragment implements View.OnClickListe
 
     public void onShow() {
         activity.mode = EditImageActivity.MODE_PAINT;
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setImageBitmap(activity.getMainBit());
         activity.bannerFlipper.showNext();
         this.mPaintView.setVisibility(View.VISIBLE);
     }
@@ -258,7 +258,7 @@ public class PaintFragment extends BaseEditFragment implements View.OnClickListe
         }
 
         mSavePaintImageTask = new SaveCustomPaintTask(activity);
-        mSavePaintImageTask.execute(activity.mainBitmap);
+        mSavePaintImageTask.execute(activity.getMainBit());
     }
 
     @Override
@@ -300,7 +300,8 @@ public class PaintFragment extends BaseEditFragment implements View.OnClickListe
         @Override
         public void onPostResult(Bitmap result) {
             mPaintView.reset();
-            activity.changeMainBitmap(result);
+            activity.changeMainBitmap(result , true);
+            backToMain();
         }
     }//end inner class
 

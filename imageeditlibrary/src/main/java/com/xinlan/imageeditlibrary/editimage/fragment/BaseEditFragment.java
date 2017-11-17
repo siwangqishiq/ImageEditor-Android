@@ -25,5 +25,7 @@ public abstract class BaseEditFragment extends Fragment {
         ensureEditActivity();
     }
 
-     public abstract void onShow();
+    public abstract void onShow();
+
+    public abstract void backToMain();
 }//end class

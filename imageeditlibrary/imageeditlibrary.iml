@@ -108,19 +108,64 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 26 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.bouncycastle:bcprov-jdk16:1.46@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:appcompat-v7-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.codehaus.plexus:plexus-interpolation:1.11@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:support-media-compat-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:robolectric-annotations:3.3.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.ow2.asm:asm-tree:5.0.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-repository-metadata:2.2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:robolectric-sandbox:3.3.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven.wagon:wagon-http-shared:1.0-beta-6@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:support-compat-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" name="com.android.support:support-core-utils-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="com.google.guava:guava:20.0@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.ant:ant-launcher:1.8.0@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="nekohtml:xercesMinimal:1.9.6.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.assertj:assertj-core:2.6.0@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-profile:2.2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-project:2.2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:robolectric-resources:3.3.2@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-vector-drawable-26.0.0-alpha1" level="project" />
     <orderEntry type="library" name="com.android.support:animated-vector-drawable-26.0.0-alpha1" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:26.0.0-alpha1@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="org.hamcrest:hamcrest-core:1.3@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:appcompat-v7-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.ow2.asm:asm:5.0.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:robolectric-utils:3.3.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-ant-tasks:2.1.3@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="nekohtml:nekohtml:1.9.6.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-artifact:2.2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-model:2.2.1@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="junit:junit:4.12@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-media-compat-26.0.0-alpha1" level="project" />
     <orderEntry type="library" name="com.android.support:recyclerview-v7-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="backport-util-concurrent:backport-util-concurrent:3.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:shadows-core:3.3.2@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:support-v4-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.ow2.asm:asm-commons:5.0.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="com.google.protobuf:protobuf-java:2.6.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.ant:ant:1.8.0@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.codehaus.plexus:plexus-utils:1.5.15@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-error-diagnostics:2.2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven.wagon:wagon-file:1.0-beta-6@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="com.thoughtworks.xstream:xstream:1.4.8@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="com.almworks.sqlite4java:sqlite4java:0.282@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven.wagon:wagon-provider-api:1.0-beta-6@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-artifact-manager:2.2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:robolectric:3.3.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="com.ibm.icu:icu4j:53.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.hamcrest:hamcrest-library:1.3@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-ui-26.0.0-alpha1" level="project" />
     <orderEntry type="library" name="com.nostra13.universalimageloader:universal-image-loader:1.9.4@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-v4-26.0.0-alpha1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-compat-26.0.0-alpha1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-core-utils-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:robolectric-junit:3.3.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="xmlpull:xmlpull:1.1.3.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="xpp3:xpp3_min:1.1.4c@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-fragment-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" scope="TEST" name="classworlds:classworlds:1.1-alpha-2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.robolectric:shadow-api:3.3.2@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-plugin-registry:2.2.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.apache.maven:maven-settings:2.2.1@jar" level="project" />
   </component>
 </module>

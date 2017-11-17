@@ -76,8 +76,8 @@ public class FilterListFragment extends BaseEditFragment {
     @Override
     public void onShow() {
         activity.mode = EditImageActivity.MODE_FILTER;
-        activity.mFilterListFragment.setCurrentBitmap(activity.mainBitmap);
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mFilterListFragment.setCurrentBitmap(activity.getMainBit());
+        activity.mainImage.setImageBitmap(activity.getMainBit());
         activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.mainImage.setScaleEnabled(false);
         activity.bannerFlipper.showNext();
@@ -86,10 +86,11 @@ public class FilterListFragment extends BaseEditFragment {
     /**
      * 返回主菜单
      */
+    @Override
     public void backToMain() {
-        currentBitmap = activity.mainBitmap;
+        currentBitmap = activity.getMainBit();
         fliterBit = null;
-        activity.mainImage.setImageBitmap(activity.mainBitmap);// 返回原图
+        activity.mainImage.setImageBitmap(activity.getMainBit());// 返回原图
         activity.mode = EditImageActivity.MODE_NONE;
         activity.bottomGallery.setCurrentItem(0);
         activity.mainImage.setScaleEnabled(true);
@@ -101,13 +102,13 @@ public class FilterListFragment extends BaseEditFragment {
      */
     public void applyFilterImage() {
         // System.out.println("保存滤镜处理后的图片");
-        if (currentBitmap == activity.mainBitmap) {// 原始图片
+        if (currentBitmap == activity.getMainBit()) {// 原始图片
             // System.out.println("原始图片");
             backToMain();
             return;
         } else {// 经滤镜处理后的图片
             // System.out.println("滤镜图片");
-            activity.changeMainBitmap(fliterBit);
+            activity.changeMainBitmap(fliterBit,true);
             backToMain();
         }// end if
     }
@@ -154,8 +155,8 @@ public class FilterListFragment extends BaseEditFragment {
         public void onClick(View v) {
             int position = ((Integer) v.getTag()).intValue();
             if (position == 0) {// 原始图片效果
-                activity.mainImage.setImageBitmap(activity.mainBitmap);
-                currentBitmap = activity.mainBitmap;
+                activity.mainImage.setImageBitmap(activity.getMainBit());
+                currentBitmap = activity.getMainBit();
                 return;
             }
             // 滤镜处理
@@ -180,7 +181,7 @@ public class FilterListFragment extends BaseEditFragment {
                 srcBitmap.recycle();
             }
 
-            srcBitmap = Bitmap.createBitmap(activity.mainBitmap.copy(
+            srcBitmap = Bitmap.createBitmap(activity.getMainBit().copy(
                     Bitmap.Config.RGB_565, true));
             return PhotoProcessing.filterPhoto(srcBitmap, type);
         }

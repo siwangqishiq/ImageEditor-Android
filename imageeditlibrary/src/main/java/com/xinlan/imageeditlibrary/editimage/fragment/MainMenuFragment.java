@@ -72,6 +72,11 @@ public class MainMenuFragment extends BaseEditFragment implements View.OnClickLi
     }
 
     @Override
+    public void backToMain() {
+        //do nothing
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == stickerBtn) {
             onStickClick();

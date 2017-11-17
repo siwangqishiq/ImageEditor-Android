@@ -150,7 +150,7 @@ public class CropFragment extends BaseEditFragment {
         activity.mode = EditImageActivity.MODE_CROP;
 
         activity.mCropPanel.setVisibility(View.VISIBLE);
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setImageBitmap(activity.getMainBit());
         activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.mainImage.setScaleEnabled(false);// 禁用缩放
         //
@@ -176,6 +176,7 @@ public class CropFragment extends BaseEditFragment {
 	/**
 	 * 返回主菜单
 	 */
+	@Override
 	public void backToMain() {
 		activity.mode = EditImageActivity.MODE_NONE;
 		mCropPanel.setVisibility(View.GONE);
@@ -194,7 +195,7 @@ public class CropFragment extends BaseEditFragment {
 	public void applyCropImage() {
 		// System.out.println("保存剪切图片");
 		CropImageTask task = new CropImageTask();
-		task.execute(activity.mainBitmap);
+		task.execute(activity.getMainBit());
 	}
 
 	/**
@@ -262,14 +263,7 @@ public class CropFragment extends BaseEditFragment {
 			if (result == null)
 				return;
 
-//			if (activity.mainBitmap != null
-//					&& !activity.mainBitmap.isRecycled()) {
-//				activity.mainBitmap.recycle();
-//			}
-//			activity.mainBitmap = result;
-//			activity.mainImage.setImageBitmap(activity.mainBitmap);
-//			activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-            activity.changeMainBitmap(result);
+            activity.changeMainBitmap(result,true);
 			activity.mCropPanel.setCropRect(activity.mainImage.getBitmapRect());
 			backToMain();
 		}

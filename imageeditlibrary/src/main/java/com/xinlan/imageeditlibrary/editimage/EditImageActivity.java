@@ -39,24 +39,17 @@ import com.xinlan.imageeditlibrary.editimage.view.TextStickerView;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouch;
 import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.editimage.view.imagezoom.ImageViewTouchBase;
+import com.xinlan.imageeditlibrary.editimage.widget.EditCache;
+import com.xinlan.imageeditlibrary.editimage.widget.RedoUndoController;
 
 /**
- *  一个幽灵
- *  共产主义的幽灵
- *  在欧洲徘徊
- *  旧欧洲的一切势力，
- *  教皇和沙皇、
- *  梅特涅和基佐、
- *  法国的激进党人和德国的警察，
- *  都为驱除这个幽灵而结成了神圣同盟
- *                                       -----《共产党宣言》
- *
+ * <p>
  * 图片编辑 主页面
  *
  * @author panyi
  *         <p>
  *         包含 1.贴图 2.滤镜 3.剪裁 4.底图旋转 功能
- *
+ *         add new modules
  */
 public class EditImageActivity extends BaseActivity {
     public static final String FILE_PATH = "file_path";
@@ -85,7 +78,7 @@ public class EditImageActivity extends BaseActivity {
     protected boolean isBeenSaved = false;
 
     private EditImageActivity mContext;
-    public Bitmap mainBitmap;// 底层显示Bitmap
+    private Bitmap mainBitmap;// 底层显示Bitmap
     public ImageViewTouch mainImage;
     private View backBtn;
 
@@ -109,8 +102,9 @@ public class EditImageActivity extends BaseActivity {
     public AddTextFragment mAddTextFragment;//图片添加文字
     public PaintFragment mPaintFragment;//绘制模式Fragment
     public BeautyFragment mBeautyFragment;//美颜模式Fragment
-
     private SaveImageTask mSaveImageTask;
+
+    private RedoUndoController mRedoUndoController;//撤销操作
 
     /**
      * @param context
@@ -200,6 +194,8 @@ public class EditImageActivity extends BaseActivity {
                 }
             }
         });
+
+        mRedoUndoController = new RedoUndoController(this, findViewById(R.id.redo_uodo_panel));
     }
 
     /**
@@ -262,26 +258,19 @@ public class EditImageActivity extends BaseActivity {
         mLoadImageTask.execute(filepath);
     }
 
+    /**
+     * 导入文件图片任务
+     */
     private final class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
-
             return BitmapUtils.getSampledBitmap(params[0], imageWidth,
                     imageHeight);
         }
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            if (mainBitmap != null) {
-                mainBitmap.recycle();
-                mainBitmap = null;
-                System.gc();
-            }
-            mainBitmap = result;
-            mainImage.setImageBitmap(result);
-            mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-            // mainImage.setDisplayType(DisplayType.FIT_TO_SCREEN);
+            changeMainBitmap(result, false);
         }
     }// end inner class
 
@@ -396,24 +385,22 @@ public class EditImageActivity extends BaseActivity {
     }
 
     /**
-     * 切换底图Bitmap
-     *
      * @param newBit
+     * @param needPushUndoStack
      */
-    public void changeMainBitmap(Bitmap newBit) {
-        if(newBit == null)
+    public void changeMainBitmap(Bitmap newBit, boolean needPushUndoStack) {
+        if (newBit == null)
             return;
 
-        if (mainBitmap != null) {
-            if (!mainBitmap.isRecycled()) {// 回收
-                mainBitmap.recycle();
+        if (mainBitmap == null || mainBitmap != newBit) {
+            if (needPushUndoStack) {
+                mRedoUndoController.switchMainBit(mainBitmap,newBit);
+                increaseOpTimes();
             }
+            mainBitmap = newBit;
+            mainImage.setImageBitmap(mainBitmap);
+            mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         }
-        mainBitmap = newBit;
-        mainImage.setImageBitmap(mainBitmap);
-        mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-
-        increaseOpTimes();
     }
 
     @Override
@@ -425,6 +412,10 @@ public class EditImageActivity extends BaseActivity {
 
         if (mSaveImageTask != null) {
             mSaveImageTask.cancel(true);
+        }
+
+        if (mRedoUndoController != null) {
+            mRedoUndoController.onDestroy();
         }
     }
 
@@ -499,5 +490,9 @@ public class EditImageActivity extends BaseActivity {
             }
         }
     }//end inner class
+
+    public Bitmap getMainBit() {
+        return mainBitmap;
+    }
 
 }// end class

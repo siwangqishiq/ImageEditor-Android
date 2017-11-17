@@ -74,11 +74,11 @@ public class RotateFragment extends BaseEditFragment {
     @Override
     public void onShow() {
         activity.mode = EditImageActivity.MODE_ROTATE;
-        activity.mainImage.setImageBitmap(activity.mainBitmap);
+        activity.mainImage.setImageBitmap(activity.getMainBit());
         activity.mainImage.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         activity.mainImage.setVisibility(View.GONE);
 
-        activity.mRotatePanel.addBit(activity.mainBitmap,
+        activity.mRotatePanel.addBit(activity.getMainBit(),
                 activity.mainImage.getBitmapRect());
         activity.mRotateFragment.mSeekBar.setProgress(0);
         activity.mRotatePanel.reset();
@@ -125,6 +125,7 @@ public class RotateFragment extends BaseEditFragment {
     /**
      * 返回主菜单
      */
+    @Override
     public void backToMain() {
         activity.mode = EditImageActivity.MODE_NONE;
         activity.bottomGallery.setCurrentItem(0);
@@ -143,7 +144,7 @@ public class RotateFragment extends BaseEditFragment {
             return;
         } else {// 保存图片
             SaveRotateImageTask task = new SaveRotateImageTask();
-            task.execute(activity.mainBitmap);
+            task.execute(activity.getMainBit());
         }// end if
     }
 
@@ -216,7 +217,7 @@ public class RotateFragment extends BaseEditFragment {
                 return;
 
             // 切换新底图
-            activity.changeMainBitmap(result);
+            activity.changeMainBitmap(result,true);
             backToMain();
         }
     }// end inner class

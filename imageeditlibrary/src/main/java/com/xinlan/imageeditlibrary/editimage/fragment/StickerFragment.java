@@ -99,7 +99,7 @@ public class StickerFragment extends BaseEditFragment {
         backToType = mainView.findViewById(R.id.back_to_type);// back按钮
 
         stickerList = (RecyclerView) mainView.findViewById(R.id.stickers_list);
-        // stickerList.setHasFixedSize(true);
+        stickerList.setHasFixedSize(true);
         LinearLayoutManager stickerListLayoutManager = new LinearLayoutManager(
                 activity);
         stickerListLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -247,6 +247,7 @@ public class StickerFragment extends BaseEditFragment {
         }
     }// end inner class
 
+    @Override
     public void backToMain() {
         activity.mode = EditImageActivity.MODE_NONE;
         activity.bottomGallery.setCurrentItem(0);
@@ -277,7 +278,8 @@ public class StickerFragment extends BaseEditFragment {
         @Override
         public void onPostResult(Bitmap result) {
             mStickerView.clear();
-            activity.changeMainBitmap(result);
+            activity.changeMainBitmap(result,true);
+            backToMain();
         }
     }// end inner class
 
@@ -290,6 +292,6 @@ public class StickerFragment extends BaseEditFragment {
             mSaveTask.cancel(true);
         }
         mSaveTask = new SaveStickersTask((EditImageActivity) getActivity());
-        mSaveTask.execute(activity.mainBitmap);
+        mSaveTask.execute(activity.getMainBit());
     }
 }// end class
