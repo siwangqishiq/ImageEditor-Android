@@ -90,7 +90,7 @@ public class RedoUndoController implements View.OnClickListener {
      * 根据状态更新按钮显示
      */
     public void updateBtns() {
-        System.out.println("缓存Size = " + mEditCache.getSize() + "  current = " + mEditCache.getCur());
+        //System.out.println("缓存Size = " + mEditCache.getSize() + "  current = " + mEditCache.getCur());
         mUndoBtn.setVisibility(mEditCache.checkNextBitExist() ? View.VISIBLE : View.INVISIBLE);
         mRedoBtn.setVisibility(mEditCache.checkPreBitExist() ? View.VISIBLE : View.INVISIBLE);
     }
