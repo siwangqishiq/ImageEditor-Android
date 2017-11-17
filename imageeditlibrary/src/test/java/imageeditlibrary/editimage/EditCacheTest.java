@@ -222,13 +222,11 @@ public class EditCacheTest {
         Bitmap bit4 = createTestBitmap();
         editCache.push(bit4);
 
-        assertEquals(bit4, editCache.getNextCurrentBit());
         assertEquals(bit3, editCache.getNextCurrentBit());
         assertEquals(bit2, editCache.getNextCurrentBit());
         assertEquals(bit1, editCache.getNextCurrentBit());
 
         //editCache.getPreCurrentBit();
-        assertEquals(bit1, editCache.getPreCurrentBit());
         assertEquals(bit2, editCache.getPreCurrentBit());
         assertEquals(bit3, editCache.getPreCurrentBit());
         assertEquals(bit4, editCache.getPreCurrentBit());
@@ -245,7 +243,6 @@ public class EditCacheTest {
         Bitmap bit4 = createTestBitmap();
         editCache.push(bit4);
 
-        assertEquals(bit4, editCache.getNextCurrentBit());
         assertEquals(bit3, editCache.getNextCurrentBit());
         assertEquals(bit2, editCache.getNextCurrentBit());
         assertEquals(bit1, editCache.getNextCurrentBit());
@@ -264,15 +261,16 @@ public class EditCacheTest {
         Bitmap bit4 = createTestBitmap();
         editCache.push(bit4);
 
-        assertEquals(bit4, editCache.getNextCurrentBit());
+        assertEquals(bit4, editCache.getCurBit());
         assertEquals(bit3, editCache.getNextCurrentBit());
         assertEquals(bit2, editCache.getNextCurrentBit());
         assertEquals(bit1, editCache.getNextCurrentBit());
+        editCache.getNextCurrentBit();
 
         Bitmap bit = createTestBitmap();
         editCache.push(bit);
         assertEquals(size, editCache.getCur());
-        assertEquals(bit , editCache.getNextCurrentBit());
+        assertEquals(bit , editCache.getCurBit());
     }
 
     @Test
@@ -288,12 +286,12 @@ public class EditCacheTest {
         Bitmap bit4 = createTestBitmap();
         editCache.push(bit4);
 
-        assertEquals(bit4, editCache.getNextCurrentBit());
+        assertEquals(bit4, editCache.getCurBit());
         assertEquals(bit3, editCache.getNextCurrentBit());
         assertEquals(bit2, editCache.getNextCurrentBit());
         assertEquals(bit1, editCache.getNextCurrentBit());
 
-        assertEquals(size - 1, editCache.getCur());
+        assertEquals(size, editCache.getCur());
     }
 
     @Test
@@ -309,21 +307,24 @@ public class EditCacheTest {
         Bitmap bit4 = createTestBitmap();
         editCache.push(bit4);
 
+        Bitmap bit5 = createTestBitmap();
+        editCache.push(bit5);
+
         assertEquals(bit4, editCache.getNextCurrentBit());
         assertEquals(bit3, editCache.getNextCurrentBit());
         assertEquals(bit2, editCache.getNextCurrentBit());
         assertEquals(bit1, editCache.getNextCurrentBit());
+        editCache.getNextCurrentBit();
 
-        Bitmap bit5 = createTestBitmap();
-        editCache.push(bit5);
-        assertEquals(bit5, editCache.getNextCurrentBit());
+        Bitmap bit6 = createTestBitmap();
+        editCache.push(bit6);
+        assertEquals(bit6, editCache.getCurBit());
         assertEquals(true, bit1.isRecycled());
         assertEquals(true, bit2.isRecycled());
         assertEquals(true, bit3.isRecycled());
         assertEquals(true, bit4.isRecycled());
-        assertEquals(false, bit5.isRecycled());
 
-        assertEquals(7, editCache.getSize());
+        assertEquals(6, editCache.getSize());
     }
 
     @Test
@@ -427,12 +428,12 @@ public class EditCacheTest {
         assertEquals(true,editCache.checkPreBitExist());
         assertEquals(true , editCache.checkNextBitExist());
         editCache.getNextCurrentBit();
-        assertEquals(true , editCache.checkNextBitExist());
+        assertEquals(false , editCache.checkNextBitExist());
         editCache.getNextCurrentBit();
 
         prepareCache(1);
-        assertEquals(false,editCache.checkPreBitExist());
-        assertEquals(true , editCache.checkNextBitExist());
+        assertEquals(false, editCache.checkPreBitExist());
+        assertEquals(false , editCache.checkNextBitExist());
     }
 
     @After

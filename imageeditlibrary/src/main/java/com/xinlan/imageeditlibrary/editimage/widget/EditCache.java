@@ -47,6 +47,14 @@ public class EditCache {
         return mCurrent;
     }
 
+    public String debugLog() {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < mCacheList.size(); i++) {
+            sb.append("{ " + mCacheList.get(i) + " }");
+        }
+        return sb.toString();
+    }
+
     public synchronized boolean push(Bitmap bitmap) {
         if (bitmap == null || bitmap.isRecycled())
             return false;
@@ -80,8 +88,8 @@ public class EditCache {
     }
 
     public synchronized Bitmap getNextCurrentBit() {
-        Bitmap ret = getCurBit();
         mCurrent--;
+        Bitmap ret = getCurBit();
         notifyListChange();
         return ret;
     }
@@ -93,20 +101,22 @@ public class EditCache {
         return ret;
     }
 
+    /**
+     * 可以撤销到前一步的操作
+     * @return
+     */
     public boolean checkNextBitExist() {
-        Bitmap ret = getCurBit();
-        return ret != null;
+        int point = mCurrent - 1;
+        return point>=0 && point<mCacheList.size();
     }
 
+    /**
+     * 可取消撤销到后一操作
+     * @return
+     */
     public boolean checkPreBitExist() {
-        int nextPt = mCurrent + 1;
-        if (nextPt >= 0 && nextPt < mCacheList.size()) {
-            Bitmap bit = mCacheList.get(nextPt);
-            if (bit != null && !bit.isRecycled()) {
-                return true;
-            }
-        }
-        return false;
+        int point = mCurrent + 1;
+        return point>=0 && point<mCacheList.size();
     }
 
 

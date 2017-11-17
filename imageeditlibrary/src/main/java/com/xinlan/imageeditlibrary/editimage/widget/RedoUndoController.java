@@ -54,7 +54,7 @@ public class RedoUndoController implements View.OnClickListener {
             undoClick();
         } else if (v == mRedoBtn) {
             redoClick();
-        }
+        }//end if
     }
 
 
@@ -63,9 +63,6 @@ public class RedoUndoController implements View.OnClickListener {
      */
     protected void undoClick() {
         //System.out.println("Undo!!!");
-        if (mEditCache.getCurBit() == mActivity.getMainBit()) {
-            mEditCache.getNextCurrentBit();
-        }
         Bitmap lastBitmap = mEditCache.getNextCurrentBit();
         if (lastBitmap != null && !lastBitmap.isRecycled()) {
             mActivity.changeMainBitmap(lastBitmap, false);
@@ -77,9 +74,6 @@ public class RedoUndoController implements View.OnClickListener {
      */
     protected void redoClick() {
         //System.out.println("Redo!!!");
-        if (mEditCache.getCur() < 0) {
-            mEditCache.getPreCurrentBit();
-        }
         Bitmap preBitmap = mEditCache.getPreCurrentBit();
         if (preBitmap != null && !preBitmap.isRecycled()) {
             mActivity.changeMainBitmap(preBitmap, false);
@@ -91,6 +85,7 @@ public class RedoUndoController implements View.OnClickListener {
      */
     public void updateBtns() {
         //System.out.println("缓存Size = " + mEditCache.getSize() + "  current = " + mEditCache.getCur());
+        //System.out.println("content = " + mEditCache.debugLog());
         mUndoBtn.setVisibility(mEditCache.checkNextBitExist() ? View.VISIBLE : View.INVISIBLE);
         mRedoBtn.setVisibility(mEditCache.checkPreBitExist() ? View.VISIBLE : View.INVISIBLE);
     }
