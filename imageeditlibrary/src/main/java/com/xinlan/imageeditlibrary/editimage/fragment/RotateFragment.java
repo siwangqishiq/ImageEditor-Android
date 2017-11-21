@@ -196,8 +196,6 @@ public class RotateFragment extends BaseEditFragment {
             RectF dst = new RectF(left, top, left + originBit.getWidth(), top
                     + originBit.getHeight());
             canvas.save();
-            canvas.scale(mRotatePanel.getScale(), mRotatePanel.getScale(),
-                    imageRect.width() / 2, imageRect.height() / 2);
             canvas.rotate(mRotatePanel.getRotateAngle(), imageRect.width() / 2,
                     imageRect.height() / 2);
 
