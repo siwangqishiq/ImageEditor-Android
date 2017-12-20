@@ -117,7 +117,7 @@ public class FilterListFragment extends BaseEditFragment {
      * 装载滤镜
      */
     private void setUpFliters() {
-        fliters = getResources().getStringArray(R.array.filter);
+        fliters = getResources().getStringArray(R.array.filters);
         if (fliters == null)
             return;
 

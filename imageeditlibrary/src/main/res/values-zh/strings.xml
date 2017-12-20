@@ -22,7 +22,7 @@
     <string name="save_error">图片保存失败</string>
     <string name="handing">处理中...</string>
 
-    <string-array name="filter">
+    <string-array name="filters">
         <item>原始</item>
         <item>软化</item>
         <item>黑白</item>
