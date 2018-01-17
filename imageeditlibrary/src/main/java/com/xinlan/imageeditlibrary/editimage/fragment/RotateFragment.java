@@ -160,21 +160,16 @@ public class RotateFragment extends BaseEditFragment {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            //dialog.dismiss();
         }
 
         @Override
         protected void onCancelled(Bitmap result) {
             super.onCancelled(result);
-            //dialog.dismiss();
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //dialog = BaseActivity.getLoadingDialog(getActivity(), R.string.saving_image,
-            //        false);
-            //dialog.show();
         }
 
         @SuppressWarnings("WrongThread")
@@ -196,16 +191,15 @@ public class RotateFragment extends BaseEditFragment {
             RectF dst = new RectF(left, top, left + originBit.getWidth(), top
                     + originBit.getHeight());
             canvas.save();
-            canvas.scale(mRotatePanel.getScale(), mRotatePanel.getScale(),
-                    imageRect.width() / 2, imageRect.height() / 2);
+            //bug fixed  应用时不需要考虑图片缩放问题 重新加载图片时 缩放控件会自动填充屏幕
+//            canvas.scale(mRotatePanel.getScale(), mRotatePanel.getScale(),
+//                    imageRect.width() / 2, imageRect.height() / 2);
             canvas.rotate(mRotatePanel.getRotateAngle(), imageRect.width() / 2,
                     imageRect.height() / 2);
 
             canvas.drawBitmap(originBit, new Rect(0, 0, originBit.getWidth(),
                     originBit.getHeight()), dst, null);
             canvas.restore();
-
-            //saveBitmap(result, activity.saveFilePath);// 保存图片
             return result;
         }
 
