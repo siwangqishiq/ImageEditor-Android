@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-#include <colour_space.h>
+#include "colour_space.h"
 #include <math.h>
 #include <android/log.h>
 
 #define  LOG_TAG    "colour_space.c"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+
+unsigned char convert(float val) {
+	return floorf((255 * val) + 0.5f);
+}
 
 void rgbToHsb(unsigned char red, unsigned char green, unsigned char blue, HSBColour* hsb) {
 	float min, max;
@@ -80,10 +84,6 @@ void getBrightness(unsigned char red, unsigned char green, unsigned char blue, f
 	float delta = max - min;
 
 	(*brightness) = max/255;
-}
-
-inline unsigned char convert(float val) {
-	return floorf((255 * val) + 0.5f);
 }
 
 void hsbToRgb(HSBColour* hsb, unsigned char* red, unsigned char* green, unsigned char* blue) {

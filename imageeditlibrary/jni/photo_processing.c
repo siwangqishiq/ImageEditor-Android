@@ -19,14 +19,19 @@
 #include <bitmap.h>
 #include <mem_utils.h>
 #include <android/log.h>
+#include <android/bitmap.h>
 #include "beauty.h"
 
 #define  LOG_TAG    "IMAGE_EDIT_PROCESSING"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
+#define COLOR_ARGB(a, r, g, b) ((a)<<24)|((b) << 16)|((g)<< 8)|(r)
+
+void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int height, unsigned int stride,
+          unsigned int out_stride, unsigned int radius);
+
 static Bitmap bitmap;
-//Java_com_xinlan_imageeditlibrary_editimage_fliter_PhotoProcessing
 int Java_com_xinlan_imageeditlibrary_editimage_fliter_PhotoProcessing_nativeInitBitmap(JNIEnv* env, jobject thiz, jint width, jint height) {
 	return initBitmapMemory(&bitmap, width, height);
 }
@@ -284,6 +289,61 @@ Java_com_xinlan_imageeditlibrary_editimage_fliter_PhotoProcessing_handleWhiteSki
     freeMatrix();
 }
 
+JNIEXPORT void JNICALL
+Java_com_xinlan_imageeditlibrary_editimage_fliter_PhotoProcessing_nativeMosaic(JNIEnv *env, jclass type, jobject bitmap,
+                                                       jobject out_bitmap,
+                                                       jint radius) {
+    AndroidBitmapInfo info;
+    void *pixels;
+    int ret;
+
+    AndroidBitmapInfo out_info;
+    void *out_pixels;
+
+    if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
+        LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
+        return;
+    }
+
+
+    if ((ret = AndroidBitmap_getInfo(env, out_bitmap, &out_info)) < 0) {
+        LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
+        return;
+    }
+
+    LOGE("Out Bitmap format is %d ", out_info.format);
+    if (out_info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+        LOGE("out Bitmap info format is not RGBA_8888 !");
+        return;
+    }
+
+    LOGE("Bitmap format is %d ", info.format);
+    if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+        LOGE("Bitmap format is not RGBA_8888 !");
+        return;
+    }
+
+    if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
+        LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+        return;
+    }
+
+    if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
+        LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+        return;
+    }
+
+    if ((ret = AndroidBitmap_lockPixels(env, out_bitmap, &out_pixels)) < 0) {
+        LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+        return;
+    }
+
+    do_mosaic(pixels, out_pixels, info.width, info.height, info.stride, out_info.stride, radius);
+    LOGE("image size width = %d , height = %d", info.width, info.height);
+    AndroidBitmap_unlockPixels(env, bitmap);
+    AndroidBitmap_unlockPixels(env, out_bitmap);
+}
+
 void setWhiteSkin(uint32_t *pix, float whiteVal, int width, int height) {
     if (whiteVal >= 1.0 && whiteVal <= 10.0) { //1.0~10.0
         float a = log(whiteVal);
@@ -352,7 +412,7 @@ void setSmooth(uint32_t *pix, float smoothValue, int width, int height) {//ç£¨çš
 }
 
 void freeMatrix() {
-    if (mIntegralMatrix != NULL) {        
+    if (mIntegralMatrix != NULL) {
 		free(mIntegralMatrix);
         mIntegralMatrix = NULL;
     }
@@ -386,7 +446,7 @@ void initBeautiMatrix(uint32_t *pix, int width, int height) {
 
     if (mImageData_yuv == NULL)
 		mImageData_yuv = (uint8_t *)malloc(sizeof(uint8_t) * width * height * 3);
-        
+
     RGBToYCbCr((uint8_t *) mImageData_rgb, mImageData_yuv, width * height);
 
     initSkinMatrix(pix, width, height);
@@ -469,7 +529,7 @@ void initIntegralMatrix(int width, int height) {
             mIntegralMatrixSqr[offset + j] = mIntegralMatrixSqr[offset + j - 1] + columnSumSqr[j];
         }
     }
-	
+
 	free(columnSum);
 	free(columnSumSqr);
     //delete[] columnSum;
@@ -533,5 +593,69 @@ void convertIntToArgb(uint32_t pixel, ARGB* argb) {
     argb->alpha = (pixel >> 24);
 }
 
+
 //------------------------ beauty module end --------------------------------------
+
+
+void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int height, unsigned int stride,
+          unsigned int out_stride, unsigned int radius) {
+    if (width == 0 || height == 0 || radius <= 1)
+        return pix;
+
+    uint32_t x, y;
+    uint32_t r_total = 0;
+    uint32_t g_total = 0;
+    uint32_t b_total = 0;
+
+    uint32_t limit_x = radius;
+    uint32_t limit_y = radius;
+
+    uint32_t i = 0;
+    uint32_t j = 0;
+
+    int32_t *src_pix = (int32_t *) pix;
+    int32_t *out = (int32_t *) out_pix;
+
+    for (y = 0; y < height; y += radius) {
+        for (x = 0; x < width; x += radius) {
+            //rgba *line = (rgba *) pix;
+            limit_y = y + radius > height ? height : y + radius;
+            limit_x = x + radius > width ? width : x + radius;
+
+            // get average rgb
+            r_total = 0;
+            g_total = 0;
+            b_total = 0;
+            uint32_t count = 0;
+            for (j = y; j < limit_y; j++) {
+                for (i = x; i < limit_x; i++) {
+                    int32_t color = src_pix[j * width + i];
+
+                    uint8_t r = color & 0x000000FF;
+                    uint8_t g = ((color & 0x0000FF00) >> 8);
+                    uint8_t b = ((color & 0x00FF0000) >> 16);
+
+                    r_total += r;
+                    g_total += g;
+                    b_total += b;
+
+                    count++;
+                }//end for i
+            }//end for j
+
+            uint32_t r = r_total / count;
+            uint32_t g = g_total / count;
+            uint32_t b = b_total / count;
+
+            //ALOGE("total = %d  count = %d ", total , count);
+            for (j = y; j < limit_y; j++) {
+                for (i = x; i < limit_x; i++) {
+                    out[j * width + i] = COLOR_ARGB(255,r,g,b);
+                }//end for i
+            }//end for j
+        }//end for x
+    }//end for y
+
+    return pix;
+}
 

@@ -182,7 +182,7 @@ public class FilterListFragment extends BaseEditFragment {
             }
 
             srcBitmap = Bitmap.createBitmap(activity.getMainBit().copy(
-                    Bitmap.Config.RGB_565, true));
+                    Bitmap.Config.ARGB_8888, true));
             return PhotoProcessing.filterPhoto(srcBitmap, type);
         }
 

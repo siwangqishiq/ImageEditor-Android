@@ -390,10 +390,10 @@ public class BitmapUtils {
     public static Bitmap getSampledBitmap(String filePath, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         BitmapFactory.decodeFile(filePath, options);
         int inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
         options.inSampleSize = inSampleSize;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(filePath, options);
     }

@@ -13,9 +13,14 @@ public class PhotoProcessing {
 
 
     public static Bitmap filterPhoto(Bitmap bitmap, int position) {
+        if(position == 12){//马赛克滤镜
+            return handleMosaicFliter(bitmap);
+        }
+
         if (bitmap != null) {
             sendBitmapToNative(bitmap);
         }
+
         switch (position) {
             case 0: // Original
                 break;
@@ -115,6 +120,17 @@ public class PhotoProcessing {
     public static native void handleSmoothAndWhiteSkin(Bitmap bitmap,float smoothValue,float whiteValue);
 
     public static native void freeBeautifyMatrix();
+
+    public static native void nativeMosaic(Bitmap src,Bitmap out , int radius);
+
+    private  static Bitmap handleMosaicFliter(Bitmap src){
+        Bitmap out = null;
+        if(src!=null){
+            out = Bitmap.createBitmap(src.getWidth() ,src.getHeight() , Config.ARGB_8888);
+            nativeMosaic(src,out,32);
+        }
+        return out;
+    }
 
     private static void sendBitmapToNative(Bitmap bitmap) {
         int width = bitmap.getWidth();
