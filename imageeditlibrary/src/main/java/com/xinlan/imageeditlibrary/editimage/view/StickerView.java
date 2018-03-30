@@ -8,9 +8,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.xinlan.imageeditlibrary.editimage.utils.RectUtil;
 
 /**
  * 贴图操作控件
@@ -33,6 +36,8 @@ public class StickerView extends View {
     private Paint boxPaint = new Paint();
 
     private LinkedHashMap<Integer, StickerItem> bank = new LinkedHashMap<Integer, StickerItem>();// 存贮每层贴图数据
+
+    private Point mPoint = new Point(0 , 0);
 
     public StickerView(Context context) {
         super(context);
@@ -114,7 +119,7 @@ public class StickerView extends View {
                         currentStatus = STATUS_ROTATE;
                         oldx = x;
                         oldy = y;
-                    } else if (item.dstRect.contains(x, y)) {// 移动模式
+                    } else if (detectInItemContent(item , x , y)) {// 移动模式
                         // 被选中一张贴图
                         ret = true;
                         if (currentItem != null) {
@@ -171,6 +176,21 @@ public class StickerView extends View {
                 break;
         }// end switch
         return ret;
+    }
+
+    /**
+     * 判定点击点是否在内容范围之内  需考虑旋转
+     * @param item
+     * @param x
+     * @param y
+     * @return
+     */
+    private boolean detectInItemContent(StickerItem item , float x , float y){
+        //reset
+        mPoint.set((int)x , (int)y);
+        //旋转点击点
+        RectUtil.rotatePoint(mPoint , item.helpBox.centerX() , item.helpBox.centerY() , -item.roatetAngle);
+        return item.helpBox.contains(mPoint.x, mPoint.y);
     }
 
     public LinkedHashMap<Integer, StickerItem> getBank() {

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.text.DynamicLayout;
@@ -80,6 +81,8 @@ public class TextStickerView extends View {
     private boolean mAutoNewLine = false;//是否需要自动换行
     private List<String> mTextContents = new ArrayList<String>(2);//存放所写的文字内容
     private String mText;
+
+    private Point mPoint = new Point(0,0);
 
     public TextStickerView(Context context) {
         super(context);
@@ -190,11 +193,13 @@ public class TextStickerView extends View {
         canvas.drawRoundRect(mHelpBoxRect, 10, 10, mHelpPaint);
         canvas.restore();
 
-
         canvas.drawBitmap(mDeleteBitmap, mDeleteRect, mDeleteDstRect, null);
         canvas.drawBitmap(mRotateBitmap, mRotateRect, mRotateDstRect, null);
-        //canvas.drawRect(mRotateDstRect, debugPaint);
-        //canvas.drawRect(mDeleteDstRect, debugPaint);
+
+        //debug
+//        canvas.drawRect(mRotateDstRect, debugPaint);
+//        canvas.drawRect(mDeleteDstRect, debugPaint);
+//        canvas.drawRect(mHelpBoxRect, debugPaint);
     }
 
     private void drawText(Canvas canvas) {
@@ -268,7 +273,7 @@ public class TextStickerView extends View {
                     last_x = mRotateDstRect.centerX();
                     last_y = mRotateDstRect.centerY();
                     ret = true;
-                } else if (mHelpBoxRect.contains(x, y)) {// 移动模式
+                } else if (detectInHelpBox(x , y)) {// 移动模式
                     isShowHelpBox = true;
                     mCurrentMode = MOVE_MODE;
                     last_x = x;
@@ -319,6 +324,21 @@ public class TextStickerView extends View {
         }// end switch
 
         return ret;
+    }
+
+    /**
+     * 考虑旋转情况下 点击点是否在内容矩形内
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    private boolean detectInHelpBox(float x , float y){
+        //mRotateAngle
+        mPoint.set((int)x , (int)y);
+        //旋转点击点
+        RectUtil.rotatePoint(mPoint , mHelpBoxRect.centerX() , mHelpBoxRect.centerY() , -mRotateAngle);
+        return mHelpBoxRect.contains(mPoint.x, mPoint.y);
     }
 
     public void clearTextContent() {

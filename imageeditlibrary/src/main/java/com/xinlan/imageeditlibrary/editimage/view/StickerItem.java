@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.View;
@@ -34,9 +33,9 @@ public class StickerItem {
     public RectF deleteRect;// 删除按钮位置
     public RectF rotateRect;// 旋转按钮位置
 
-    RectF helpBox;
+    public RectF helpBox;
     public Matrix matrix;// 变化矩阵
-    private float roatetAngle = 0;
+    public float roatetAngle = 0;
     boolean isDrawHelpTool = false;
     private Paint dstPaint = new Paint();
     private Paint paint = new Paint();
@@ -47,7 +46,7 @@ public class StickerItem {
     private static Bitmap deleteBit;
     private static Bitmap rotateBit;
 
-    private Paint greenPaint = new Paint();
+    private Paint debugPaint = new Paint();
     public RectF detectRotateRect;
 
     public RectF detectDeleteRect;
@@ -63,9 +62,9 @@ public class StickerItem {
         dstPaint.setColor(Color.RED);
         dstPaint.setAlpha(120);
 
-        greenPaint = new Paint();
-        greenPaint.setColor(Color.GREEN);
-        greenPaint.setAlpha(120);
+        debugPaint = new Paint();
+        debugPaint.setColor(Color.GREEN);
+        debugPaint.setAlpha(120);
 
         // 导入工具按钮位图
         if (deleteBit == null) {
@@ -239,8 +238,11 @@ public class StickerItem {
             canvas.restore();
             // canvas.drawRect(deleteRect, dstPaint);
             // canvas.drawRect(rotateRect, dstPaint);
-            // canvas.drawRect(detectRotateRect, this.greenPaint);
-            // canvas.drawRect(detectDeleteRect, this.greenPaint);
+
+            //debug
+//             canvas.drawRect(detectRotateRect, debugPaint);
+//             canvas.drawRect(detectDeleteRect, debugPaint);
+//             canvas.drawRect(helpBox , debugPaint);
         }// end if
 
         // detectRotateRect

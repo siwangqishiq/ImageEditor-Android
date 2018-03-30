@@ -1,5 +1,6 @@
 package com.xinlan.imageeditlibrary.editimage.utils;
 
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
@@ -51,6 +52,24 @@ public class RectUtil {
 
         rect.offset(dx, dy);
     }
+
+    /**
+     * 旋转Point点
+     * @param p
+     * @param center_x
+     * @param center_y
+     * @param roatetAngle
+     */
+    public static void rotatePoint(Point p, float center_x, float center_y,
+                                   float roatetAngle) {
+        float sinA = (float) Math.sin(Math.toRadians(roatetAngle));
+        float cosA = (float) Math.cos(Math.toRadians(roatetAngle));
+        // calc new point
+        float newX = center_x + (p.x - center_x) * cosA - (p.y - center_y) * sinA;
+        float newY = center_y + (p.y - center_y) * cosA + (p.x - center_x) * sinA;
+        p.set((int)newX , (int)newY);
+    }
+
 
     /**
      * 矩形在Y轴方向上的加法操作
