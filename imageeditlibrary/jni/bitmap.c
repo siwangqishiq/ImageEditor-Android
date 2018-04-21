@@ -34,6 +34,10 @@ inline int rgb(int red, int green, int blue) {
 	return (0xFF << 24) | (red << 16) | (green << 8) | blue;
 }
 
+inline int argb(int alpha , int red, int green, int blue) {
+	return (alpha << 24) | (red << 16) | (green << 8) | blue;
+}
+
 inline unsigned char red(int color) {
 	return (unsigned char)((color >> 16) & 0xFF);
 }
@@ -44,6 +48,10 @@ inline unsigned char green(int color) {
 
 inline unsigned char blue(int color) {
 	return (unsigned char)(color & 0xFF);
+}
+
+inline unsigned char alpha(int color ){
+    return (unsigned char)( (color >> 24) & 0xFF );
 }
 
 int getPixelAsInt(Bitmap* bitmap, int x, int y) {
@@ -63,6 +71,8 @@ void deleteBitmap(Bitmap* bitmap) {
 	freeUnsignedCharArray(&(*bitmap).red);
 	freeUnsignedCharArray(&(*bitmap).green);
 	freeUnsignedCharArray(&(*bitmap).blue);
+	freeUnsignedCharArray(&(*bitmap).alpha);
+
 	freeUnsignedCharArray(&(*bitmap).transformList.transforms);
 	(*bitmap).transformList.size = 0;
 	(*bitmap).width = 0;
@@ -100,6 +110,11 @@ int initBitmapMemory(Bitmap* bitmap, int width, int height) {
 	if (resultCode != MEMORY_OK) {
 		return resultCode;
 	}
+
+    resultCode = newUnsignedCharArray(size, &(*bitmap).alpha);
+    if (resultCode != MEMORY_OK) {
+    	return resultCode;
+    }
 }
 
 int decodeJpegData(char* jpegData, int jpegSize, int maxPixels, Bitmap* bitmap) {
@@ -263,7 +278,7 @@ void getBitmapRowAsIntegers(Bitmap* bitmap, int y, int* pixels) {
 	register unsigned int i = (width*y) + width - 1;
 	register unsigned int x;
 	for (x = width; x--; i--) {
-		pixels[x] = rgb((int)(*bitmap).red[i], (int)(*bitmap).green[i], (int)(*bitmap).blue[i]);
+		pixels[x] = argb( (int)(*bitmap).alpha[i] , (int)(*bitmap).red[i], (int)(*bitmap).green[i], (int)(*bitmap).blue[i]);
 	}
 }
 
@@ -275,5 +290,6 @@ void setBitmapRowFromIntegers(Bitmap* bitmap, int y, int* pixels) {
 		(*bitmap).red[i] = red(pixels[x]);
 		(*bitmap).green[i] = green(pixels[x]);
 		(*bitmap).blue[i] = blue(pixels[x]);
+		(*bitmap).alpha[i] = alpha(pixels[x]);
 	}
 }

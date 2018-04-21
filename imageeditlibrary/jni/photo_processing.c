@@ -603,6 +603,7 @@ void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int heigh
         return pix;
 
     uint32_t x, y;
+    uint32_t a_total = 0;
     uint32_t r_total = 0;
     uint32_t g_total = 0;
     uint32_t b_total = 0;
@@ -623,6 +624,7 @@ void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int heigh
             limit_x = x + radius > width ? width : x + radius;
 
             // get average rgb
+            a_total = 0;
             r_total = 0;
             g_total = 0;
             b_total = 0;
@@ -631,6 +633,8 @@ void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int heigh
                 for (i = x; i < limit_x; i++) {
                     int32_t color = src_pix[j * width + i];
 
+                    //考虑透明像素点
+                    uint8_t a = ((color & 0xFF000000) >> 24);
                     uint8_t r = color & 0x000000FF;
                     uint8_t g = ((color & 0x0000FF00) >> 8);
                     uint8_t b = ((color & 0x00FF0000) >> 16);
@@ -638,6 +642,7 @@ void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int heigh
                     r_total += r;
                     g_total += g;
                     b_total += b;
+                    a_total += a;
 
                     count++;
                 }//end for i
@@ -646,11 +651,12 @@ void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int heigh
             uint32_t r = r_total / count;
             uint32_t g = g_total / count;
             uint32_t b = b_total / count;
+            uint32_t a = a_total / count;
 
             //ALOGE("total = %d  count = %d ", total , count);
             for (j = y; j < limit_y; j++) {
                 for (i = x; i < limit_x; i++) {
-                    out[j * width + i] = COLOR_ARGB(255,r,g,b);
+                    out[j * width + i] = COLOR_ARGB(a,r,g,b);
                 }//end for i
             }//end for j
         }//end for x

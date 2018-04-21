@@ -47,7 +47,7 @@ public class FileUtils {
 
 	public static File genEditFile(){
 		return FileUtils.getEmptyFile("tietu"
-				+ System.currentTimeMillis() + ".jpg");
+				+ System.currentTimeMillis() + ".png");
 	}
 
 	public static File getEmptyFile(String name) {

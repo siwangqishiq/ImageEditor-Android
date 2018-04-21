@@ -178,7 +178,7 @@ public class RotateFragment extends BaseEditFragment {
             RectF imageRect = mRotatePanel.getImageNewRect();
             Bitmap originBit = params[0];
             Bitmap result = Bitmap.createBitmap((int) imageRect.width(),
-                    (int) imageRect.height(), Bitmap.Config.ARGB_4444);
+                    (int) imageRect.height(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(result);
             int w = originBit.getWidth() >> 1;
             int h = originBit.getHeight() >> 1;
@@ -215,27 +215,4 @@ public class RotateFragment extends BaseEditFragment {
             backToMain();
         }
     }// end inner class
-
-    /**
-     * 保存Bitmap图片到指定文件
-     *
-     * @param bm
-     */
-    public static void saveBitmap(Bitmap bm, String filePath) {
-        File f = new File(filePath);
-        if (f.exists()) {
-            f.delete();
-        }
-        try {
-            FileOutputStream out = new FileOutputStream(f);
-            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // System.out.println("保存文件--->" + f.getAbsolutePath());
-    }
 }// end class

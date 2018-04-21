@@ -37,6 +37,8 @@ typedef struct {
 	unsigned char* green;
 	unsigned char* blue;
 
+	unsigned char *alpha;//添加透明度
+
 	TransformList transformList;
 } Bitmap;
 
