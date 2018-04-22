@@ -445,7 +445,7 @@ void initBeautiMatrix(uint32_t *pix, int width, int height) {
     memcpy(mImageData_rgb, pix, sizeof(uint32_t) * width * height);
 
     if (mImageData_yuv == NULL)
-		mImageData_yuv = (uint8_t *)malloc(sizeof(uint8_t) * width * height * 3);
+		mImageData_yuv = (uint8_t *)malloc(sizeof(uint8_t) * width * height * 4);
 
     RGBToYCbCr((uint8_t *) mImageData_rgb, mImageData_yuv, width * height);
 
@@ -545,16 +545,20 @@ int32_t convertArgbToInt(ARGB argb)
 void YCbCrToRGB(uint8_t* From, uint8_t* To, int length)
 {
     if (length < 1) return;
-    int Red, Green, Blue;
+    int Red, Green, Blue , alpha;
     int Y, Cb, Cr;
     int i,offset;
     for(i = 0; i < length; i++)
     {
         offset = (i << 1) + i;
-        Y = From[offset]; Cb = From[offset+1] - 128; Cr = From[offset+2] - 128;
+        Y = From[offset];
+        Cb = From[offset+1] - 128;
+        Cr = From[offset+2] - 128;
         Red = Y + ((RGBRCrI * Cr + HalfShiftValue) >> Shift);
         Green = Y + ((RGBGCbI * Cb + RGBGCrI * Cr + HalfShiftValue) >> Shift);
         Blue = Y + ((RGBBCbI * Cb + HalfShiftValue) >> Shift);
+        alpha = From[offset+3];
+
         if (Red > 255) Red = 255; else if (Red < 0) Red = 0;
         if (Green > 255) Green = 255; else if (Green < 0) Green = 0;
         if (Blue > 255) Blue = 255; else if (Blue < 0) Blue = 0;
@@ -563,14 +567,14 @@ void YCbCrToRGB(uint8_t* From, uint8_t* To, int length)
         To[offset] = (uint8_t)Blue;
         To[offset+1] = (uint8_t)Green;
         To[offset+2] = (uint8_t)Red;
-        To[offset+3] = 0xff;
+        To[offset+3] = alpha;
     }
 }
 
 void RGBToYCbCr(uint8_t* From, uint8_t* To, int length)
 {
     if (length < 1) return;
-    int Red, Green, Blue;
+    int Red, Green, Blue , alpha;
     int i,offset;
     for(i = 0; i < length; i++)
     {
@@ -578,11 +582,13 @@ void RGBToYCbCr(uint8_t* From, uint8_t* To, int length)
         Blue = From[offset];
         Green = From[offset+1];
         Red = From[offset+2];
+        alpha = From[offset + 3];
 
         offset = (i << 1) + i;
         To[offset] = (uint8_t)((YCbCrYRI * Red + YCbCrYGI * Green + YCbCrYBI * Blue + HalfShiftValue) >> Shift);
         To[offset+1] = (uint8_t)(128 + ((YCbCrCbRI * Red + YCbCrCbGI * Green + YCbCrCbBI * Blue + HalfShiftValue) >> Shift));
         To[offset+2] = (uint8_t)(128 + ((YCbCrCrRI * Red + YCbCrCrGI * Green + YCbCrCrBI * Blue + HalfShiftValue) >> Shift));
+        To[offset + 3] = alpha;
     }
 }
 
