@@ -1,3 +1,4 @@
+## 目前正在找工作的同学(Android iOS 前端 服务端) 可以发简历到我的邮箱 525647740@qq.com 可以内推杭州阿里巴巴的工作
 # AndroidImageEditor
 
 #### For edit image,supply stickers filter rotate crop textstciker doodle 
