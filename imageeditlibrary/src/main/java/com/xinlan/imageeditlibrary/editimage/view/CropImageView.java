@@ -84,6 +84,9 @@ public class CropImageView extends View {
 	 * @param rect
 	 */
 	public void setCropRect(RectF rect) {
+		if(rect == null)
+			return;
+
 		imageRect.set(rect);
 		cropRect.set(rect);
 		scaleRect(cropRect, 0.5f);
