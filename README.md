@@ -2,6 +2,8 @@
 # AndroidImageEditor
 
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+#### 杭州Android开发找工作黑名单    
+##### 阿里巴巴优酷少儿团队 主管垃圾 找新人过去就是背3.25的 千万避开!!!!
 
 #### For edit image,supply stickers filter rotate crop textstciker doodle 
 
