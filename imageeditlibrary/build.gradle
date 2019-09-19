@@ -28,7 +28,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.3.2"
 
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
-    compile 'com.android.support:recyclerview-v7:26.+'
+    api 'com.android.support:appcompat-v7:26.+'
+    api 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    api 'com.android.support:recyclerview-v7:26.+'
 }
