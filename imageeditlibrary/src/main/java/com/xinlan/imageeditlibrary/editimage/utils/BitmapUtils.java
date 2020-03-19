@@ -397,12 +397,8 @@ public class BitmapUtils {
         options.inJustDecodeBounds = false;
 
         final Bitmap retBit = BitmapFactory.decodeFile(filePath, options);
-        int degree = readPictureDegree(filePath);
-        if(degree > 0){
-            return rotateBitmap(degree , retBit);
-        }else{
-            return retBit;
-        }
+        final int degree = readPictureDegree(filePath);
+        return degree > 0?rotateBitmap(degree , retBit):retBit;
     }
 
 
