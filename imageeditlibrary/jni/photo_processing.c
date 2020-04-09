@@ -567,7 +567,6 @@ void YCbCrToRGB(uint8_t* From, uint8_t* To, int length)
         To[offset] = (uint8_t)Blue;
         To[offset+1] = (uint8_t)Green;
         To[offset+2] = (uint8_t)Red;
-        To[offset+3] = alpha;
     }
 }
 
