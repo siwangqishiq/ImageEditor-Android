@@ -38,7 +38,7 @@
 
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.xinlan.imageeditandroid.fileProvider"
             android:grantUriPermissions="true"
             android:exported="false">

@@ -1,11 +1,10 @@
 
 package com.xinlan.imageeditlibrary.picchooser;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.xinlan.imageeditlibrary.BaseActivity;
 
 public class SelectPictureActivity extends BaseActivity {
