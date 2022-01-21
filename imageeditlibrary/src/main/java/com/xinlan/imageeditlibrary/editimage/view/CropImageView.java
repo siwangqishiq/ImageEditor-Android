@@ -283,13 +283,13 @@ public class CropImageView extends View {
 			switch (selectedControllerCicle) {
 			case 1:// 左上角控制点
 			case 2:// 右上角控制点
-				cropRect.bottom = (cropRect.right - cropRect.left) / this.ratio
-						+ cropRect.top;
+				cropRect.top = cropRect.bottom
+						- (cropRect.right - cropRect.left) / this.ratio;
 				break;
 			case 3:// 左下角控制点
 			case 4:// 右下角控制点
-				cropRect.top = cropRect.bottom
-						- (cropRect.right - cropRect.left) / this.ratio;
+				cropRect.bottom = (cropRect.right - cropRect.left) / this.ratio
+						+ cropRect.top;
 				break;
 			}// end switch
 
