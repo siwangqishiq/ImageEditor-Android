@@ -8,7 +8,7 @@
 ## Version History
 
 ### NextVersion
-mosaic 马赛克打码功能（阻碍人类进步的马赛克，还在研究打码算法中...）
+mosaic 马赛克打码功能 此功能已在 另一个项目ImageEditorGL中实现 [ImageEditorGL](https://github.com/siwangqishiq/ImageEditorGL)。
 
 ### v_3.3:
 - [x] redo and undo
