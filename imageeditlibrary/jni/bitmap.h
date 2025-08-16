@@ -18,9 +18,15 @@
 #define BITMAP
 #endif
 
-#include <transform.h>
+#include "transform.h"
 
+#ifndef _INCONSISTENT_BITMAP_ERROR
+#define _INCONSISTENT_BITMAP_ERROR
 static const int INCONSISTENT_BITMAP_ERROR = 5;
+#endif
+
+#ifndef _BITMAP_
+#define _BITMAP_
 
 typedef struct {
 	unsigned int width;
@@ -41,6 +47,8 @@ typedef struct {
 
 	TransformList transformList;
 } Bitmap;
+
+#endif
 
 /**
  * @file bitmap.h
@@ -125,6 +133,16 @@ int AndroidBitmap_lockPixels(JNIEnv* env, jobject jbitmap, void** addrPtr);
  * Call this to balance a successful call to AndroidBitmap_lockPixels.
  */
 int AndroidBitmap_unlockPixels(JNIEnv* env, jobject jbitmap);
+
+int decodeJpegChannel(char* jpegData, int jpegSize, int channel, unsigned char** channelPixels, int* srcWidth, int* srcHeight);
+
+int doTransforms(Bitmap* bitmap, int doRed, int doGreen, int doBlue);
+
+int resizeChannelBicubic(const unsigned char *src, int srcWidth, int srcHeight, unsigned char *dst, int dstWidth, int dstHeight);
+
+int resizeChannelBicubic(const unsigned char *src, int srcWidth, int srcHeight, unsigned char *dst, int dstWidth, int dstHeight);
+
+int resizeChannel(unsigned char** channelPixels, int srcWidth, int srcHeight, int maxWidth, int maxHeight);
 
 #ifdef __cplusplus
 }

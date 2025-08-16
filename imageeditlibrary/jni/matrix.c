@@ -4,6 +4,8 @@
 #include <math.h>
 #include "bitmap.h"
 
+#include "matrix.h"
+
 #define RLUM    (0.3086f)
 #define GLUM    (0.6094f)
 #define BLUM    (0.0820f)
@@ -59,7 +61,7 @@ void applyMatrixToPixel(unsigned char* red, unsigned char* green, unsigned char*
 	(*blue) = b2;
 }
 
-identMatrix(float *matrix) {
+void identMatrix(float *matrix) {
     *matrix++ = 1.0f;    /* row 1        */
     *matrix++ = 0.0f;
     *matrix++ = 0.0f;
@@ -120,7 +122,7 @@ void saturateMatrix(float matrix[4][4], float* saturation)
     multiplyMatricies(mmatrix, matrix, matrix);
 }
 
-multiplyMatricies(float a[4][4], float b[4][4], float c[4][4]) {
+void multiplyMatricies(float a[4][4], float b[4][4], float c[4][4]) {
     int x, y;
     float temp[4][4];
 

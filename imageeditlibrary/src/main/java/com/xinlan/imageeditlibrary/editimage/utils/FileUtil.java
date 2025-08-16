@@ -2,6 +2,8 @@ package com.xinlan.imageeditlibrary.editimage.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
@@ -46,10 +48,17 @@ public class FileUtil {
             return;
         }
 
-        ContentValues values = new ContentValues(2);
-        String extensionName = getExtensionName(dstPath);
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + (TextUtils.isEmpty(extensionName) ? "jpeg" : extensionName));
-        values.put(MediaStore.Images.Media.DATA, dstPath);
-        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//        ContentValues values = new ContentValues(2);
+//        String extensionName = getExtensionName(dstPath);
+//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + (TextUtils.isEmpty(extensionName) ? "jpeg" : extensionName));
+//        values.put(MediaStore.Images.Media.DATA, dstPath);
+//        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, file.getName());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+        values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/xinlanedit");
+
+        final Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 }//end class

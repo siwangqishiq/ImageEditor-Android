@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <string.h>
+
 #ifndef MEM_UTILS
 #define MEM_UTILS
 #endif

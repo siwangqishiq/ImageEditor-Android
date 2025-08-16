@@ -26,6 +26,29 @@
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
+
+int initBitmapMemory(Bitmap* bitmap, int width, int height);
+void getBitmapRowAsIntegers(Bitmap* bitmap, int y, int* pixels);
+void setBitmapRowFromIntegers(Bitmap* bitmap, int y, int* pixels);
+void deleteBitmap(Bitmap* bitmap);
+void flipHorizontally(Bitmap* bitmap, int doRed, int doGreen, int doBlue);
+int rotate90(Bitmap* bitmap, int doRed, int doGreen, int doBlue);
+void rotate180(Bitmap* bitmap, int doRed, int doGreen, int doBlue);
+void applyInstafix(Bitmap* bitmap);
+void applyAnselFilter(Bitmap* bitmap);
+void applyTestino(Bitmap* bitmap);
+void applyXPro(Bitmap* bitmap);
+void applyRetro(Bitmap* bitmap);
+void applyXPro(Bitmap* bitmap);
+void applyBlackAndWhiteFilter(Bitmap* bitmap);
+void applySepia(Bitmap* bitmap);
+void applyCyano(Bitmap* bitmap);
+void applyGeorgia(Bitmap* bitmap);
+int applySahara(Bitmap* bitmap);
+int applyHDR(Bitmap* bitmap);
+int decodeJpegData(char* jpegData, int jpegSize, int maxPixels, Bitmap* bitmap);
+
+
 #define COLOR_ARGB(a, r, g, b) ((a)<<24)|((b) << 16)|((g)<< 8)|(r)
 
 void *do_mosaic(void *pix, void *out_pix, unsigned int width, unsigned int height, unsigned int stride,

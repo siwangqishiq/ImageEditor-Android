@@ -26,7 +26,7 @@ import com.xinlan.imageeditlibrary.picchooser.SelectPictureActivity;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_PERMISSON_SORAGE = 1;
     public static final int REQUEST_PERMISSON_CAMERA = 2;
 
@@ -62,37 +62,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imgView = (ImageView) findViewById(R.id.img);
         openAblum = findViewById(R.id.select_ablum);
         editImage = findViewById(R.id.edit_image);
-        openAblum.setOnClickListener(this);
-        editImage.setOnClickListener(this);
+        openAblum.setOnClickListener((v)->{
+            selectFromAblum();
+        });
+        editImage.setOnClickListener((v)->{
+            editImageClick();
+        });
 
         mTakenPhoto = findViewById(R.id.take_photo);
-        mTakenPhoto.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.take_photo:
-                takePhotoClick();
-                break;
-            case R.id.edit_image:
-                editImageClick();
-                break;
-            case R.id.select_ablum:
-                selectFromAblum();
-                break;
-        }//end switch
+        mTakenPhoto.setOnClickListener((v)->{
+            takePhotoClick();
+        });
     }
 
     /**
      * 拍摄照片
      */
     protected void takePhotoClick() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestTakePhotoPermissions();
-        } else {
-            doTakePhoto();
-        }//end if
+        requestTakePhotoPermissions();
     }
 
     /**
@@ -116,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = FileUtils.genEditFile();
-            // Continue only if the File was successfully created
             if (photoFile != null) {
                 photoURI = Uri.fromFile(photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -155,10 +141,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openAblumWithPermissionsCheck() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permission = Manifest.permission.READ_MEDIA_IMAGES;
+        }
+        if (ActivityCompat.checkSelfPermission(this, permission)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    new String[]{permission},
                     REQUEST_PERMISSON_SORAGE);
             return;
         }

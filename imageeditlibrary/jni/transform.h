@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-#ifndef TRANSFORM
-#define TRANSFORM
-#endif
-
+#ifndef _FLIP_HORIZONTALLY_
+#define _FLIP_HORIZONTALLY_
 static const char FLIP_HORIZONTALLY = 'h';
 static const char FLIP_VERTICALLY = 'v';
 static const char ROTATE_90 = 'r';
 static const char ROTATE_180 = 'u';
 static const char CROP = 'c';
+#endif
 
+#ifndef  _TRANSFORMLIST_
+#define _TRANSFORMLIST_
 typedef struct {
 	float cropBounds[4]; //left, top, right, bottom
 	unsigned char* transforms;
 	int size;
 } TransformList;
+#endif

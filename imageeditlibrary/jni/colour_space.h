@@ -24,4 +24,25 @@ typedef struct {
     float b;        /* Value between 0.0 (black) and 1.0 */
 } HSBColour ;
 
+unsigned char convert(float val);
+
+void rgbToHsb(unsigned char red, unsigned char green, unsigned char blue, HSBColour* hsb);
+
+void getBrightness(unsigned char red, unsigned char green, unsigned char blue, float* brightness);
+
+void hsbToRgb(HSBColour* hsb, unsigned char* red, unsigned char* green, unsigned char* blue);
+
+static int fastBlur(int radius, unsigned char* srcRed, unsigned char* srcGreen, unsigned char* srcBlue, int width, int height, unsigned char* dstRed, unsigned char* dstGreen, unsigned char* dstBlue);
+
+static int fastBlurComponent(int radius, unsigned char* srcComponent, int width, int height, unsigned char* dstComponent);
+
+int stackBlur(float* radius, unsigned char* srcRed, unsigned char* srcGreen, unsigned char* srcBlue, int* width, int* height,
+              unsigned char* dstRed, unsigned char* dstGreen, unsigned char* dstBlue);
+
+int stackBlurComponent(float* radius, unsigned char* srcComponent, int* width, int* height, unsigned char* dstComponent);
+
+
+
+
+
 

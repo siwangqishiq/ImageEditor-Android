@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <mem_utils.h>
 
+
 int newIntArray(unsigned int size, int** arrayPointer) {
 	unsigned int numBytes = size * sizeof(int);
 	*arrayPointer = (int*) malloc(numBytes);
