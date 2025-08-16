@@ -10,6 +10,10 @@
 ### NextVersion
 mosaic 马赛克打码功能 此功能已在 另一个项目ImageEditorGL中实现 [ImageEditorGL](https://github.com/siwangqishiq/ImageEditorGL)。
 
+### v_3.4
+- so库支持16KB PageSize
+- 更新gradle版本
+
 ### v_3.3:
 - [x] redo and undo
 <br />
