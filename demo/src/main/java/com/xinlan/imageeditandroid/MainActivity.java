@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,6 +26,9 @@ import com.xinlan.imageeditlibrary.editimage.utils.BitmapUtils;
 import com.xinlan.imageeditlibrary.picchooser.SelectPictureActivity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_PERMISSON_SORAGE = 1;
@@ -102,14 +106,15 @@ public class MainActivity extends AppCompatActivity {
     private void doTakePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = FileUtils.genEditFile();
-            if (photoFile != null) {
-                photoURI = Uri.fromFile(photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, TAKE_PHOTO_CODE);
-            }
-
-            //startActivityForResult(takePictureIntent, TAKE_PHOTO_CODE);
+            File photoFile = FileUtils.genEditFile(this);
+            path = photoFile.getAbsolutePath();
+            // 通过 FileProvider 获取 content Uri
+            photoURI = FileProvider.getUriForFile(
+                    this,
+                    getPackageName() + ".fileProvider",
+                    photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, TAKE_PHOTO_CODE);
         }
     }
 
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
      * @author panyi
      */
     private void editImageClick() {
-        File outputFile = FileUtils.genEditFile();
+        File outputFile = FileUtils.genEditFile(this);
         EditImageActivity.start(this,path,outputFile.getAbsolutePath(),ACTION_REQUEST_EDITIMAGE);
     }
 
@@ -198,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void handleTakePhoto(Intent data) {
         if (photoURI != null) {//拍摄成功
-            path = photoURI.getPath();
-            startLoadTask();
+            LoadImageTaskWithUri task = new LoadImageTaskWithUri();
+            task.execute(photoURI);
         }
     }
 
@@ -231,6 +236,56 @@ public class MainActivity extends AppCompatActivity {
         LoadImageTask task = new LoadImageTask();
         task.execute(path);
     }
+
+    private final class LoadImageTaskWithUri extends AsyncTask<Uri, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(Uri... params) {
+            Uri uri = params[0];
+            InputStream inputStream = null;
+            try {
+                inputStream = getApplicationContext().getContentResolver().openInputStream(uri);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            try {
+                if(inputStream != null){
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
+        protected void onCancelled(Bitmap result) {
+            super.onCancelled(result);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            if (mainBitmap != null) {
+                mainBitmap.recycle();
+                mainBitmap = null;
+                System.gc();
+            }
+            mainBitmap = result;
+            imgView.setImageBitmap(mainBitmap);
+        }
+    }// end inner class
 
 
     private final class LoadImageTask extends AsyncTask<String, Void, Bitmap> {

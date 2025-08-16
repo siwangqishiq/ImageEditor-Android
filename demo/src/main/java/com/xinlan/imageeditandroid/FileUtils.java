@@ -45,9 +45,8 @@ public class FileUtils {
 		return Environment.getExternalStorageDirectory();
 	}
 
-	public static File genEditFile(){
-		return FileUtils.getEmptyFile("tietu"
-				+ System.currentTimeMillis() + ".png");
+	public static File genEditFile(Context context){
+        return new File(context.getFilesDir() , "tietu" + System.currentTimeMillis() + ".png");
 	}
 
 	public static File getEmptyFile(String name) {
