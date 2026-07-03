@@ -18,15 +18,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-//    externalNativeBuild {
-//        ndkBuild {
-//            path 'jni/Android.mk'
-//        }
-//    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
+
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.3.2"
 
